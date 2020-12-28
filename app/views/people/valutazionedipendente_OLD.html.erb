@@ -1,0 +1,116 @@
+<script>
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+</script>
+
+<div id="search_division">
+    <%= render 'intestazionepagella' %>
+</div>
+<div id="results_division">
+<h1> Valutazione </h1>
+<table class="pagella_table">
+  <thead>
+    <tr>
+      <th class="fattore_valutazione">Denominazione</th>
+      <th>Peso</th>
+      <th>Voto</th>
+      
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @valutazioni.each do |v| %>
+      <tr>
+	    <% if v.vfactor != nil %>
+         <td class="fattore_valutazione"><%= v.vfactor.denominazione.gsub(/\r\n/, "").strip  %></td>
+         <td><%= v.vfactor.peso(@person)  %></td>
+         <td>
+		 <%= form_for :valutazione, url: setvalue_people_path, method: :post, :remote => true do |f| %>
+		 <%= f.number_field :value,  :value => v.value, min: v.vfactor.min, max: v.vfactor.max, :onchange => 'abilita_save('+v.id.to_s+')' %>
+		 <%= f.hidden_field :person_id, :value => @person.id %>
+	     <%= f.hidden_field :valutation_id, :value => v.id %>
+         <%= f.hidden_field :vfactor_id, :value => v.vfactor.id %>
+		 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+		 <%= f.submit "Salva", class: 'btn-salva', id: ('btn-salva'+v.id.to_s), disabled: true%>
+         <% end %></td>
+		<% else %>
+		  <td></td>
+          <td></td>
+          <td></td>
+		 <% end %>  
+        </div>
+		
+		
+        
+        
+      </tr>
+    <% end %>
+	 <tr>
+	 <td> <b> Media pesata </b> </td>
+	 <td>
+	 
+	 </td>
+	 <td><%= @person.punteggiocomplessivo.round(2) %></td>
+	 </tr>
+	 <tr>
+	 <td> <b> Punteggio finale </b> </td>
+	 <td>
+	 
+	 </td>
+	 <td><b><%= @person.punteggiofinale.round %></b></td>
+	 </tr>
+	 <tr>
+	 <td>  </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+	 <%= form_for :chiusura_valutazione, url: people_chiusura_valutazione_path, method: :post, :remote => true do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "Chiudi valutazione"%>
+	 <% end %>
+	 </td>
+	 </tr>
+	 <tr>
+	 <td>  </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+	 <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "PDF"%>
+	 <% end %>
+	 </td>
+	 </tr>
+	 <tr>
+	 <td>  </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+	 <%= form_for :schedaxls, url: people_schedavalutazionedipendentexls_path, method: :get, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "Excel"%>
+	 <% end %>
+	 </td>
+	 </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<div id="instruction_division">
+    <%= render 'istruzionipagella' %>
+</div>
+

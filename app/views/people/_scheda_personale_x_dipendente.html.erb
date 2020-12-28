@@ -1,0 +1,6 @@
+
+
+<%= form_tag("/people/scheda_personale_x_dipendente_mostra", method: "post", remote: true, name: "scheda_personale_x_dipendente_mostra"  )  do  %>
+<%= collection_select(:person, :id, @people, :id, :cognomenome)  %>
+<%= submit_tag "Seleziona", class:'btn btn-sm btn-info' %>
+<% end %>

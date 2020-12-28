@@ -1,0 +1,38 @@
+<%= form_with(model: valuation_qualification_percentage, local: true) do |form| %>
+  <% if valuation_qualification_percentage.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(valuation_qualification_percentage.errors.count, "error") %> prohibited this valuation_qualification_percentage from being saved:</h2>
+
+      <ul>
+      <% valuation_qualification_percentage.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+  
+    <%= form.label :valuation_area_id %>
+    <%= form.collection_select( :valuation_area_id, ValuationArea.all, :id, :denominazione, prompt: false) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :qualification_type_id %>
+     <%= form.collection_select( :qualification_type_id, QualificationType.all, :id, :denominazione, prompt: false) %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :category_id %>
+     <%= form.collection_select( :category_id, Category.all, :id, :denominazione, prompt: false) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :percentuale %>
+    <%= form.number_field :percentuale, id: :valuation_qualification_percentage_percentuale %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Importazione dati generali dipendenti da Excel</h1>
+
+<div class="row">
+  <div class="column">
+    <div id="sinistra">
+	<h4> Importazione dati generali dipendenti </h4>
+	<%= form_tag importa_dati_generali_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p> Colonna Matricola <%= select_tag(:colonna_matricola, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna categoria (questa è A, B, C ...)<%= select_tag(:colonna_categoria, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna Figura giuridica (ISTRUTTORE ...)<%= select_tag(:colonna_figura_giuridica, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna ruolo <%= select_tag(:colonna_ruolo, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna servizio percentuale (ore a settimana)<%= select_tag(:colonna_servizio_percentuale, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna note<%= select_tag(:colonna_note, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <%= submit_tag "Importa" %>
+	<% end %>
+	
+<p> Prende un file Excel con anche più fogli dentro </p>
+	
+	
+	</div>
+    <div id="division_fase"></div>
+  </div>
+</div>
+
+
+

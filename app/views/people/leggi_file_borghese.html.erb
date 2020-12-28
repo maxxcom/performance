@@ -1,0 +1,25 @@
+<h1>Persone ed uffici</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Ufficio file Borghese</th>
+      <th>Ufficio trovato</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @result != nil %>
+    <% @result.each do |rec| %>
+      <tr>
+        <td><%= rec[:persona] %></td>
+		<td><%= rec[:ufficio1] %></td>
+        <td><%= rec[:ufficio2] %></td>
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

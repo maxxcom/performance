@@ -1,0 +1,74 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Calcolo produttività dipendenti 2019</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>progressivo</th>
+      <th>Matricola</th>
+      <th>Nominativo</th>
+      <th>Assegnazione</th>
+      <th>Categoria</th>
+      <th>Totgg</th>
+      <th>Totassenze</th>
+	  <th>Servizio</th>
+	  <th>Tempo</th>
+	  <th>Obiettivi</th>
+	  <th>Valutazione</th>
+	  <th>Totale obiettivi</th>
+	  <th>Totale valutazione</th>
+	  <th>Totale produttività</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% p = 0 %>
+    <% @employees.each do |employee| %>
+      <tr>
+	    <td><%= p = p + 1  %></td>
+	    <td><%= employee.matricola %></td>
+        <td><%= employee.nominativo %></td>
+        <td><%= employee.assegnazione %></td>
+        <td><%= employee.categoria %></td>
+        <td><%= employee.totgg %></td>
+        <td><%= employee.totassenze %></td>
+		<td><%= employee.servizio_percentuale != nil ? employee.servizio_percentuale.round(2) : "--" %></td>
+		<td><%= employee.tempo != nil ? employee.tempo.round(2) : "--" %></td>
+		<td><%= employee.raggiungimento_obiettivi != nil ? employee.raggiungimento_obiettivi.round(2) : "--" %></td>
+		<td><%= employee.valutazione != nil ? employee.valutazione.round(2) : "--" %></td>
+        <td><%= employee.totale_premio_obiettivi.round(2) %></td>
+        <td><%= employee.totale_premio_valutazione.round(2) %></td>
+		<td><%= employee.totale_premio_produttivita.round(2) %></td>
+      </tr>
+    <% end %>
+	   <tr>
+	    <td></td>
+	    <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+        <td><%= @totale_generale_obiettivi.round(2) %></td>
+        <td><%= @totale_generale_valutazione.round(2) %></td>
+		<td><%= @totale_generale_valutazione.round(2) + @totale_generale_obiettivi.round(2) %></td>
+      </tr>
+  </tbody>
+</table>
+
+<p> Totale fondo = <%= @fondo %> </p>
+<p> Valutazioni  = <%= @totale_generale_valutazione.round(2) %> </p>
+<p> Obiettivi    = <%= @totale_generale_obiettivi.round(2) %> </p>
+<p> Totale produttività    = <%= @totale_generale_produttivita.round(2) %> </p>
+<p> Economia     = <%= (@fondo - @totale_generale_produttivita).round(2) %> </p>
+
+<br>
+
+
+
+

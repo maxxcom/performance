@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Azioni</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+      <th>Anno</th>
+      <th>Ente</th>
+	  <th>Responsabile</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @simple_actions.each do |simple_action| %>
+      <tr>
+        <td><%= simple_action.denominazione %></td>
+        <td><%= simple_action.descrizione %></td>
+        <td><%= simple_action.anno %></td>
+        <td><%= simple_action.ente %></td>
+		<td><%= simple_action.responsabile_principale != nil ? simple_action.responsabile_principale.cognome : " - "  %></td>
+        <td><%= link_to 'Show', simple_action %></td>
+        <td><%= link_to 'Edit', edit_simple_action_path(simple_action) %></td>
+        <td><%= link_to 'Destroy', simple_action, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Simple Action', new_simple_action_path %>

@@ -1,0 +1,37 @@
+<%= form_with(model: delegation, local: true) do |form| %>
+  <% if delegation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(delegation.errors.count, "error") %> prohibited this delegation from being saved:</h2>
+
+      <ul>
+      <% delegation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_tag("/delegations/aggiungi_delega", method: "get", remote: true, name: "aggiungi_delega"  )  do  %>
+  <div class="field">
+    <%= form.label :delegante_id %>
+    
+	
+    <%= collection_select(:person, :id, Person.all.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+	
+  </div>
+
+  <div class="field">
+    <%= form.label :delegato_id %>
+    <%= collection_select(:person, :id, Person.all.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+  </div>
+
+  <div class="field">
+    <%= form.label :office_id %>
+     <%= collection_select(:person, :id, Office.all.sort_by{|u| u.nome}, :id, :nome, :include_blank => true)  %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,34 @@
+<b> prova </b>
+
+<%= form_with(model: fte_percentage, local: true) do |form| %>
+  <% if fte_percentage.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(fte_percentage.errors.count, "error") %> prohibited this fte_percentage from being saved:</h2>
+
+      <ul>
+      <% fte_percentage.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%= form_tag("/fte_percentages/aggiungi_fte_percentage", method: "get", remote: true, name: "aggiungi_fte_percentage"  )  do  %>
+  <div class="field">
+    <%= form.label :category_id %>
+	 <%= collection_select(:category, :id, Category.all.sort_by{|c| c.denominazione}, :id, :denominazione, :include_blank => true)  %>
+    <%= form.number_field :category_id, id: :fte_percentage_category_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :percentuale %>
+    <%= form.text_field :percentuale, id: :fte_percentage_percentuale %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+ 
+ <% end %> 
+ 
+<% end %>

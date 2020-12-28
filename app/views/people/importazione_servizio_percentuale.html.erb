@@ -1,0 +1,17 @@
+<h1>Importazione servizio percentuale dipendenti </h1>
+
+
+<h4> Importazione servizio percentuale</h4>
+	<%= form_tag importa_servizio_percentuale_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> File Excel di Ilaria Pedron </p>
+<p>  </p>
+<p>  </p>
+<p>  nominativo     = colonna B </p>
+<p>	 servizio percentuale = colonna E </p>
+
+
+<p> Servizio percentuale è la quota part time: 1 tempo pieno </p>

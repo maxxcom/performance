@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @simple_action_assignment.person_id %>
+</p>
+
+<p>
+  <strong>Simple action:</strong>
+  <%= @simple_action_assignment.simple_action_id %>
+</p>
+
+<p>
+  <strong>Wheight:</strong>
+  <%= @simple_action_assignment.wheight %>
+</p>
+
+<%= link_to 'Edit', edit_simple_action_assignment_path(@simple_action_assignment) %> |
+<%= link_to 'Back', simple_action_assignments_path %>

@@ -1,0 +1,14 @@
+<h1>Importazione valori</h1>
+
+
+<h4> Importazione valori</h4>
+	<%= form_tag importavalori_operational_goals_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati i valori degli indicatori  e di misurazioni di obiettivi/fasi/azioni(dai file Excel di Mauro Gaspardo </p>
+	<p> Dal foglio di lavoro Obiettivi vengono presi: </p>
+	<p> avanzamento misurato : colonna T (è un float va nell'indicatore) </p>
+	<p> quantificatore indicatore: colonna N (va nella stringa dell'indicatore) <p>
+	<p> avanzamento dichiarato dal dirigente: colonna P (va nella valutazione non nell'indicatore) <p>

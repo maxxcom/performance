@@ -1,0 +1,95 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dipendenti importati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Categoria</th>
+      <th>cos</th>
+	  <th>ufficio</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @aggiunte != nil %>
+    <% @aggiunte.each do |person| %>
+      <tr>
+        <td><%= person[:nome] %></td>
+		<td><%= person[:cognome] %></td>
+        <td><%= person[:matricola] %></td>
+        <td><%= person[:email] %></td>
+		<td><%= person[:categoria] %></td>
+        <td><%= person[:cos] %></td>
+		<td><%= person[:ufficio] %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @aggiunte.length == 0 then "Non sono state importate persone" else "N° persone importate :" + @aggiunte.length.to_s end %>
+<br>
+
+<h1>Doppi</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Categoria</th>
+      <th>cos</th>
+	  <th>ufficio</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @doppi != nil %>
+    <% @doppi.each do |person| %>
+      <tr>
+        <td><%= person[:nome] %></td>
+		<td><%= person[:cognome] %></td>
+        <td><%= person[:matricola] %></td>
+        <td><%= person[:email] %></td>
+		<td><%= person[:categoria] %></td>
+        <td><%= person[:cos] %></td>
+		<td><%= person[:ufficio] %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @doppi.length == 0 then "No doppi" else "N° doppi :" + @doppi.length.to_s end %>
+<br>
+
+<h1>Uffici</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Padre</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @uffici_nuovi != nil %>
+    <% @uffici_nuovi.each do |u| %>
+      <tr>
+        <td><%= u[:nome] %></td>
+		<td><%= u[:nome_ufficio_padre] %></td>
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

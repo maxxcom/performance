@@ -1,0 +1,85 @@
+
+var id1='<%= "#" + @p.id.to_s %>'
+var id2='<%= "#q_" + @p.id.to_s %>'
+var id3='<%= "#c_" + @p.id.to_s %>'
+var id4='<%= "#cf_" + @p.id.to_s %>'
+console.log(id1)
+console.log(id2)
+console.log(id3)
+console.log(id4)
+var element1 = $(id1);
+var element2 = $(id2);
+var element3 = $(id3);
+var element4 = $(id4);
+element1.empty()
+element2.empty()
+element3.empty()
+element4.empty()
+
+var html1 = '';
+
+html1 += '	<%= form_for :person, url: set_assegnazione_people_path, method: :post, :remote => true do |f| %>';
+html1 += '	<%= f.text_field :assegnazione,  :value => @p.assegnazione, :onchange => "abilita_save_s("+@p.id.to_s+")" %>';
+html1 += '	<%= f.hidden_field :person_id, :value => @p.id %>';
+html1 += '	<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_s"+@p.id.to_s, disabled: true %>';
+html1 += '	<% end %>';
+
+var html2 = '';
+<% id = @p.id.to_s %>
+
+html2 += '	<div id=<%= "q_" + id %> >';
+html2 += '	<%= form_for :person, url: set_qualifica_people_path, method: :post, :remote => true do |f| %>';
+
+html2 += '  <%= f.select(:qualification_type_id, :qualification_type_id, { :selected => @p.qualification_type_id }, {:onchange => "abilita_save_q("+id+")" }) do %>';
+html2 += '   <%= content_tag(:option, ( @p.qualification_type_id != nil ? QualificationType.find(@p.qualification_type_id).denominazione : ""), value: @p.qualification_type_id) %>';
+html2 += '	   <%  QualificationType.all.each do |q| %>';
+html2 += '	     <%= content_tag(:option, q.denominazione, value: q.id) %>';
+html2 += '	  <% end %>';
+html2 += '  <% end %>';
+
+html2 += '	<%= f.hidden_field :person_id, :value => @p.id %>';
+html2 += '	<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_q"+ id, disabled: true %>';
+html2 += '	<% end %>';
+html2 += '	</div>';
+
+var html3 = '';
+<% id = @p.id.to_s %>
+
+html3 += '	<div id=<%= "c_" + id %> >';
+html3 += '	<%= form_for :person, url: set_categoria_people_path, method: :post, :remote => true do |f| %>';
+
+html3 += '  <%= f.select(:categoria, :categoria, { :selected => @p.categoria }, {:onchange => "abilita_save_c("+id+")" }) do %>';
+html3 += '   <%= content_tag(:option,  @p.categoria.to_s, value: @p.categoria) %>';
+html3 += '	   <%  Category.all.each do |c| %>';
+html3 += '	     <%= content_tag(:option, c.denominazione, value: c.id) %>';
+html3 += '	  <% end %>';
+html3 += '  <% end %>';
+
+html3 += '	<%= f.hidden_field :person_id, :value => @p.id %>';
+html3 += '	<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_c"+ id, disabled: true %>';
+html3 += '	<% end %>';
+html3 += '	</div>';
+
+var html4 = '';
+<% id = @p.id.to_s %>
+
+html4 += '	<div id=<%= "cf_" + id %> >';
+html4 += '	<%= form_for :person, url: set_categoria_formale_people_path, method: :post, :remote => true do |f| %>';
+
+html4 += '  <%= f.select(:categoria_formale, :categoria_formale, { :selected => @p.categoria_formale.to_s }, {:onchange => "abilita_save_cf("+id+")" }) do %>';
+html4 += '   <%= content_tag(:option,  @p.categoria_formale.to_s, value: @p.categoria_formale.to_s) %>';
+html4 += '	   <%  Category.all.each do |c| %>';
+html4 += '	     <%= content_tag(:option, c.denominazione.to_s, value: c.id) %>';
+html4 += '	  <% end %>';
+html4 += '  <% end %>';
+
+html4 += '	<%= f.hidden_field :person_id, :value => @p.id %>';
+html4 += '	<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_cf"+ id, disabled: true %>';
+html4 += '	<% end %>';
+html4 += '	</div>';
+
+element1.append(html1);
+element2.append(html2);
+element3.append(html3);
+element4.append(html4);
+

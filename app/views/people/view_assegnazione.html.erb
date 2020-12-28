@@ -1,0 +1,162 @@
+<script>
+
+function prova()
+{
+ console.log('prova')
+}
+
+function abilita_save_s(button_code)
+{
+ console.log('ciao2')
+ $button = $('#btn-salva_s'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_t(button_code)
+{
+ $button = $('#btn-salva_t'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_q(button_code)
+{
+ console.log('ciao3')
+ $button = $('#btn-salva_q'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+ console.log($button)
+}
+
+function abilita_save_c(button_code)
+{
+ $button = $('#btn-salva_c'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_cf(button_code)
+{
+ $button = $('#btn-salva_cf'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+</script>
+
+<div id="results_division">
+   
+<h1>Dipendenti</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>COS</th>
+	  <th>Ufficio</th>
+	  <th>Categoria formale</th>
+	  <th>Setta Categoria</th>
+	  <th>Setta Assegnazione %</th>
+	  <th>Setta Qualifica</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+	  
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		
+		<td><%= person.cos %></td>
+		<td class="ufficio"><%= if person.ufficio != nil
+                 person.ufficio.nome
+                else
+				 if person.dirige.length != 0
+                   person.dirige.first.nome
+                 else				 
+                  "-" 
+				 end
+				end %>
+		</td>
+		<td>
+		<% id = person.id.to_s %>
+		
+  	    <div id=<%= "cf_" + id %> >
+         <%= form_for :person, url: set_categoria_formale_people_path, method: :post, :remote => true do |f| %>
+           <%= f.select(:categoria_formale, :categoria_formale, { :selected => person.categoria_formale.to_s }, {:onchange => "abilita_save_cf("+id+")" }) do %>
+             <%= content_tag(:option, person.categoria_formale.to_s , value: person.categoria_formale) %>
+             <%  Category.all.each do |c| %>
+              <%= content_tag(:option, c.denominazione, value: c.id) %>
+             <% end %>
+           <% end %>
+
+           <%= f.hidden_field :person_id, :value => person.id %>
+           <%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_cf"+ id, disabled: true %>
+        <% end %>
+        </div>
+		
+		</td>
+		
+		<td>
+		<% id = person.id.to_s %>
+		
+  	    <div id=<%= "c_" + id %> >
+         <%= form_for :person, url: set_categoria_people_path, method: :post, :remote => true do |f| %>
+           <%= f.select(:categoria, :categoria, { :selected => person.categoria.to_s }, {:onchange => "abilita_save_c("+id+")" }) do %>
+             <%= content_tag(:option, person.categoria.to_s , value: person.categoria) %>
+             <%  Category.all.each do |c| %>
+              <%= content_tag(:option, c.denominazione, value: c.id) %>
+             <% end %>
+           <% end %>
+
+           <%= f.hidden_field :person_id, :value => person.id %>
+           <%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_c"+ id, disabled: true %>
+        <% end %>
+        </div>
+		
+		</td>
+		<td>
+		    <% id = person.id.to_s %>
+		    <div id=<%= id %> >
+		    <%= form_for :person, url: set_assegnazione_people_path, method: :post, :remote => true do |f| %>
+     		<%= f.text_field :assegnazione,  :value => person.assegnazione, :onchange => "abilita_save_s("+person.id.to_s+")" %>
+     		<%= f.hidden_field :person_id, :value => person.id %>
+			<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_s"+person.id.to_s, disabled: true %>
+            <% end %>
+			</div>
+		</td>
+		
+		<td>
+		    <% id = person.id.to_s %>
+		    <div id=<%= "q_" + id %> >
+		    <%= form_for :person, url: set_qualifica_people_path, method: :post, :remote => true do |f| %>
+			<%= f.select(:qualification_type_id, :qualification_type_id, { :selected => person.qualification_type_id }, {:onchange => "abilita_save_q("+id+")" }) do %>
+			   <%= content_tag(:option, ( person.qualification_type_id != nil ? QualificationType.find(person.qualification_type_id).denominazione : ""), value: person.qualification_type_id) %>
+			   <%  QualificationType.all.each do |q| %>
+			     <%= content_tag(:option, q.denominazione, value: q.id) %>
+			  <% end %>
+			<% end %>
+			<%= f.hidden_field :person_id, :value => person.id %>
+			<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_q"+ id, disabled: true %>
+            <% end %>
+			</div>
+		</td>
+		
+		
+      </tr>
+	 
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

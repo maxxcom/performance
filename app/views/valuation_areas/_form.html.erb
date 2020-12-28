@@ -1,0 +1,27 @@
+<%= form_with(model: valuation_area, local: true) do |form| %>
+  <% if valuation_area.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(valuation_area.errors.count, "error") %> prohibited this valuation_area from being saved:</h2>
+
+      <ul>
+      <% valuation_area.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :denominazione %>
+    <%= form.text_field :denominazione, id: :valuation_area_denominazione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione %>
+    <%= form.text_area :descrizione, id: :valuation_area_descrizione %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

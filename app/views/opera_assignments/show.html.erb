@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @opera_assignment.person_id %>
+</p>
+
+<p>
+  <strong>Opera:</strong>
+  <%= @opera_assignment.opera_id %>
+</p>
+
+<p>
+  <strong>Wheight:</strong>
+  <%= @opera_assignment.wheight %>
+</p>
+
+<%= link_to 'Edit', edit_opera_assignment_path(@opera_assignment) %> |
+<%= link_to 'Back', opera_assignments_path %>

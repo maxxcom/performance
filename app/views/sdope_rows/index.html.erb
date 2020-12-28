@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sdope Rows</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Matricola</th>
+      <th>Nominativo</th>
+      <th>Livello</th>
+      <th>Figuracod</th>
+      <th>Figurades</th>
+      <th>Ruolo</th>
+      <th>Titolo1</th>
+      <th>Titolo2</th>
+      <th>Titolo3</th>
+      <th>Titolo4</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sdope_rows.each do |sdope_row| %>
+      <tr>
+        <td><%= sdope_row.matricola %></td>
+        <td><%= sdope_row.nominativo %></td>
+        <td><%= sdope_row.livello %></td>
+        <td><%= sdope_row.figuracod %></td>
+        <td><%= sdope_row.figurades %></td>
+        <td><%= sdope_row.ruolo %></td>
+        <td><%= sdope_row.titolo1 %></td>
+        <td><%= sdope_row.titolo2 %></td>
+        <td><%= sdope_row.titolo3 %></td>
+        <td><%= sdope_row.titolo4 %></td>
+        <td><%= link_to 'Show', sdope_row %></td>
+        <td><%= link_to 'Edit', edit_sdope_row_path(sdope_row) %></td>
+        <td><%= link_to 'Destroy', sdope_row, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sdope Row', new_sdope_row_path %>

@@ -1,0 +1,86 @@
+<script>
+
+function abilita_save_q(button_code)
+{
+ console.log('ciao3')
+ $button = $('#btn-salva_q'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+ console.log($button)
+}
+</script>
+<p id="notice"><%= notice %></p>
+
+<h1>Utenti</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+      <th>Email</th>
+	  <th>Ufficio</th>
+	  <th>Qualifica</th>
+	  <th>Obiettivi/Pesi</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.email %></td>
+		<td><%= if person.ufficio != nil
+                 person.ufficio.nome
+                else
+				 if person.dirige.length != 0
+                   person.dirige.first.nome
+                 else				 
+                  "-" 
+				 end
+				end %></td>
+		<td>
+		    <% id = person.id.to_s %>
+		    <div id=<%= "q_" + id %> >
+		    <%= form_for :person, url: set_qualifica_people_x_index_people_path, method: :post, :remote => true do |f| %>
+			<%= f.select(:qualification_type_id, :qualification_type_id, { :selected => person.qualification_type_id }, {:onchange => "abilita_save_q("+id+")" }) do %>
+			   <%= content_tag(:option, ( person.qualification_type_id != nil ? QualificationType.find(person.qualification_type_id).denominazione : ""), value: person.qualification_type_id) %>
+			   <%  QualificationType.all.each do |q| %>
+			     <%= content_tag(:option, q.denominazione, value: q.id) %>
+			  <% end %>
+			<% end %>
+			<%= f.hidden_field :person_id, :value => person.id %>
+			<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_q"+ id, disabled: true %>
+            <% end %>
+			</div>
+		</td>
+		<% n_target = person.numero_target_assegnati %>
+        <% totale_pesi = person.totale_pesi_target_assegnati %>
+        <td>
+        <% if (n_target < 1) || (totale_pesi < 100) %>
+        <b><font color="red">
+        <% end %>
+        <%= n_target.to_s + "/" + totale_pesi.to_s %>
+        <% if (n_target < 1) || (totale_pesi < 100) %>
+        </b></font>
+        <% end %>
+        </td>
+        <td><%= link_to 'Show', person %></td>
+        <td><%= link_to 'Edit', edit_person_path(person) %></td>
+		<td><%= link_to 'Password', edit_password_path(person) %></td>
+        <td><%= link_to 'Destroy', person, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Person', new_person_path %>

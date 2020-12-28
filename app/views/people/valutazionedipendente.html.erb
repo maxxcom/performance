@@ -1,0 +1,234 @@
+
+
+<div id="search_division">
+    <%= render 'intestazionepagella' %>
+</div>
+<div id="pagella_division">
+<h1> Valutazione</h1>
+<table class="pagella_table">
+  <thead>
+    <tr>
+      <th class="fattore_valutazione">Denominazione</th>
+      <th>Peso</th>
+      <th>Voto</th>
+      <th>Voto Pesato</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+  <% indice = 0 %>
+  
+  <%= form_for :valutazione, url: setvalueall_people_path, method: :post, :remote => false do |f| %>
+    <% @valutazioni.each do |v| %>
+	  <% indice = indice + 1 %>
+      <tr>
+	    <% if v.vfactor != nil %>
+         <td class="fattore_valutazione"><%= v.vfactor.denominazione.gsub(/\r\n/, "").strip  %></td>
+         <td><%= v.vfactor.peso(@person)  %></td>
+         <td>
+		 <% stringa_campo =  @person.id.to_s + "_" + v.id.to_s + "_" + v.vfactor.id.to_s %>
+		 <%= f.number_field stringa_campo,  :value => v.value, min: v.vfactor.min, max: v.vfactor.max, step: :any %>
+         
+         </td>
+		 <td>
+		 <%= (v.value * v.vfactor.peso(@person)/v.vfactor.max).round(2) %>
+		 </td>
+		<% else %>
+		  <td></td>
+          <td></td>
+          <td></td>
+		  <td></td>
+		 <% end %>  
+        
+       
+      </tr>
+    <% end %>
+	<tr>
+	 <td>  </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+	 
+	 <%= f.hidden_field :numero_voti, :value => indice %>
+	 <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Salva tutto"), class: 'btn_salva', id: 'btn_salva_tutto', disabled: @person.flag_valutazione_chiusa %>
+	 <% end %>
+	 </td>
+	 <td>
+	 </td>
+	 </tr>
+	 <tr>
+	 <td>
+	 
+	 </td>
+	 <td>
+<% if Setting.where(denominazione: 'anno').first.value == '2019' %>
+	 <b> Media pesata </b> 
+<% end %>	 
+	 </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+<% if Setting.where(denominazione: 'anno').first.value == '2019' %>
+	 <%= @person.punteggiocomplessivo.round(2) %>
+<% end %>	 
+	 </td>
+	 </tr>
+	 <tr>
+	 <td> <b> Punteggio finale </b> </td>
+	 <td >
+	 
+	 </td>
+	 <td align="center">
+	 <%= @person.flag_valutazione_chiusa ? "VALUTAZIONE CHIUSA" : "" %>
+	 </td>
+	 <td><b><%= @person.punteggiofinale.round(2) %></b></td>
+	 </tr>
+	 
+	 
+	
+  </tbody>
+</table>
+
+<table class="pagella_table">
+  <thead>
+    
+  </thead>
+  <tbody>
+  <tr>
+	 <td> <b> Valutazione complessiva </b> </td>
+	 <td ><b>
+	 <% moltiplicatore_valutazione_pagella = @person.percentuale_pagella %>
+	 <% moltiplicatore_valutazione_obiettivi = @person.percentuale_obiettivi %>
+	 <% valutazione_complessiva = (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) != 0 ? (moltiplicatore_valutazione_pagella *  @person.punteggiofinale  + moltiplicatore_valutazione_obiettivi * @person.raggiungimento_obiettivi_discretizzato) / (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) : 0.0 %>
+	 <%= "" + moltiplicatore_valutazione_pagella.to_s + "*" + @person.punteggiofinale.to_s + " + " + moltiplicatore_valutazione_obiettivi.to_s + "*" + @person.raggiungimento_obiettivi_discretizzato.to_s + " = " + valutazione_complessiva.round(2).to_s %>
+	 </b>
+	 </td>
+  </tr> 
+  
+  </tbody>
+</table>
+
+</div>
+
+<div id="indicazioni_division">
+
+<%= form_for(:person, url: salva_indicazioni_people_path, method: :post, :remote => true) do |f| %>
+<table class="pagella_table">
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ <b>Indicazioni per il miglioramento della prestazione: </b>
+</td>
+</tr>
+<tr>
+<td>
+
+<%= f.text_area(:indicazioni_miglioramento_prestazione, cols: 80, rows: 5) %>
+
+</td>
+</tr>
+<tr>
+<td>
+ <b>Considerazioni del valutato: </b>
+</td>
+</tr>
+<tr>
+<td>
+
+<%= f.text_area(:considerazioni_del_valutato, cols: 80, rows: 5) %>
+
+</td>
+</tr>
+<tr>
+<td>
+<%= f.hidden_field :person_id, :value => @person.id %>
+<%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+<%= submit_tag( (@person.flag_valutazione_chiusa ? "X" : "Salva indicazioni e considerazioni"), disabled: @person.flag_valutazione_chiusa) %>
+<% end %>  
+</td>
+</tr>
+</tbody>
+</table> 
+
+</div>
+
+<div id="comandi_division">
+
+	 
+<table class="pagella_table">
+<thead>
+<tr>
+<th></th>
+<th>OPERAZIONI FINALI</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+
+   <%= form_for @person, url: chiusura_valutazione_people_path, method: :post, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Chiudi valutazione") , class: 'btn_chiudi', id: 'btn_chiudi_valutazione', disabled: @person.flag_valutazione_chiusa, data: {confirm: 'Sicuro di chiudere la valutazione?'} %>
+	 <% end %>
+     
+
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+
+     <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "PDF"%>
+	 <% end %>
+    
+
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+
+         <%= form_for :schedaxls, url: people_schedavalutazionedipendentexls_path, method: :get, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "Excel"%>
+	 <% end %>
+
+</td>
+<td>
+</td>
+</tr>
+   </tbody>
+</table>    
+	 
+	 
+</div>
+
+
+<div id="instruction_division">
+    <%= render 'istruzionipagella' %>
+</div>
+

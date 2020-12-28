@@ -1,0 +1,54 @@
+// Place all the styles related to the Gauges controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#gauge_descrizione { /* Stili specifici per la teaxtarea */
+    background: #FFFFFF  no-repeat 400px 95px; /* Sfondo con immagine */
+    font-size: 12px;
+    height: 50px;
+    width: 700px;
+    overflow: hidden; /* disabilitare la scrollbar in IE */
+}
+
+#gauge_nome { /* Stili specifici per la teaxtarea */
+    background: #FFFFFF  no-repeat 400px 95px; /* Sfondo con immagine */
+    font-size: 12px;
+    height: 20px;
+    width: 700px;
+    overflow: hidden; /* disabilitare la scrollbar in IE */
+}
+
+#gauge_descrizione_valore_misurazione { /* Stili specifici per la teaxtarea */
+    background: #FFFFFF  no-repeat 400px 95px; /* Sfondo con immagine */
+    font-size: 12px;
+    height: 20px;
+    width: 700px;
+    overflow: hidden; /* disabilitare la scrollbar in IE */
+}
+
+.tabella_misurazioni {
+  border: 0px solid black;
+  width: 1200px;
+  font-size:	10px;  
+  text-align:center;
+  table-layout: fixed;
+}
+
+.obiettivo {
+  width: 150px;
+  font-size:	10px;
+  text-align:center;
+  font-weight: bold;
+}
+
+.formvalore {
+  width: 120px;
+  font-size:	10px;
+  text-align:center;
+}
+
+.fase_azione {
+  width: 250px;
+  font-size:	10px;
+  text-align:left;
+}

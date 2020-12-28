@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Goal Assignments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Operational goal</th>
+      <th>Wheight</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @goal_assignments.each do |goal_assignment| %>
+      <tr>
+        <td><%= goal_assignment.person_id.to_s + " " + Person.find(goal_assignment.person_id).nominativo %></td>
+        <td><%= goal_assignment.operational_goal_id.to_s + " " + (OperationalGoal.where(id: goal_assignment.operational_goal_id).first != nil ? OperationalGoal.where(id: goal_assignment.operational_goal_id).first.denominazione : "nil") %></td>
+        <td><%= goal_assignment.wheight %></td>
+        <td><%= link_to 'Show', goal_assignment %></td>
+        <td><%= link_to 'Edit', edit_goal_assignment_path(goal_assignment) %></td>
+        <td><%= link_to 'Destroy', goal_assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Goal Assignment', new_goal_assignment_path %>

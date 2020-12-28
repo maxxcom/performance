@@ -1,0 +1,17 @@
+<h1>Importazione categorie dipendenti </h1>
+
+
+<h4> Importazione categorie</h4>
+	<%= form_tag importa_categorie_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende il file Excel assenze mandato da Insiel spostando le colonne </p>
+<p> 14 righe di intestazione </p>
+<p>  </p>
+<p>  matricola    = colonna A </p>
+<p>	 cognome nome = colonna B </p>
+<p>  qualifica = colonna E </p>
+
+<p> Fornito da Insiel </p>

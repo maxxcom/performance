@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @goal_assignment.person_id %>
+</p>
+
+<p>
+  <strong>Operational goal:</strong>
+  <%= @goal_assignment.operational_goal_id %>
+</p>
+
+<p>
+  <strong>Wheight:</strong>
+  <%= @goal_assignment.wheight %>
+</p>
+
+<%= link_to 'Edit', edit_goal_assignment_path(@goal_assignment) %> |
+<%= link_to 'Back', goal_assignments_path %>

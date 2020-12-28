@@ -1,0 +1,904 @@
+console.log("nuovo_target.js.erb file");
+var includeDivForm = $("#form_division")
+var includeDivTree = $("#jstree_aggiungi_target")
+var includeDivMsg = $("#messaggi")
+
+
+includeDivForm.empty();
+includeDivTree.empty();
+includeDivMsg.empty();
+
+var html = '<hr>';
+
+
+includeDivTree.jstree("destroy");
+
+var data = [];
+
+<% if (@tipo_target != "") && ( @target_creato != 0) %>
+   <% case @tipo_target %>
+   <% when "Obiettivo" # modificha di obiettivo operativo e aggiunta di fase o indicatore %>
+   
+     <% puts "Obiettivo"  %>
+	 <% o = OperationalGoal.find(@target_creato) %>
+	 <% puts "Obiettivo nome " + o.denominazione_completa  %>
+	 <% if o != nil %>
+	  <% if o.indicatori.length < 1 %>
+	 
+	   <% denominazione_fase_creata = "" %>
+       <% descrizione_fase_creata = ""  %>
+	   <% peso_fase_creata = 0  %>
+       html +=  '<h2> Aggiungi fase </h2> ';
+	   html += '<p> Aggiunta di fase sottostante obiettivo <b> <%= o.denominazione_completa %>: </p> </b>';
+       html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+       html += '    <%= p.label "Denominazione fase"  %>';
+       html += '    <%= p.text_field :denominazione_fase_sottostante, value: denominazione_fase_creata %>';
+       html += '<br>';
+       html += '    <%= p.label "Descrizione fase"  %>';
+       html += '    <%= p.text_field :descrizione_fase_sottostante, value: descrizione_fase_creata %>';
+       html += '<br>';
+	   html += '    <%= p.label "Peso"  %>';
+       html += '    <%= p.number_field :peso_fase_sottostante, value: peso_fase_creata %>';
+       html += '<br>';
+       html += '<table align="left">';
+       html += '  <tr>';
+       html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+       html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+       html += '  </tr>';
+       html += '</table>';
+	   html += '<table align="left">';
+       html += '  <tr>';
+       html += '    <td>Crea indicatore personalizzato</td>';
+       html += '    <td>Stringa </td>';
+       html += '  </tr>';
+	   html += '  <tr>';
+       html += '    <td>Nome</td>';
+       html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+       html += '  </tr>';
+	   html += '  <tr>';
+       html += '    <td>Descrizione</td>';
+       html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+       html += '  </tr>';
+	   html += '  <tr>';
+       html += '    <td>Descrizione valore misurazione</td>';
+       html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+       html += '  </tr>';
+       html += '</table>';
+       html += '</p>';
+       html += '  <%= p.hidden_field :operazione, :value => "crea_fase" %>';
+       html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+       html += '  <%= p.hidden_field :target_creato, :value => @target_creato %>';
+       html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+       html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	   html += '  <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+       html += '<br>';
+       html += '<br>';
+       html += '<br>';
+       html += '  <div class="actions">';
+       html += '    <%= p.submit "Salva " %>';
+       html += '  </div>';
+       html += '<% end %>';
+	 
+	  <% end # if o.indicatori.length < 1 %>
+	  
+	  <% #rimozione obiettivo %>
+	  <% if (o.indicatori.length == 0) && (o.fasi.length == 0) %>
+		  html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+		  html += '  <%= p.hidden_field :operazione, :value => "rimuovi_obiettivo" %>';
+          html += '  <%= p.hidden_field :tipo_target, :value => "Obiettivo" %>';
+          html += '  <%= p.hidden_field :target_creato, :value => o.id %>';
+          html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+          html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	      html += '  <%= p.hidden_field :obiettivo_attivo, :value => o.id %>';
+	      html += '  <%= p.submit "Rimuovi Obiettivo " %>';
+		  html += '<% end %>';
+	  <% end # di if (o.indicatori.length == 0) && (o.fasi.length == 0) %> 
+	  
+	  <% # sezione di modifica obiettivo %>
+          
+	    html += '<h2> Modifica obiettivo </h2> ';
+	    html += '<p> Modifica obiettivo <%= o.denominazione_completa %>: </p> ';
+        html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+        html += '    <%= p.label "Denominazione obiettivo"  %>';
+        html += '    <%= p.text_field :denominazione_obiettivo, value: o.denominazione_completa %>';
+        html += '<br>';
+        html += '    <%= p.label "Descrizione obiettivo"  %>';
+        html += '    <%= p.text_field :descrizione_obiettivo, value: o.descrizione_completa %>';
+        html += '<br>';
+	  
+	  
+	  
+	  
+	    <% # TABELLA FLAG OBIETTIVO %>
+	  
+
+       <% if (o != nil) %>
+        
+
+        <% valore_flag_obiettivo_di_ente = o.obiettivo_di_ente %>
+        <% valore_flag_obiettivo_di_gruppo = o.obiettivo_di_gruppo %>
+        <% valore_flag_obiettivo_di_struttura = o.obiettivo_di_struttura %>
+        <% valore_flag_obiettivo_individuale = o.obiettivo_individuale %>
+        <% valore_flag_attivita_ordinaria = o.attivita_ordinaria %>
+		<% valore_flag_obiettivo_extrapeg = o.obiettivo_extrapeg %>
+		<% valore_indice_strategicita = o.indice_strategicita %>
+        <% denominazione_obiettivo = o.denominazione_completa %>
+        <% descrizione_obiettivo = o.descrizione_completa %>
+
+      <% else %>
+        <% valore_flag_obiettivo_di_ente = false %>
+        <% valore_flag_obiettivo_di_gruppo = false %>
+        <% valore_flag_obiettivo_di_struttura = false %>
+        <% valore_flag_obiettivo_individuale = false %>
+        <% valore_flag_attivita_ordinaria = false %>
+		<% valore_flag_obiettivo_extrapeg = false %>
+		<% valore_indice_strategicita = 0 %>
+       
+      <% end %>
+      
+	  <% if current_user_admin?  # la tabella flag sono per glio amministratori %> 
+	  
+	  html += '  <br>';
+	  
+	  html += '<div>';
+      html += '<table >';
+	  html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_di_ente %></td>';
+      html += '    <td width="100px"><%= p.check_box :obiettivo_di_ente, {checked: valore_flag_obiettivo_di_ente} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_di_gruppo %></td>';
+      html += '    <td><%= p.check_box :obiettivo_di_gruppo, {checked: valore_flag_obiettivo_di_gruppo} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_di_struttura %></td>';
+      html += '    <td><%= p.check_box :obiettivo_di_struttura, {checked: valore_flag_obiettivo_di_struttura} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_individuale %></td>';
+      html += '    <td><%= p.check_box :obiettivo_individuale, {checked: valore_flag_obiettivo_individuale} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :attivita_ordinaria %></td>';
+      html += '    <td><%= p.check_box :attivita_ordinaria, {checked: valore_flag_attivita_ordinaria} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+	  html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_extrapeg %></td>';
+      html += '    <td><%= p.check_box :obiettivo_extrapeg, {checked: valore_flag_obiettivo_extrapeg} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :indice_strategicita %></td>';
+      html += '    <td><%= p.number_field :indice_strategicita, id: :operational_goal_indice_strategicita, :size=>"10", step: :any, value: valore_indice_strategicita %></td>';
+      html += '  </tr>';
+      html += '</table >';
+	  
+	  
+	  html += '</div>';
+	  html += '  <br>';
+	  <% else %>
+	  
+	  
+	  <% end %>
+	  
+	  <% # FINE TABELLA FLAG OBIETTIVO %>
+	  
+	  
+	    <% # se non ha fasi ne indicatori si può creare un indicatore %>
+	    <% if (o.indicatori.length == 0) && (o.fasi.length == 0) %>
+	         html += '<table align="left">';
+             html += '  <tr>';
+             html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+             html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+             html += '  </tr>';
+             html += '</table>';
+	         html += '<table align="left">';
+             html += '  <tr>';
+             html += '    <td>Crea indicatore personalizzato</td>';
+             html += '    <td>Stringa </td>';
+             html += '  </tr>';
+	         html += '  <tr>';
+             html += '    <td>Nome</td>';
+             html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+             html += '  </tr>';
+	         html += '  <tr>';
+             html += '    <td>Descrizione</td>';
+             html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+             html += '  </tr>';
+	         html += '  <tr>';
+             html += '    <td>Descrizione valore misurazione</td>';
+             html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+             html += '  </tr>';
+             html += '</table>';
+           <% end %>
+	   
+           html += '</p>';
+           html += '  <%= p.hidden_field :operazione, :value => "modifica_obiettivo" %>';
+           html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+           html += '  <%= p.hidden_field :target_creato, :value => o.id %>';
+           html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+           html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	       html += '  <%= p.hidden_field :obiettivo_attivo, :value => o.id %>';
+           html += '<br>';
+           html += '<br>';
+           html += '<br>';
+           html += '  <div class="actions">';
+           html += '    <%= p.submit "Modifica " %>';
+           html += '  </div>';
+           html += '<% end %>';
+		  
+		<% # fine mdofica di obiettivo %> 
+        
+        <% if o.indicatori.length > 0 %>
+	    html +=  '<h2> Rimozione indicatore </h2> ';
+	    <% o.indicatori.each do |indicatore| %>
+	      html +=  '<p> <%= indicatore.nome %> </p> ';
+		  html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+		  html += '     <%= p.hidden_field :operazione, :value => "rimuovi_indicatore" %>';
+          html += '     <%= p.hidden_field :indicatore_da_rimuovere, :value => indicatore.id %>';
+          html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		  html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '     <%= p.hidden_field :target_creato, :value => o.id %>';
+          html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+          html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+          html += '     <%= p.submit "Rimuovi indicatore" %>';
+          html += '    <% end %>';
+	   <% end %>
+     <% end # if indicatori.length maggiore di zero %>		
+	  
+	  
+	  
+     <% end # o != nil %>
+   <% when "Fase" %>
+   
+     <% f = Phase.find(@target_creato) %>
+   
+     <% if f.indicatori.length < 1 %>
+	  
+      html +=  '<h2> Aggiungi azione </h2> ';
+      html += '<p> Aggiunta di azione sottostante a fase <%= f.denominazione_completa %> : </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '    <%= p.label "Denominazione azione"  %>';
+      html += '    <%= p.text_field :denominazione_azione_sottostante, value: "" %>';
+      html += '<br>';
+      html += '    <%= p.label "Descrizione azione"  %>';
+      html += '    <%= p.text_field :descrizione_azione_sottostante, value: "" %>';
+      html += '<br>';
+	  html += '    <%= p.label "Peso"  %>';
+      html += '    <%= p.number_field :peso_azione_sottostante, value: 0 %>';
+      html += '<br>';
+      html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+      html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+      html += '  </tr>';
+      html += '</table>';
+	  html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td>Crea indicatore personalizzato</td>';
+      html += '    <td>Stringa </td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Nome</td>';
+      html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione valore misurazione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+      html += '  </tr>';
+      html += '</table>';
+      html += '</p>';
+      html += '  <%= p.hidden_field :operazione, :value => "crea_azione" %>';
+      html += '  <%= p.hidden_field :denominazione, :value => @denominazione %>';
+      html += '  <%= p.hidden_field :descrizione, :value => @descrizione %>';
+      html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      html += '  <%= p.hidden_field :target_creato, :value => @target_creato %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	  html += '  <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+      html += '  <%= p.hidden_field :fase_padre, :value => f.id %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Salva " %>';
+      html += '  </div>';
+      html += '<% end %>';
+   
+    <% end # fase selezionata ha indicatori quindi non si crea una azione sotto %>
+	<% # sezione di modifica della fase %>
+	
+	  html += '<h2> Modifica fase </h2> ';
+	  html += '<p> Modifica fase <%= f.denominazione_completa %>: </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '    <%= p.label "Denominazione fase"  %>';
+      html += '    <%= p.text_field :denominazione_fase_sottostante, value: f.denominazione_completa %>';
+      html += '<br>';
+      html += '    <%= p.label "Descrizione fase"  %>';
+      html += '    <%= p.text_field :descrizione_fase_sottostante, value: f.descrizione_completa %>';
+      html += '<br>';
+      html += '    <%= p.label "Peso"  %>';
+      html += '    <%= p.number_field :peso_fase_sottostante, value: f.peso, step: :any %>';
+      html += '<br>';
+      html += '</p>';
+      html += '  <%= p.hidden_field :operazione, :value => "modifica_fase" %>';
+      html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      html += '  <%= p.hidden_field :target_creato, :value => f.id %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	  html += '  <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Modifica " %>';
+      html += '  </div>';
+      html += '<% end %>';
+	  
+	  <% #rimozione fase %>
+	    <% if (f.indicatori.length == 0) && (f.azioni.length == 0) %>
+		  html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+		  html += '  <%= p.hidden_field :operazione, :value => "rimuovi_fase" %>';
+          html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '  <%= p.hidden_field :target_creato, :value => f.id %>';
+          html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+          html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	      html += '  <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+	      html += '  <%= p.submit "Rimuovi Fase " %>';
+		  html += '<% end %>';
+	    <% end %>
+		 
+	  
+	  <% if f.indicatori.length > 0 %>
+	    html +=  '<h2> Rimuozione indicatore </h2> ';
+	    <% f.indicatori.each do |indicatore| %>
+	      html +=  '<p> <%= indicatore.nome %> </p> ';
+		  html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+		  html += '     <%= p.hidden_field :operazione, :value => "rimuovi_indicatore" %>';
+          html += '     <%= p.hidden_field :indicatore_da_rimuovere, :value => indicatore.id %>';
+          html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		  html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '     <%= p.hidden_field :target_creato, :value => f.id %>';
+          html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+          html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+          html += '     <%= p.submit "Rimuovi indicatore" %>';
+          html += '    <% end %>';
+	   <% end %>
+     <% end # if indicatori.length maggiore di zero %>
+	 
+	 <% #aggiunta indicatori a fase %>
+	  <% if (f.indicatori.length == 0) && (f.azioni.length == 0) %>
+	   html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+	     html += '<br>';
+         html += '<table align="left">';
+         html += '  <tr>';
+         html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+         html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+         html += '  </tr>';
+         html += '</table>';
+	     html += '<table align="left">';
+         html += '  <tr>';
+         html += '    <td>Crea indicatore personalizzato</td>';
+         html += '    <td>Stringa </td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Nome</td>';
+         html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Descrizione</td>';
+         html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Descrizione valore misurazione</td>';
+         html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+         html += '  </tr>';
+         html += '</table>';
+		 html += '     <%= p.hidden_field :operazione, :value => "aggiungi_indicatore" %>';
+		 html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+         html += '     <%= p.hidden_field :target_creato, :value => f.id %>';
+		 html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+         html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+		 html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		 html += '     <%= p.submit "Aggiungi indicatore" %>';
+         html += '    <% end %>';
+		 
+	   
+	  <% end # if di indicatori zero e azioni zero %>
+	 
+      
+   <% when "Azione" %>
+      <% a = SimpleAction.find(@target_creato) %>
+      
+	  html += '<h2> Modifica azione </h2> ';
+      html += '<p> Modifica di azione  <%= a.denominazione_completa %> sottostante di : </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '    <%= p.label "Denominazione azione"  %>';
+      html += '    <%= p.text_field :denominazione_azione_sottostante, value: a.denominazione_completa %>';
+      html += '<br>';
+      html += '    <%= p.label "Descrizione azione"  %>';
+      html += '    <%= p.text_field :descrizione_azione_sottostante, value: a.descrizione_completa %>';
+      html += '<br>';
+      html += '    <%= p.label "Peso"  %>';
+      html += '    <%= p.number_field :peso_azione_sottostante, value: a.peso, step: :any %>';
+      html += '<br>';
+      html += '  <%= p.hidden_field :operazione, :value => "modifica_azione" %>';
+      
+      html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      html += '  <%= p.hidden_field :target_creato, :value => a.id %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+      html += '  <%= p.hidden_field :fase_padre, :value => @fase_padre %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Modifica " %>';
+      html += '  </div>';
+      html += '<% end %>';
+	  
+	  <% # rimozione di indicatori %>
+	  <% if a.indicatori.length > 0 %>
+	      html +=  '<p> Rimuovi indicatore di Azione <%= a.denominazione_completa %>: </p> ';
+	    <% a.indicatori.each do |indicatore| %>
+	      html +=  '<p> <%= indicatore.nome %> </p> ';
+		  html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+		  html += '     <%= p.hidden_field :operazione, :value => "rimuovi_indicatore" %>';
+          html += '     <%= p.hidden_field :indicatore_da_rimuovere, :value => indicatore.id %>';
+          html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		  html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '     <%= p.hidden_field :target_creato, :value => a.id %>';
+          html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+          html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+          html += '     <%= p.submit "Rimuovi indicatore" %>';
+          html += '    <% end %>';
+	   <% end %>
+     <% end # if indicatori.length maggiore di zero %>
+	 
+	 <% #aggiunta indicatori a azione %>
+	  <% if (a.indicatori.length == 0) %>
+	   html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+	     html += '<br>';
+         html += '<table align="left">';
+         html += '  <tr>';
+         html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+         html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+         html += '  </tr>';
+         html += '</table>';
+	     html += '<table align="left">';
+         html += '  <tr>';
+         html += '    <td>Crea indicatore personalizzato</td>';
+         html += '    <td>Stringa </td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Nome</td>';
+         html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Descrizione</td>';
+         html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Descrizione valore misurazione</td>';
+         html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+         html += '  </tr>';
+         html += '</table>';
+		 html += '     <%= p.hidden_field :operazione, :value => "aggiungi_indicatore" %>';
+		 html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+         html += '     <%= p.hidden_field :target_creato, :value => a.id %>';
+		 html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+         html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+		 html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		 html += '     <%= p.submit "Aggiungi indicatore" %>';
+         html += '    <% end %>';
+		 
+	   
+	  <% end # if di indicatori zero  %>
+	  
+	  <% # Rimozione azione %>
+	   <% if (a.indicatori.length == 0) %>
+	   
+	      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+		  html += '  <%= p.hidden_field :operazione, :value => "rimuovi_azione" %>';
+          html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '  <%= p.hidden_field :target_creato, :value => a.id %>';
+          html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+          html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	      html += '  <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+	      html += '  <%= p.submit "Rimuovi Azione " %>';
+		  html += '<% end %>';
+       
+	   <% end # if indicatori di azione uguali a zero %>
+   
+   <% when "Opera" %>
+   
+    
+      <% op = Opera.find(@target_creato) %>
+      
+	  <% # per le opere si fa solo la modifica dell'indicatore %>
+	  html += '<h2> Modifica Indicatore Opera </h2> ';
+      html += '<p> Opera  <b><%= op.denominazione_completa %> </b>: </p> ';
+	  
+      //html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      //html += '    <%= p.label "Denominazione opera"  %>';
+      //html += '    <%= p.text_field :denominazione_opera, value: op.denominazione_completa %>';
+      //html += '<br>';
+      //html += '    <%= p.label "Descrizione opera"  %>';
+      //html += '    <%= p.text_field :descrizione_opera, value: op.descrizione_completa %>';
+      //html += '<br>';
+      
+      //html += '  <%= p.hidden_field :operazione, :value => "modifica_opera" %>';
+      
+      //html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      //html += '  <%= p.hidden_field :target_creato, :value => op.id %>';
+      //html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      //html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+      
+      //html += '<br>';
+      //html += '<br>';
+      //html += '<br>';
+      //html += '  <div class="actions">';
+      //html += '    <%= p.submit "Modifica " %>';
+      //html += '  </div>';
+      //html += '<% end %>';
+	  
+	  <% # rimozione di indicatori %>
+	  <% if op.indicatori.length > 0 %>
+	      html +=  '<p> Rimuovi indicatore di Opera <%= op.denominazione_completa %>: </p> ';
+	    <% op.indicatori.each do |indicatore| %>
+	      html +=  '<p> <%= indicatore.nome %> </p> ';
+		  html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+		  html += '     <%= p.hidden_field :operazione, :value => "rimuovi_indicatore" %>';
+          html += '     <%= p.hidden_field :indicatore_da_rimuovere, :value => indicatore.id %>';
+          html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		  html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '     <%= p.hidden_field :target_creato, :value => op.id %>';
+          html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+          html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+          html += '     <%= p.submit "Rimuovi indicatore" %>';
+          html += '    <% end %>';
+	   <% end %>
+     <% end # if indicatori.length maggiore di zero %>
+	 
+	 <% #aggiunta indicatori a opera %>
+	  <% if (op.indicatori.length == 0) %>
+	   html += '    <%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p| %>';
+	     html += '<br>';
+         html += '<table align="left">';
+         html += '  <tr>';
+         html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+         html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+         html += '  </tr>';
+         html += '</table>';
+	     html += '<table align="left">';
+         html += '  <tr>';
+         html += '    <td>Crea indicatore personalizzato</td>';
+         html += '    <td>Stringa </td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Nome</td>';
+         html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Descrizione</td>';
+         html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+         html += '  </tr>';
+	     html += '  <tr>';
+         html += '    <td>Descrizione valore misurazione</td>';
+         html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+         html += '  </tr>';
+         html += '</table>';
+		 html += '     <%= p.hidden_field :operazione, :value => "aggiungi_indicatore" %>';
+		 html += '     <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+         html += '     <%= p.hidden_field :target_creato, :value => op.id %>';
+		 html += '     <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+         html += '     <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+		 html += '     <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+		 html += '     <%= p.submit "Aggiungi indicatore" %>';
+         html += '    <% end %>';
+		 
+	   
+	  <% end # if di indicatori zero  %>
+	  
+	  <% # Rimozione opera %>
+	   <% if (op.indicatori.length == 0) %>
+	   
+	      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+		  html += '  <%= p.hidden_field :operazione, :value => "rimuovi_opera" %>';
+          html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+          html += '  <%= p.hidden_field :target_creato, :value => op.id %>';
+          html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+          html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+	      html += '  <%= p.hidden_field :obiettivo_attivo, :value => @obiettivo_attivo %>';
+	      html += '  <%= p.submit "Rimuovi Opera " %>';
+		  html += '<% end %>';
+       
+	   <% end # if indicatori di opera uguali a zero %>
+  
+   
+   
+   <% when "Indicatore" %>
+   
+    <% i = Gauge.find(@target_creato) %>
+      
+	  html += '<h2> Modifica Indicatore </h2> ';
+      html += '<p> Modifica di indicatore  <%= i.nome %> sottostante di : </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td>Crea indicatore personalizzato</td>';
+      html += '    <td>Stringa </td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Nome</td>';
+      html += '    <td><%= p.text_field :indicatore_nome, value: i.nome_completo.to_s %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione, value: i.descrizione_completa.to_s %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione valore misurazione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: i.descrizione_valore_misurazione.to_s %></td>';
+      html += '  </tr>';
+      html += '</table>';
+     
+      html += '  <%= p.hidden_field :operazione, :value => "modifica_indicatore" %>';
+      
+      html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      html += '  <%= p.hidden_field :target_creato, :value => i.id %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+      html += '  <%= p.hidden_field :fase_padre, :value => @fase_padre %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Modifica " %>';
+      html += '  </div>';
+      html += '<% end %>';
+	  
+	    
+   
+   <% else %>
+   
+      html += '';
+
+   <% end # case tipo_target %>
+<% else %>
+<% # siamo nel caso iniziale o niente selezionato. Facciamo creare un obiettivo %>
+
+ <% # CREAZIONE DI UN OBIETTIVO %>
+   
+      html += '<p> Aggiunta di obiettivo : </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '    <%= p.label "Denominazione obiettivo"  %>';
+      html += '    <%= p.text_field :denominazione_obiettivo, value: "" %>';
+      html += '<br>';
+      html += '    <%= p.label "Descrizione obiettivo"  %>';
+      html += '    <%= p.text_field :descrizione_obiettivo, value: "" %>';
+      html += '<br>';
+	  
+	   <% # TABELLA FLAG OBIETTIVO %>
+	  
+
+        <% valore_flag_obiettivo_di_ente = false %>
+        <% valore_flag_obiettivo_di_gruppo = false %>
+        <% valore_flag_obiettivo_di_struttura = false %>
+        <% valore_flag_obiettivo_individuale = false %>
+        <% valore_flag_attivita_ordinaria = false %>
+		<% valore_flag_obiettivo_extrapeg = false %>
+		<% valore_indice_strategicita = 0 %>
+		
+	<% if current_user_admin?  # la tabella flag sono per glio amministratori %> 
+      
+	  html += '  <br>';
+	  
+	  html += '<div>';
+      html += '<table >';
+	  html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_di_ente %></td>';
+      html += '    <td width="100px"><%= p.check_box :obiettivo_di_ente, {checked: valore_flag_obiettivo_di_ente} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_di_gruppo %></td>';
+      html += '    <td><%= p.check_box :obiettivo_di_gruppo, {checked: valore_flag_obiettivo_di_gruppo} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_di_struttura %></td>';
+      html += '    <td><%= p.check_box :obiettivo_di_struttura, {checked: valore_flag_obiettivo_di_struttura} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_individuale %></td>';
+      html += '    <td><%= p.check_box :obiettivo_individuale, {checked: valore_flag_obiettivo_individuale} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :attivita_ordinaria %></td>';
+      html += '    <td><%= p.check_box :attivita_ordinaria, {checked: valore_flag_attivita_ordinaria} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+	  html += '  <tr>';
+      html += '    <td><%= p.label :obiettivo_extrapeg %></td>';
+      html += '    <td><%= p.check_box :obiettivo_extrapeg, {checked: valore_flag_obiettivo_extrapeg} %></td>';
+      html += '  </tr>';
+      html += '  <tr>';
+      html += '    <td><%= p.label :indice_strategicita %></td>';
+      html += '    <td><%= p.number_field :indice_strategicita, id: :operational_goal_indice_strategicita, :size=>"10", step: :any, value: valore_indice_strategicita %></td>';
+      html += '  </tr>';
+      html += '</table >';
+	  
+	  
+	  html += '</div>';
+	  html += '  <br>';
+	  
+	  <% end %>
+	  
+	  <% # FINE TABELLA FLAG OBIETTIVO %>
+	  
+	  html += '<p>';
+      html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+      html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+      html += '  </tr>';
+      html += '</table>';
+	  
+	 
+	  
+	  html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td>Crea indicatore personalizzato</td>';
+      html += '    <td>Stringa </td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Nome</td>';
+      html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione valore misurazione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+      html += '  </tr>';
+      html += '</table>';
+	  
+	  
+      
+      html += '  <%= p.hidden_field :operazione, :value => "crea_obiettivo" %>';
+      html += '  <%= p.hidden_field :tipo_target, :value => "Obiettivo" %>';
+      html += '  <%= p.hidden_field :target_creato, :value => 0 %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => 0 %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Salva " %>';
+      html += '  </div>';
+      html += '<% end %>';
+
+
+<% end # di else di (@tipo_target != "") && ( @target_creato != 0) %>
+
+includeDivForm.append(html);
+html = '<%= @messaggio.to_s %>'
+includeDivMsg.append(html);
+
+<% if @dirigente != nil %>
+ data.push({ "id" : '<%= "d-" + @dirigente.id.to_s %>', "parent" : "#", "text" : '<%= @dirigente.nominativo2 %>', 'state' : { 'opened' : true} });
+<% end %>
+
+ <% if @obiettivo_attivo != 0 %> 
+ 
+ 
+  <% if @tipo_nodo_attivo == "Obiettivo" %>
+   <%    o = OperationalGoal.find(@obiettivo_attivo) %>
+      data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 + o.stringa_extrapeg %> ', 'state' : { 'opened' : true} });
+	  
+	   <%    o.indicatori.each do |i| %>	  
+       data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>
+	  
+   <%    o.fasi.each do |f| %>	
+       
+       data.push({ "id" : '<%= "f-" + f.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= "[" + f.peso.to_s + "] " + f.denominazione80 %>', 'state' : { 'opened' : true} });
+	   <%    f.indicatori.each do |i| %>	  
+        data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>  
+   <%        f.azioni.each do |a| %>
+           data.push({ "id" : '<%= "a-" + a.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= "[" + a.peso.to_s + "] " + a.denominazione80 %>', 'state' : { 'opened' : true} });
+			<%    a.indicatori.each do |i| %>	  
+				data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "a-" + a.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+			<%    end # end di indicatori.each%>
+   <%        end # end di azioni.each%>
+   <%    end # end di fasi.each %>
+   
+  <% elsif @tipo_nodo_attivo == "Opera" %>
+     <%    op = Opera.find(@obiettivo_attivo) %>
+      data.push({ "id" : '<%= "p-" + op.id.to_s %>', "parent" : "#", "text" : '<%= op.denominazione80 %>', 'state' : { 'opened' : true} });
+      <%    op.indicatori.each do |i| %>	  
+        data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "p-" + op.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	  <%    end %>
+	  
+  <% elsif @tipo_target == "Indicatore" %>
+     <% i = Gauge.find(@obiettivo_attivo) %>
+	 
+  <% end %>
+ 
+ <% else # @obiettivo_attivo == 0  %>
+
+   <% @dirigente.obiettivi_responsabile.each do |o| %>
+    
+	 <% if mostra_tutto_in_aggiungi_target? || current_user_admin? %>
+       data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 + o.stringa_extrapeg %>', 'state' : { 'opened' : true} });
+	 <% else  %>
+	   <% if o.obiettivo_extrapeg %>
+	     data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 + o.stringa_extrapeg %>', 'state' : { 'opened' : true} });
+	   <% end %>
+	 <% end %>
+
+   <% end %>
+   
+   <% @dirigente.opere.each do |op| %>
+    
+	 <% if mostra_opere_in_aggiungi_target? || current_user_admin? %>
+       data.push({ "id" : '<%= "p-" + op.id.to_s %>', "parent" : "#", "text" : '<%= op.denominazione80 %>', 'state' : { 'opened' : true} });
+	
+	 <% end %>
+
+   <% end %>
+
+ <% end # @obiettivo_attivo == 0 %>
+
+
+
+
+includeDivTree.on("changed.jstree", function (e, data) {
+			if(data.selected.length) {
+			    selezionato = data.instance.get_node(data.selected[0]).id
+				alert('Nodo selezionato: ' + data.instance.get_node(data.selected[0]).text + " " + data.instance.get_node(data.selected[0]).id);
+				
+				mydata = {
+					nodo: data.instance.get_node(data.selected[0]).id,
+					dirigente_id: <%= @dirigente != nil ? @dirigente.id.to_s : "nil" %>,
+				};
+				console.log(mydata);
+				$.ajax({
+					method: 'POST',
+					url: 'selected_target',
+					data: mydata,
+					success: function(){},
+					error: function(){}
+    
+				})
+			}
+		}).jstree({
+     "core" : {
+       // so that create works
+       "check_callback" : true,
+	   "themes": {
+            "icons": true,
+			'name': 'default',
+			'url': '/style.css'
+        },
+        
+       "data": data
+	   
+	   
+     },
+	 "ui" : {
+		"select_limit" : 1
+			},
+
+	 
+	 
+	   
+	  "plugins" : ["types", "themes", "ui"]
+	 
+	 });

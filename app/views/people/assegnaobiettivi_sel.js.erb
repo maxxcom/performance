@@ -1,0 +1,197 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code);
+ $.rails.enableElement($button);
+ $button.removeAttr('disabled');
+}
+
+console.log("<%= @scelta.to_s %>");
+var includeDiv = $("#results_division");
+var includeDivTree = $("#jstree_assegnaobiettivi");
+includeDiv.empty();
+
+var html = '';
+
+//html += '<br>*<%= @dirigente.to_s %>*';
+//html += '<br>*<%= @target_array.length %>*';
+html += '<h1> Obiettivi/Fasi/Azioni/Opere </h1>';
+
+
+
+html += '<br>';
+html += ' <%= form_for :person, url: selecttarget_people_path, method: :post, :remote => true do |p| %>';
+html += ' <%= p.select(:selected) do %>';
+html += '    <%= content_tag(:option, (" "), value: [0, ""]) %>';
+html += '  <% @target_array.each do |t| %>';
+html += '    <%= content_tag(:option, (t.tipo[0] + " - " + t.denominazione80), value: [t.id, t.class.name]) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += ' <%= p.hidden_field :opzione_obiettivi, :value => @opzione_obiettivi %>';
+html += ' <%= p.hidden_field :opzione_fasi, :value => @opzione_fasi %>';
+html += ' <%= p.hidden_field :opzione_azioni, :value => @opzione_azioni %>';
+html += ' <%= p.hidden_field :opere, :value => @opzione_opere %>';
+html += ' <%= p.hidden_field :sel, :value => @sel %>';
+html += ' <%= p.submit "Seleziona" %>';
+html += ' <% end %>';
+//html += '<p> QUI SOPRA </p>';
+
+//html += '<br>*<%= @scelta.to_s %>*';
+
+html += '<% if @scelta != nil %>';
+//html += '<p> QUI </p>';
+html += '<p><%= @scelta.tipo %> : <b><%= @scelta.denominazione_completa %></b></p> ';
+html += '<b>Assegnatari:</b>';
+html += '<br>';
+
+html += '<div class="toleft">';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @scelta.assegnatari.each do |p| %>';
+html += '  <tr>';
+html += '   <td>';
+html += '    <%= form_for p, url: removeassegnazione_people_path, method: :post, :remote => true do |f| %>';
+html += '     <%= f.hidden_field :target_id, :value => @scelta.id %>';
+html += '	  <%= f.hidden_field :assegnatario_id, :value => p.id %>';
+html += '     <%= f.hidden_field :target_type, :value => @scelta.class.name %>';
+html += '     <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '     <%= f.hidden_field :opzione_obiettivi, :value => @opzione_obiettivi %>';
+html += '     <%= f.hidden_field :opzione_fasi, :value => @opzione_fasi %>';
+html += '     <%= f.hidden_field :opzione_azioni, :value => @opzione_azioni %>';
+html += '     <%= f.hidden_field :opere, :value => @opzione_opere %>';
+html += '     <%= f.hidden_field :sel, :value => @sel %>';
+html += '     <%= f.submit "Rimuovi assegnazione" %>';
+html += '    <% end %>';
+html += '   </td>';
+html += '   <td>';
+html += '    <%= p.cognome + " " + p.nome %>';
+html += '   </td>';
+html += '   <td>';
+html += '    <%= @scelta.peso_assegnazione(p) %>';
+html += '   </td>';
+html += '  </tr>';
+html += '  <% end %>'; 
+html += '</tbody></table>';
+html += '</div> ';
+
+html += '<br>';
+
+<% if current_user_admin? %>
+html += '<hr>';
+html += '<p>';
+html += ' <%= form_for :person, url: aggiungiassegnazioni_people_path, method: :post, :remote => true do |p| %>';
+html += '  <%= p.text_field :text, cols: 40, rows: 15, :value => "" %>';
+html += '  <%= p.number_field :value, min: 0, max: 100,  :value => 0 %>';
+html += '  <%= p.hidden_field :target_id, :value => @scelta.id %>';
+html += '  <%= p.hidden_field :target_type, :value => @scelta.class.name %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :opzione_obiettivi, :value => @opzione_obiettivi %>';
+html += '  <%= p.hidden_field :opzione_fasi, :value => @opzione_fasi %>';
+html += '  <%= p.hidden_field :opzione_azioni, :value => @opzione_azioni %>';
+html += '  <%= p.hidden_field :opere, :value => @opzione_opere %>';
+html += '  <%= p.hidden_field :sel, :value => @sel %>';
+html += '</p>';
+html += '  <%= p.submit "Aggiungi assegnazioni" %>';
+html += ' <% end %>';
+<% end %>
+
+html += '<hr>';
+html += '<p>';
+html += '<%= form_for :person, url: aggiungiassegnazioni_people_path, method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:person_id) do %>';
+html += '<%=    content_tag(:option, "", value: "") %>';
+html += '<%     @dirigente.dipendenti_sotto.sort_by{|p| p.cognome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo2, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.number_field :value, min: 0, max: 100,  :value => 0 %>';
+html += '  <%= p.hidden_field :target_id, :value => @scelta.id %>';
+html += '  <%= p.hidden_field :target_type, :value => @scelta.class.name %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :opzione_obiettivi, :value => @opzione_obiettivi %>';
+html += '  <%= p.hidden_field :opzione_fasi, :value => @opzione_fasi %>';
+html += '  <%= p.hidden_field :opzione_azioni, :value => @opzione_azioni %>';
+html += '  <%= p.hidden_field :opere, :value => @opzione_opere %>';
+html += '  <%= p.hidden_field :sel, :value => @sel %>';
+html += '</p>';
+html += '<%=   p.submit "Aggiungi assegnazione" %>';
+html += '<% end %>';
+html += '<hr>';
+  
+html += '<% end %>';
+
+html_alternativo = '<h1> La fase di assegnazione obiettivi è chiusa. </h1>'
+
+<% if periodo_assegnazione_aperto || current_user_admin? %>
+   includeDiv.append(html);
+<% else %>
+   includeDiv.append(html_alternativo);
+<% end %>
+
+includeDivTree.jstree("destroy");
+var data = [];
+
+data.push({ "id" : '<%= "d-" + @dirigente.id.to_s %>', "parent" : "#", "text" : '<%= @dirigente.nominativo2 %>', 'state' : { 'opened' : true} });
+<% @target_array.each do |t| %>
+
+  data.push({ "id" : '<%= @sel + "-" + t.id.to_s %>', "parent" : "#", "text" : '<%= t.denominazione80 %>', 'state' : { 'opened' : true} });
+  <% t.assegnatari.each do |p| %>
+    data.push({ "id" : '<%= "dt-" + p.id.to_s + "-" + t.id.to_s %>', "parent" : '<%= @sel + "-" + t.id.to_s %>', "text" : '<%= p.nominativo2 + " " + t.peso_assegnazione(p).to_s %>', "li_attr" : { "class" : "person" }, 'state' : { 'opened' : false} });
+  <% end %>
+
+ 
+<% end %>
+
+includeDivTree.jstree({
+     "core" : {
+       // so that create works
+       "check_callback" : true,
+	   "themes": {
+            "icons": true,
+			'name': 'default',
+			'url': '/style.css'
+        },
+        
+       "data": data
+	   
+	   
+     },
+	 
+	 "dnd" : {
+            "drop_finish" : function () {
+                console.log("DROP");
+            },
+	},
+
+	   
+	  "plugins" : ["types", "themes", "dnd"]
+	 
+	 });
+
+//includeDivTree.jstree._themes = '/assets/jstree-themes/';
+	 
+includeDivTree.bind(
+        "select_node.jstree", function(evt, data){
+		    var dirigente_id = '<%= @dirigente.id %>';
+			var sel = '<%= @sel %>';
+            console.log('select!');
+			console.log(data.node.id);
+			console.log(data.node.className);
+			console.log(dirigente_id);
+			mydata = {   
+               target: data.node.id,
+               dirigente: dirigente_id,
+			   sel: sel 
+            };
+			console.log(mydata);
+			$.ajax({
+              method: 'POST',
+              url: '/people/selecttarget',
+              data: mydata,
+              success: function(){},
+              error: function(){}
+    
+            });
+        }
+);

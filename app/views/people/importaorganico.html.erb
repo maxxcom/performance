@@ -1,0 +1,132 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dipendenti trovati</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome Cognome</th>
+	  <th>Matricola</th>
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @dipendenti != nil %>
+    <% @dipendenti.each do |person| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person[:nomecognome] %></td>
+		<td><%= person[:matricola] %></td>
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Uffici trovati</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Denominazione</th>
+
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @uffici != nil %>
+    <% @uffici.each do |ufficio| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= ufficio[:nome] %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Dipendenti aggiunti da SDOPE</h1>
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Denominazione</th>
+
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @dipendentiinsdope != nil %>
+    <% @dipendentiinsdope.each do |altro| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= altro[:nomecognome] %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Altro</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Denominazione</th>
+
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @dipendentinontrovati != nil %>
+    <% @dipendentinontrovati.each do |altro| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= altro[:denominazione] %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Porcherie</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>riga[2]</th>
+      <th>riga[3]</th>
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @porcherie != nil %>
+    <% @porcherie.each do |altro| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= altro[:riga2] %></td>
+		<td><%= altro[:riga3] %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

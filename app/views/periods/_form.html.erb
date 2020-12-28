@@ -1,0 +1,39 @@
+
+<p> Attenzione: la creazione di un nuovo periodo annuale deve essere accompagnata da opportune modifiche al codice di calcolo </p>
+<%= form_with(model: period, local: true) do |form| %>
+  <% if period.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(period.errors.count, "error") %> prohibited this period from being saved:</h2>
+
+      <ul>
+      <% period.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :denominazione %>
+    <%= form.text_field :denominazione, id: :period_denominazione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :data_inizio %>
+    <%= form.date_select :data_inizio, id: :period_data_inizio %>
+  </div>
+
+  <div class="field">
+    <%= form.label :data_fine %>
+    <%= form.date_select :data_fine, id: :period_data_fine %>
+  </div>
+
+  <div class="field">
+    <%= form.label :stato_aperto %>
+    <%= form.check_box :stato_aperto, id: :period_stato_aperto %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

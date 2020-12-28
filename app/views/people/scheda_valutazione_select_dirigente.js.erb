@@ -1,0 +1,197 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+console.log("scheda_valutazione_select_dirigente.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = '';
+
+html += '<h1> Scheda valutazione dirigente </h1>';
+
+html += '<p>Nominativo : <%= @dirigente.cognome + "  " + @dirigente.nome %></p>';
+html += '<p>Dipartimento : <%= @dipartimento.nome %></p>';
+html += '<p>Servizio : <%= @servizio %></p>';
+
+html += '<p>Servizi: </p>';
+<% @servizi.each do | servizio | %>
+html += '<p> <%= (servizio != nil ? servizio.nome : "-") %> </p>';
+<% end %>
+
+<% if false %>
+html += '<p> Obiettivi individuali: </p>';
+
+html += '<table class="tabella_valutazione_obiettivi_individuali">';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th class="numeratore">Nr</th>';
+html += '      <th class="obiettivo">Obiettivo</th>';
+
+html += '      <th class="percentuale">Percentuale raggiungimento</th>';
+	       
+html += '    </tr>';
+html += '  </thead>';
+html += '    <tbody>';
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @obiettivi_individuali_digruppo.each do |obiettivo| %>
+	  <% num = num + obiettivo.valore_totale*1 %>
+	  <% den = den + 1 %>
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= obiettivo.denominazione80 %></td>';
+html += '        <td><%= obiettivo.valore_totale %></td>';
+		
+html += '	  </tr>';
+    <% end %>
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '      <td>Totale</td>';
+html += '      <td><%=den !=0 ? (num/den).round(2) : " n.a." %></td> </td>';
+	  
+html += '	  </tr>';
+html += '  </tbody>';
+html += '</table>';
+
+<% end %>
+
+html += '<br>';
+
+html += '<p> Obiettivi : </p>';
+
+html += '<br>';
+
+html += '<table class="tabella_valutazione_obiettivi_strategici">';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th class="numeratore">Nr</th>';
+html += '      <th class="obiettivo">Obiettivo</th>';
+html += '      <th class="obiettivo">Servizio</th>';
+html += '	  <th class="percentuale">Indice di strategicità</th>';
+html += '      <th class="percentuale">Percentuale raggiungimento</th>';
+html += '	  <th class="percentuale">Valutazione 0-3</th>';
+html += '	  <th class="percentuale">Punteggio finale</th>';
+      
+html += '    </tr>';
+html += '  </thead>';
+
+  
+html += '    <tbody>';
+
+<% @servizi.each do | servizio | %>
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+	<% totale_indice_strategicita = 0 %>
+	<% totale_punteggio_finale = 0 %>
+    <% @obiettivi_strategici.each do |obiettivo| %>
+	<% if obiettivo.struttura_organizzativa == servizio %>
+	
+	  <% num = num + obiettivo.valore_totale*obiettivo.indice_strategicita %>
+	  <% den = den + obiettivo.indice_strategicita %>
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= obiettivo.denominazione %></td>';
+html += '        <td><%= (servizio != nil ? servizio.nome : "-") %></td>';
+html += '		<td><%= obiettivo.indice_strategicita %></td>';
+html += '        <td><%= obiettivo.valore_totale %></td>';
+html += '        <td><%= obiettivo.punteggio_0_3 %></td>';
+html += '        <td><%= (obiettivo.punteggio_0_3 * obiettivo.indice_strategicita).round(2) %></td>';
+html += '	  </tr>';
+<% totale_indice_strategicita = totale_indice_strategicita + obiettivo.indice_strategicita %>
+<% totale_punteggio_finale = totale_punteggio_finale + (obiettivo.punteggio_0_3 * obiettivo.indice_strategicita) %>
+    <% end # if servizio%>
+    <% end %>
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '     <td><b>Totale</b></td>';
+html += '     <td></td>';
+html += '     <td><b><%= totale_indice_strategicita.round(2) %></b></td>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  <td><b><%= totale_punteggio_finale.round(2) %></b></td>';
+html += '	  </tr>';
+
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '     <td></td>';
+html += '     <td></td>';
+html += '     <td></td>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  <td></b></td>';
+html += '	  </tr>';
+
+   
+
+<% end # divisione per servizio%>
+
+
+
+<% @obiettivi_individuali.each do |obiettivo| %>
+
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= obiettivo.denominazione80 %></td>';
+html += '        <td>Individuale</td>';
+html += '		<td></td>';
+html += '        <td><%= obiettivo.valore_totale %></td>';
+html += '        <td><%= obiettivo.punteggio_0_3 %></td>';
+html += '        <td><%= (obiettivo.punteggio_0_3).round(2) %></td>';
+html += '	  </tr>';
+
+<% end %>
+
+
+html += '  </tbody>';
+html += '</table>';
+
+
+
+html += '<br>';
+
+<% if false %>
+html += '<p> Obiettivi di ente: </p>';
+html += '<br>';
+
+html += '<table class="tabella_valutazione_obiettivi_di_ente">';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th class="numeratore">Nr</th>';
+html += '      <th class="obiettivo">Obiettivo</th>';
+html += '      <th class="percentuale">Percentuale raggiungimento</th>';
+	        
+html += '    </tr>';
+html += '  </thead>';
+  
+html += '    <tbody>';
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @obiettivi_strategici.each do |obiettivo| %>
+	  <% num = num + obiettivo.valore_totale*1 %>
+	  <% den = den + 1 %>
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= obiettivo.denominazione %></td>';
+html += '        <td><%= obiettivo.valore_totale %></td>';
+		
+html += '	  </tr>';
+    <% end %>
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '      <td>Totale</td>';
+html += '      <td><%= den !=0 ? (num/den).round(2) : " n.a." %></td> </td>';
+	  
+html += '	  </tr>';
+html += '  </tbody>';
+html += '</table>';
+
+<% end %>
+
+includeDiv.append(html);

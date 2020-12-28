@@ -1,0 +1,23 @@
+<h1>Persone ed uffici</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Risultato</th>
+	 
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @result != nil %>
+    <% @result.each do |rec| %>
+      <tr>
+        <td><%= rec %></td>
+		
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

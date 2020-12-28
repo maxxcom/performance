@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Area di valutazione:</strong>
+  <%= @valuation_qualification_percentage.valuation_area_id %>
+   <%= ValuationArea.find(@valuation_qualification_percentage.valuation_area_id).denominazione %>
+</p>
+
+<p>
+  <strong>Qualifica:</strong>
+  <%= @valuation_qualification_percentage.qualification_type_id %>
+  <%= QualificationType.find(@valuation_qualification_percentage.qualification_type_id).denominazione %>
+</p>
+
+<p>
+  <strong>Categoria:</strong>
+  <%= @valuation_qualification_percentage.category_id %>
+  <%= Category.find(@valuation_qualification_percentage.category_id).denominazione %>
+</p>
+
+<p>
+  <strong>Percentuale:</strong>
+  <%= @valuation_qualification_percentage.percentuale %>
+</p>
+
+<%= link_to 'Edit', edit_valuation_qualification_percentage_path(@valuation_qualification_percentage) %> |
+<%= link_to 'Back', valuation_qualification_percentages_path %>

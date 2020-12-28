@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Simple Action Assignments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Simple action</th>
+      <th>Wheight</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @simple_action_assignments.each do |simple_action_assignment| %>
+      <tr>
+        <td><%= simple_action_assignment.person_id %></td>
+        <td><%= simple_action_assignment.simple_action_id %></td>
+        <td><%= simple_action_assignment.wheight %></td>
+        <td><%= link_to 'Show', simple_action_assignment %></td>
+        <td><%= link_to 'Edit', edit_simple_action_assignment_path(simple_action_assignment) %></td>
+        <td><%= link_to 'Destroy', simple_action_assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Simple Action Assignment', new_simple_action_assignment_path %>

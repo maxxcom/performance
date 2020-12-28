@@ -1,0 +1,53 @@
+console.log("set_altri_responsabili.js.erb file");
+var includeDiv = $("#responsabili_division")
+includeDiv.empty();
+
+var html = '';
+
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Responsabile:</strong>';
+html += '  <%= @operational_goal.responsabile_principale.nominativo %>';
+html += '</p>';
+html += '<p>';
+html += '<%= form_for @operational_goal, url: operational_goal_set_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     Person.joins(:qualification).where(qualification_types: { denominazione: 'Dirigente' }).order(:cognome).each do |c| %>';
+html += '<%=      content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '<%=   p.submit "Responsabile" %>';
+html += '<% end %>';
+html += '</p>';
+
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Altri Responsabili:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @operational_goal.altri_responsabili.each do |ar| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @operational_goal, url: operational_goal_remove_altro_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :person_id, :value => ar.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ar.nominativo %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+
+html += '<%= form_for @operational_goal, url: operational_goal_add_altro_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     Person.joins(:qualification).where(qualification_types: { denominazione: 'Dirigente' }).order(:cognome).each do |c| %>';
+html += '<%=      content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+
+includeDiv.append(html);

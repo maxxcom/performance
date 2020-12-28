@@ -1,0 +1,6 @@
+<h1>Fasi</h1>
+
+<%= form_for(:phase, method: "get", remote: false, url: indexfiltro_phases_path  )  do |f| %>
+<%= f.text_field(:stringa , :value => @stringa_ricerca, size: 20) %>
+<% end %>
+

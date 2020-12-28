@@ -1,0 +1,113 @@
+// Place all the styles related to the OperationalGoals controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.tabella_pesi_azioni_fasi {
+  border: 0px solid black;
+  width: 1200px;
+  font-size:	10px;  
+  text-align:center;
+  table-layout: fixed;
+}
+
+.obiettivo {
+  width: 150px;
+  font-size:	10px;
+  text-align:center;
+  font-weight: bold;
+}
+
+.formvalore {
+  width: 120px;
+  font-size:	10px;
+  text-align:center;
+}
+
+.fase_azione {
+  width: 250px;
+  font-size:	10px;
+  text-align:left;
+}
+
+.field {
+  border: 1px solid #bbb;
+  width: 30%;
+  padding: 10px;
+  height: auto !important;
+  margin-bottom: 1px;
+
+}
+
+#operational_goal_descrizione {
+  border: 1px solid #bbb;
+  width: 100%;
+  padding: 10px;
+  height: auto !important;
+  margin-bottom: 1px;
+}
+
+#operational_goal_denominazione{
+  border: 2px solid #bbb;
+  width: 100%;
+  padding: 10px;
+  height: auto !important;
+  margin-bottom: 1px;
+
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+input, textfield, textarea, select {
+  border: 1px solid #bbb;
+  
+  width: 98%;
+  
+  padding: 10px;
+  height: auto !important;
+  margin-bottom: 15px;
+
+}
+
+/*
+ .uneditable-input {
+  border: 1px solid #bbb;
+  width: 50%;
+  padding: 10px;
+  height: auto !important;
+  margin-bottom: 15px;
+
+}
+*/
+
+#riquadro {
+
+position: fixed;
+z-index: 9;
+background:#ff0; 
+border:1px solid #ACD8F0; 
+width: 600px;
+hight: 400px
+
+}
+
+
+#riquadroheader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: #2196F3;
+  color: #fff;
+}
+

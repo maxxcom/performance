@@ -1,0 +1,30 @@
+<h1>Settaggio associazione</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+      <th>Assegnazione</th>
+	  
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+	<% if @valutazioni != nil %>
+    <% @valutazioni.each do |person| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.assegnazione %></td>
+      </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+

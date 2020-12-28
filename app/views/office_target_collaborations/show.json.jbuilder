@@ -1,0 +1,1 @@
+json.partial! "office_target_collaborations/office_target_collaboration", office_target_collaboration: @office_target_collaboration

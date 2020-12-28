@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+
+<h1>Istruzioni </h1>
+
+<%= render 'istruzioni_compilazione_pagella' %>
+
+<h2>Importazione dati PEG</h2>
+
+<p> L'importazione dei dati del PEG (obiettivi/fasi/azioni) avviene attraverso i file Excel del Controllo di Gestione </p>
+<p> Queste importazioni si possono eseguire più volte: vanno a modificare quello che c'è già nella base dati e ad aggiungere cosa c'è di nuovo.
+Per cui non sono operazioni pericolose. Anche cancellare un obiettivo o una fase di per se non è pericoloso: eventualmente si reimporta il file Excel (
+o si inserisce l'elemento a mano) </p>
+
+<p> Ordine di importazione </p>
+<ol>
+	<li>Importazione obiettivi da PEG</li>
+	<li>Importazione obiettivi attività ordinaria</li>
+	<li>Importazione dipendenti da PEG: in realtà dal foglio Personale degli obiettivi vengono presi i dipendenti e messi nell'ufficio giusto</li>
+	<li>Importazione indicatori da PEG</li>
+	<li>Importazione Valori e Misurazioni da PEG</li>
+</ol>
+
+<p> Importati obiettivi/fasi/azioni si possono vedere le schermate riassuntive:<p>
+<ol>
+	<li>Misurazione obiettivi per Dirigente</li>
+	<li>Importazione obiettivi attività ordinaria</li>
+	<li>Importazione dipendenti da PEG: in realtà dal foglio Personale degli obiettivi vengono presi i dipendenti e messi nell'ufficio giusto</li>
+	<li>Importazione indicatori da PEG</li>
+	<li>Importazione Valori e Misurazioni da PEG</li>
+</ol>
+
+<h2>Importazione Valutazioni </h2>
+<p> L'importazioni riassuntivi pagelle può essere fatto quando si vuole</p>
+
+
+

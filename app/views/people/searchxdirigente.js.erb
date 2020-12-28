@@ -1,0 +1,67 @@
+console.log("create.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = 'Lista';
+<% numero_dipendenti = 0 %>
+<% @risultati.each do |r| %>
+
+html += '<br>';
+html += 'Ufficio:';
+html += '<b><%= "[" + r[:ufficio].id.to_s + "]" + r[:ufficio].nome %></b>'; 
+html += '<br>';
+html += 'Direttore: ';
+html += '<%= r[:ufficio].director != nil ? r[:ufficio].director.nome : " " %>'; 
+html += ' ';
+html += '<%= r[:ufficio].director != nil ? r[:ufficio].director.cognome : " " %>'; 
+html += '<br>';
+
+html += '<table style="width:50%">';
+html += '  <tr>';
+html += '    <th style="width:25%">Nome</th>';
+html += '    <th style="width:25%">Cognome</th>';
+html += '    <th style="width:25%">Categoria</th>';
+html += '    <th style="width:25%">Obiettivi/PesoTotale</th>';
+html += '  </tr>';
+<% r[:ufficio].people.each do |p| %>
+<% numero_dipendenti = numero_dipendenti + 1 %>
+html += '  <tr>';
+html += '    <td><%= p.nome %></td>';
+html += '    <td><%= p.cognome %></td>';
+html += '    <td><%= p.stringa_categoria.to_s %></td>';
+<% n_target = p.numero_target_assegnati %>
+<% totale_pesi = p.totale_pesi_target_assegnati %>
+html += '	<td>';
+<% if (n_target < 1) || (totale_pesi < 100) %>
+html += '   <b><font color="red">';
+<% end %>
+html += ' <%= n_target.to_s + "/" + totale_pesi.to_s %>';
+<% if (n_target < 1) || (totale_pesi < 100) %>
+html += '</b></font>';
+<% end %>
+html += '   </td>';
+html += '  </tr>';
+<% end %> 
+html += '</table>';
+
+
+
+html += '<br>';
+
+<% end %>
+html += '<p> Totale dipendenti :';
+html += '<%= numero_dipendenti %>';
+html += '</p>';
+
+<% if (current_user_admin? || true) %>
+html += '	 	 <%= form_for :schedaxls, url: people_riassuntivo_assegnazioni_path, method: :get, :remote => false do |f| %>';
+html += '	      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "Riassuntivo assegnazioni per dipendente"%>';
+html += '	 	 <% end %>';
+html += '	 	 <%= form_for :schedaxls, url: people_riassuntivo_assegnazioni_raggruppate_path, method: :get, :remote => false do |f| %>';
+html += '	      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "Riassuntivo assegnazioni per ufficio"%>';
+html += '	 	 <% end %>';
+<% end %>
+
+includeDiv.append(html);

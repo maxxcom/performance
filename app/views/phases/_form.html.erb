@@ -1,0 +1,52 @@
+<%= form_with(model: phase, local: true) do |form| %>
+  <% if phase.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(phase.errors.count, "error") %> prohibited this phase from being saved:</h2>
+
+      <ul>
+      <% phase.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :denominazione %>
+    <%= form.text_field :denominazione, id: :phase_denominazione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione %>
+    <%= form.text_area :descrizione, id: :phase_descrizione %>
+  </div>
+  
+  <div class="field">
+      <%= form.label :responsabile_principale_id %>
+      <%= form.collection_select(:responsabile_principale_id, Person.dirigenti, :id, :cognome, :include_blank => true) %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :peso %>
+    <%= form.number_field :peso, id: :phase_peso, step: 0.1 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :anno %>
+    <%= form.number_field :anno, id: :phase_anno, :value => Setting.where(denominazione: "anno").first.value%>
+  </div>
+
+  <div class="field">
+    <%= form.label :ente %>
+    <%= form.text_field :ente, id: :phase_ente, :value => Setting.where(denominazione: "ente").first.value %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :operational_goal %>
+    <%= form.collection_select(:operational_goal_id, OperationalGoal.order(denominazione: :asc), :id, :id_denominazione80, :include_blank => true, :class => 'scelta_og') %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Salva Fase" %>
+  </div>
+<% end %>

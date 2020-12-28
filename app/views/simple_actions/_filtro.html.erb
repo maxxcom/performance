@@ -1,0 +1,6 @@
+<h1>Azioni</h1>
+
+<%= form_for(:simple_action, method: "get", remote: false, url: indexfiltro_simple_actions_path  )  do |f| %>
+<%= f.text_field(:stringa , :value => @stringa_ricerca, size: 20) %>
+<% end %>
+

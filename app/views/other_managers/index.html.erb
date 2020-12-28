@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Other Managers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Altro responsabile</th>
+      <th>Obiettivo operativo</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @other_managers.each do |other_manager| %>
+      <tr>
+        <td><%= other_manager.altro_responsabile_id %></td>
+        <td><%= other_manager.obiettivo_operativo_id %></td>
+        <td><%= link_to 'Show', other_manager %></td>
+        <td><%= link_to 'Edit', edit_other_manager_path(other_manager) %></td>
+        <td><%= link_to 'Destroy', other_manager, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Other Manager', new_other_manager_path %>

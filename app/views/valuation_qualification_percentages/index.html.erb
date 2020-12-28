@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Percentuali Aree di valutazione - Tipologia di impiego</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Area di valutazione</th>
+      <th>Qualifica</th>
+	  <th>Categoria</th>
+      <th>Percentuale</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @valuation_qualification_percentages.each do |valuation_qualification_percentage| %>
+      <% if (ValuationArea.where(id: valuation_qualification_percentage.valuation_area_id).length == 1) && (QualificationType.where(id: valuation_qualification_percentage.qualification_type_id).length == 1 ) && ( Category.where(id: valuation_qualification_percentage.category_id).length == 1)  %>
+        
+	  <tr>
+	    <td><%= ValuationArea.find(valuation_qualification_percentage.valuation_area_id).denominazione %></td>
+        <td><%= QualificationType.find(valuation_qualification_percentage.qualification_type_id).denominazione %></td>
+		<td><%= Category.find(valuation_qualification_percentage.category_id) != nil ? Category.find(valuation_qualification_percentage.category_id).denominazione : "-" %></td>
+        <td><%= valuation_qualification_percentage.percentuale %></td>
+        <td><%= link_to 'Show', valuation_qualification_percentage %></td>
+        <td><%= link_to 'Edit', edit_valuation_qualification_percentage_path(valuation_qualification_percentage) %></td>
+        <td><%= link_to 'Destroy', valuation_qualification_percentage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+	  <% else %>
+	    <%  #valuation_qualification_percentage.delete %>
+		
+	  <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Nuova Percentuale Area di valutazione - Qualifica', new_valuation_qualification_percentage_path %>

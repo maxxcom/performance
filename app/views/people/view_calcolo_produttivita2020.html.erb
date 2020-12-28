@@ -1,0 +1,12 @@
+<%= form_tag calcolo_produttivita2020_people_path, multipart: true do %>
+	 
+	 <p> Aggiorna quota categorie <%= check_box_tag :aggiorna_quota_categoria %></p>
+
+<% if !Setting.disabilita_pagelle_singole %>
+	 <p> Aggiorna raggiungimento_obiettivi <%= check_box_tag :aggiorna_raggiungimento_obiettivi %></p>
+	 <p> Aggiorna valutazione comportamenti<%= check_box_tag :aggiorna_valutazione %></p>
+<% end %>
+	 
+	 <%= submit_tag "Calcolo" %>
+<% end %>
+

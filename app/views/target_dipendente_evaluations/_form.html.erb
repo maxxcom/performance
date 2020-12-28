@@ -1,0 +1,42 @@
+<%= form_with(model: target_dipendente_evaluation, local: true) do |form| %>
+  <% if target_dipendente_evaluation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(target_dipendente_evaluation.errors.count, "error") %> prohibited this target_dipendente_evaluation from being saved:</h2>
+
+      <ul>
+      <% target_dipendente_evaluation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :target_id %>
+    <%= form.number_field :target_id, id: :target_dipendente_evaluation_target_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :target_type %>
+    <%= form.text_field :target_type, id: :target_dipendente_evaluation_target_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :person_id %>
+    <%= form.number_field :person_id, id: :target_dipendente_evaluation_person_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :dirigente_id %>
+    <%= form.number_field :dirigente_id, id: :target_dipendente_evaluation_dirigente_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :valore %>
+    <%= form.number_field :valore, id: :target_dipendente_evaluation_valore %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

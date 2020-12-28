@@ -1,0 +1,26 @@
+
+
+  <%= form_tag("/delegations/aggiungi_delega", method: "post", remote: false, name: "aggiungi_delega"  )  do  %>
+  <div class="field">
+       
+	<p> Delegante </p>
+    <%= collection_select(:delegante, :id, Person.all.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+	
+  </div>
+
+  <div class="field">
+    
+	<p> Delegato </p>
+    <%= collection_select(:delegato, :id, Person.all.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+  </div>
+
+  <div class="field">
+    
+     <%= collection_select(:office, :id, Office.all.sort_by{|u| u.nome}, :id, :nome, :include_blank => true)  %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag %>
+  </div>
+  <% end %>
+

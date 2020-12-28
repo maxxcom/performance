@@ -1,0 +1,247 @@
+
+console.log("scheda_personale_x_dipendente.js.erb file");
+var includeDiv = $("#obiettivi_division")
+includeDiv.empty();
+
+var html = '';
+
+html += '<h1> Scheda personale obiettivi dipendente </h1>';
+
+
+<% if @dipendente != nil %>
+
+html += '<p>Nominativo : <b> <%= @dipendente.cognome + "  " + @dipendente.nome %> </b></p>';
+html += '<p>Dipartimento : <%= @dipartimento != nil ? @dipartimento.nome : ' - ' %></p>';
+html += '<p>Ufficio : <%= @ufficio != nil ? @ufficio.nome : ' - ' %></p>';
+
+
+html += '<p> Obiettivi/Fasi/Azioni/Opere : </p>';
+
+html += '<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">';
+html += '  <tr>';
+html += '    <th>Qualifica</th>';
+html += '    <th>Categoria</th>';
+html += '    <th>Tempo</th>';
+html += '	<th>Part-time</th>';
+html += '	<th>Tot gg</th>';
+html += '	<th>Assenze</th>';
+html += '	<th>Percentuale</th>';
+html += '  </tr>';
+html += '  <tr>';
+html += '    <td><%= @dipendente.qualification != nil ? @dipendente.qualification.denominazione :  " - " %></td>';
+html += '    <td><%= @dipendente.stringa_categoria != nil ? @dipendente.categoria :  " - " %></td>';
+html += '    <td><%= @dipendente.tempo != nil ? @dipendente.tempo.round(2).to_s :  " - " %></td>';
+html += '	<td><%= @dipendente.servizio_percentuale != nil ? @dipendente.servizio_percentuale.round(2).to_s :  " - " %></td>';
+html += '    <td><%= @dipendente.totgg != nil ? @dipendente.totgg.round(2).to_s :  " - " %></td>';
+html += '    <td><%= @dipendente.totassenze != nil ? @dipendente.totassenze.round(2).to_s :  " - " %></td>';
+html += '	<td><%= ((@dipendente.totassenze != nil) && (@dipendente.totgg != nil)) ? (( @dipendente.totgg != 0) ? (100*@dipendente.totassenze/@dipendente.totgg).round(2).to_s :  " n.a. ") : " n.a. " %></td>';
+html += '  </tr>';
+html += '</table>';
+
+html += '<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">';
+html += '  <tr>';
+html += '  <td>'; 
+html += '  Assenze incidono sul premio'; 
+html += '  </td>';
+html += '  <td>';
+html += '  <%=  (@dipendente.flag_assenze_incidono != nil ? (@dipendente.flag_assenze_incidono ? "SI" : "NO") : "n.a." )%>'; 
+html += '  </td>';
+html += '  </tr>';
+html += '</table>';
+
+html += '<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">';
+html += '  <thead>';
+html += '    <tr>';
+	  
+html += '      <th class="tipo_target" >Tipo </th>';
+html += '	   <th class="obiettivo" >Denominazione</th>';
+html += '	   <th class="form_peso" >Peso</th>';
+html += '	   <th class="form_misurazione" >Misurazione</th>';
+html += '	   <th class="form_misurazione" >Valutazione</th>';
+
+
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+
+<% somma_obiettivi = 0 %>
+<% somma_fasi = 0 %>
+<% somma_azioni = 0 %>
+<% somma_opere = 0 %>
+
+<% @dipendente.obiettivi.each do |o| %>
+html += '      <tr>';
+html += '       <td class="tipo_target" >Obiettivo</td>';
+html += '		<td class="obiettivo" >';
+html += '			  <%= o.denominazione_completa %> ';
+                      <% o.indicatori.each do |i| %>
+html += '				<p class="indicatore_sotto"> <%= i.denominazione  %> </p>';
+                      <% end %>	 
+                        <% o.fasi.each do |f| %>
+html += '				 <p class="fase_sotto_obiettivo"> <%= f.denominazione_completa %> </p>';
+                         <% f.indicatori.each do |i| %>
+html += '				 		  <p class="indicatore_sotto"> <%= i.denominazione.strip.html_safe  %> </p>';
+	                     <% end %>
+                        <% end %>
+html += '	    </td>';
+html += '       <td class="form_peso" >';
+<%                ga = GoalAssignment.where(persona: @dipendente, obiettivo: o).first  %>
+html += '       <%=ga.wheight %>';
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= o.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: o).first  %>
+html += '		<%= (val != nil ? val.valore : 0) %>';
+
+html += '       </td>';
+
+
+html += '      </tr>';
+<% somma_obiettivi = somma_obiettivi + (ga.wheight != nil ? ga.wheight : 0)%>
+<% end %>
+
+<% @dipendente.fasi.each do |f| %>
+html += '      <tr>';
+html += '       <td class="tipo_target">Fase</td>';
+html += '		<td class="obiettivo" >'; 
+
+html += '		<p class_"obiettivo_sopra_fase"><%= f.obiettivo_operativo_fase.denominazione_completa%> </p>';
+html += '		<%= f.denominazione_completa %> ';
+         <% f.indicatori.each do |i| %>
+html += '				  <p class_"indicatore_sotto"> <%= i.denominazione  %> </p>';
+	     <% end %>
+	   
+	     <% f.azioni.each do |a| %>
+html += '				  <p class="azione_sotto_fase"> <%= a.denominazione_completa %> </p>';
+	     <% end %>
+
+
+html += '</td>';
+html += '       <td class="form_peso" >';
+<%                fa = PhaseAssignment.where(persona: @dipendente, fase: f).first  %>
+html += '       <%=fa.wheight %>';
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= f.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: f).first  %>
+html += '		<%= (val != nil ? val.valore : 0) %>';
+
+html += '       </td>';
+
+
+
+html += '      </tr>';
+<% somma_fasi = somma_fasi + (fa.wheight != nil ? fa.wheight : 0) %>
+<% end %>
+
+<% @dipendente.azioni.each do |a| %>
+html += '      <tr>';
+html += '       <td class="tipo_target">Azione</td>';
+html += '       <td class="azione" > ';
+html += '       		 <p class_"obiettivo_operativo_sopra"><%= a.obiettivo_operativo_denominazione_completa %> </p>';
+html += '       		 <p class_"fase_sopra"><%= a.fase_denominazione_completa %> </p>';
+
+html += '       		 <p class_"azione_sotto_fase"><%= a.denominazione_completa %> </p>';
+		
+		<% a.indicatori.each do |i| %>
+html += '       	  <p class_"indicatore_sotto"> <%= i.denominazione  %> </p>';
+	     <% end %>
+html += '       		</td>';
+html += '       <td class="form_peso" >';
+<%                aa = SimpleActionAssignment.where(persona: @dipendente, azione: a).first  %>
+html += '       <%= aa.wheight %>';
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= a.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: a).first  %>
+html += '		<%= (val != nil ? val.valore : 0) %>';
+
+html += '       </td>';
+
+
+html += '      </tr>';
+<% somma_azioni = somma_azioni + (aa.wheight != nil ? aa.wheight : 0) %>
+<% end %>
+
+
+<% @dipendente.opere_assegnate.each do |op| %>
+html += '             <tr>';
+html += '              <td class="tipo_target">Opera</td>';
+html += '       		<td class="obiettivo" > <%= op.denominazione_completa %> </td>';
+html += '              <td class="form_peso" >';
+<%                opa = OperaAssignment.where(persona: @dipendente, opera: op).first  %>
+
+html += '              <%=	opa.wheight %>';
+
+html += '              </td>';
+
+html += '              <td>';
+html += '         <%= op.valore_totale.round(2) %>';
+html += '              </td>';
+
+html += '              <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: op).first  %>
+	  
+html += '       		<%= (val != nil ? val.valore : 0) %>';
+
+
+   
+html += '              </td>';
+
+html += '             <td class="form_peso" >';
+	  
+      
+html += '             </td>';
+
+html += '             </tr>';
+<% somma_opere = somma_opere + (opa.wheight != nil ? opa.wheight : 0) %>
+<% end %>
+
+html += '    <tr>';
+html += '      <td class="tipo_target" > </td>';
+html += '	   <td class="obiettivo" > </td>';
+html += '	   <td class="form_peso" >  </td>';
+html += '	   <td>';
+
+html += '	   </td>';
+html += '	   <td>';
+html += '	   </td>';
+
+html += '    </tr>';
+
+
+html += '      <tr>';
+html += '          <td class="tipo_target" > </td>';
+html += '      	   <td class="obiettivo" > Totale  </td>';
+html += '      	   <td class="form_peso" > <%= somma_obiettivi + somma_fasi + somma_azioni + somma_opere  %>  </td>';
+html += '      	   <td></td>';
+html += '      	   <td>';
+html += '             <%= @dipendente.valutazione_dirigente_obiettivi_fasi_azioni %> ';
+html += '      	   </td> ';
+
+html += '          </tr> ';
+
+html += '  </tbody>';
+html += '</table>';
+
+
+
+<% end %>
+
+includeDiv.append(html);

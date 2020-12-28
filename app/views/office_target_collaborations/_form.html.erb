@@ -1,0 +1,32 @@
+<%= form_with(model: office_target_collaboration, local: true) do |form| %>
+  <% if office_target_collaboration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(office_target_collaboration.errors.count, "error") %> prohibited this office_target_collaboration from being saved:</h2>
+
+      <ul>
+      <% office_target_collaboration.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :target_id %>
+    <%= form.number_field :target_id, id: :office_target_collaboration_target_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :target_type %>
+    <%= form.text_field :target_type, id: :office_target_collaboration_target_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :office_id %>
+    <%= form.number_field :office_id, id: :office_target_collaboration_office_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

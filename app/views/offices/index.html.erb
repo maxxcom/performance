@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Servizi ed Uffici</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr.</th>
+	  <th>ID</th>
+      <th>Nome</th>
+	  <th>Tipo</th>
+	  <th>Parent</th>
+	  <th>Direttore</th>
+	  <th>Nr. dipendenti</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @offices.each do |office| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+		<td><%= office.id %></td>
+        <td><%= office.nome %></td>
+		<td><%= office.office_type != nil ? (office.office_type.denominazione) : " - " %></td>
+		<td><%= office.parent != nil ? (office.parent.nome) : " - " %></td>
+		<td><%= office.director != nil ? (office.director.nome + " " + office.director.cognome) : " - " %></td>
+		<td><%= office.dipendenti.length %></td>
+        <td><%= link_to 'Show', office %></td>
+        <td><%= link_to 'Edit', edit_office_path(office) %></td>
+        <td><%= link_to 'Destroy', office, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Office', new_office_path %>

@@ -1,0 +1,36 @@
+// Place all the styles related to the ItemEvaluations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.tabella_misurazioni {
+  border: 0px solid black;
+  width: 1200px;
+  font-size:	10px;  
+  text-align:center;
+  table-layout: fixed;
+}
+
+.obiettivo {
+  width: 150px;
+  font-size:	10px;
+  text-align:center;
+  font-weight: bold;
+}
+
+.formvalore {
+  width: 120px;
+  font-size:	10px;
+  text-align:center;
+}
+
+.fase_azione {
+  width: 250px;
+  font-size:	10px;
+  text-align:left;
+}
+
+.valore_totale {
+  font-size:	12px;
+  text-align:right;
+  font-weight: bold;
+}

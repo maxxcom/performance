@@ -1,0 +1,83 @@
+console.log("set_dipendenti_uffici_dirigente.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = 'Lista';
+
+<% numero_dipendenti = 0 %>
+<% @risultati.each do |r| %>
+
+html += '<br>';
+html += 'Ufficio:';
+html += '<b><%= "[" + r[:ufficio].id.to_s + "]" + r[:ufficio].nome %></b>'; 
+html += '<br>';
+html += 'Direttore: ';
+html += '<%= r[:ufficio].director != nil ? r[:ufficio].director.nome : " " %>'; 
+html += ' ';
+html += '<%= r[:ufficio].director != nil ? r[:ufficio].director.cognome : " " %>'; 
+html += '<br>';
+html += '<table class="blueTable"><thead></thead><tbody>';
+<% r[:ufficio].people.each do |dipendente| %>
+html += '<tr>';
+html += '<td>';
+html += ' <%= form_for :person, url: "/people/set_dipendenti_uffici_dirigente", method: :post, :remote => true do |p| %>';
+html += ' <%= p.hidden_field :person_id, :value => dipendente.id %>';
+html += ' <%= p.hidden_field :office_id, :value => r[:ufficio].id %>';
+html += ' <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += ' <%= p.hidden_field :operation, :value => "rm" %>';
+html += ' <%= p.submit "Rimuovi" %>';
+html += ' <% end %>';
+html += '</td>';
+html += '<td>';
+
+html += '<%= dipendente.nome %>';
+html += ' ';
+html += '<%= dipendente.cognome %>';
+html += '</td>';
+html += ' </tr>';
+<% numero_dipendenti = numero_dipendenti + 1 %>
+<% end %>
+
+html += ' </tbody></table>';
+
+html += '<hr>';
+html += '<p>';
+html += ' <%= form_for :person, url: "/people/set_dipendenti_uffici_dirigente", method: :post, :remote => true do |p| %>';
+html += '  <%= p.text_field :text, cols: 40, rows: 15, :value => "" %>';
+html += '  <%= p.hidden_field :office_id, :value => r[:ufficio].id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += ' <%= p.hidden_field :operation, :value => "add" %>';
+html += '</p>';
+html += '  <%= p.submit "Aggiungi dipendente" %>';
+html += ' <% end %>';
+
+html += '<hr>';
+html += '<p>';
+html += '<%= form_for :person, url: "/people/set_dipendenti_uffici_dirigente", method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:person_id) do %>';
+html += '<%     @dirigente.dipendenti_sotto.sort_by{|p| p.cognome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo2, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :office_id, :value => r[:ufficio].id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += ' <%= p.hidden_field :operation, :value => "add" %>';
+html += '</p>';
+html += '<%=   p.submit "Aggiungi dipendente" %>';
+html += '<% end %>';
+html += '<hr>'
+html += '<hr>'
+html += '<br>'; 
+
+<% end %>
+html += '<p> Totale dipendenti :';
+html += '<%= numero_dipendenti %>';
+html += '</p>';
+
+html += '<br>';
+
+
+
+includeDiv.append(html);

@@ -1,0 +1,6 @@
+<h1>Target (ricerca su tutti)</h1>
+
+<%= form_for(:operational_goal, method: "get", remote: false, url: aggiungi_indicatore_default_target_gauges_path  )  do |f| %>
+<%= f.text_field(:stringa , :value => @stringa_ricerca, size: 20) %>
+<% end %>
+

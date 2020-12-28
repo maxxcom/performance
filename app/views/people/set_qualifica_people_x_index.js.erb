@@ -1,0 +1,32 @@
+
+
+var id2='<%= "#q_" + @p.id.to_s %>'
+
+console.log(id2)
+
+var element2 = $(id2);
+
+element2.empty()
+
+
+var html2 = '';
+<% id = @p.id.to_s %>
+
+html2 += '	<div id=<%= "q_" + id %> >';
+html2 += '	<%= form_for :person, url: set_qualifica_people_x_index_people_path, method: :post, :remote => true do |f| %>';
+
+html2 += '  <%= f.select(:qualification_type_id, :qualification_type_id, { :selected => @p.qualification_type_id }, {:onchange => "abilita_save_q("+id+")" }) do %>';
+html2 += '   <%= content_tag(:option, ( @p.qualification_type_id != nil ? QualificationType.find(@p.qualification_type_id).denominazione : ""), value: @p.qualification_type_id) %>';
+html2 += '	   <%  QualificationType.all.each do |q| %>';
+html2 += '	     <%= content_tag(:option, q.denominazione, value: q.id) %>';
+html2 += '	  <% end %>';
+html2 += '  <% end %>';
+
+html2 += '	<%= f.hidden_field :person_id, :value => @p.id %>';
+html2 += '	<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_q"+ id, disabled: true %>';
+html2 += '	<% end %>';
+html2 += '	</div>';
+
+
+element2.append(html2);
+

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Percentuali Full Time Equivalent</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Categoria</th>
+      <th>Percentuale</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @fte_percentages.each do |fte_percentage| %>
+	  <% if fte_percentage.category != nil %>
+      <tr>
+        <td><%= fte_percentage.category.denominazione %></td>
+        <td><%= fte_percentage.percentuale %></td>
+        <td><%= link_to 'Show', fte_percentage %></td>
+        <td><%= link_to 'Edit', edit_fte_percentage_path(fte_percentage) %></td>
+        <td><%= link_to 'Destroy', fte_percentage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+	 <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Nuova Percentuale Full Time Equivalent', new_fte_percentage_path %>

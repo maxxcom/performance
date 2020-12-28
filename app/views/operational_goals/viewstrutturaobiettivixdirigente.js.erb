@@ -1,0 +1,205 @@
+console.log("viewstrutturaobiettivixdirigente.js.erb file");
+var includeDivObiettivo = $("#division_obiettivo")
+var includeDivFase = $("#division_fase")
+var includeDivTree = $("#jstree_obiettivi")
+
+
+includeDivObiettivo.empty();
+includeDivFase.empty();
+//includeDivTree.empty();
+
+
+var html = '<hr>';
+   
+html += '<h1> Obiettivi/Fasi/Azioni </h1>';
+
+html += '<div id="division_obiettivo">';
+
+<% if @dirigente != nil %>
+html += '<br>';
+html += ' <%= form_for :operational_goal, url: selecttargetxdirigente_operational_goals_path, method: :post, :remote => true do |p| %>';
+html += ' <%= p.select(:selected) do %>';
+html += '  <% @target_array.sort_by{|t| t.denominazione}.each do |t| -%>';
+html += '    <%= content_tag(:option, (t.tipo[0] + " - " + t.denominazione_completa).first(80), value: [t.id, t.class.name]) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += ' <%= p.submit "Seleziona" %>';
+html += ' <% end %>';
+<%end %>
+
+html += '</div>';
+
+html += '<br>';
+includeDivObiettivo.append(html);
+
+var htmlf = '<hr>';
+
+htmlf += '<div id="division_fase">';
+
+<% if @target != nil %>
+
+htmlf += ' <p><%= @target.tipo %> : <b><%= @target.denominazione_completa %></b></p> ';
+
+<% if @target.class.name == "OperationalGoal" %>
+htmlf += '<b>Fasi:</b>';
+htmlf += '<br>';
+htmlf += '<div class="toleft">';
+htmlf += '<table class="blueTable"><thead></thead><tbody>';
+htmlf += '<% @target.fasi.sort_by{|t| t.denominazione}.each do |f| %>';
+htmlf += '<tr>';
+htmlf += '<td>';
+htmlf += ' <%= form_with  url: removechildfromparent_operational_goals_path, method: :post, :remote => true do |p| %>';
+htmlf += ' <%= p.hidden_field :target_id, :value => f.id %>';
+htmlf += ' <%= p.hidden_field :target_type, :value => f.class.name %>';
+htmlf += ' <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+htmlf += ' <%= p.hidden_field :parent_type, :value => @target.class.name %>';
+htmlf += ' <%= p.hidden_field :parent_id, :value => @target.id %>';
+htmlf += ' <%= p.submit "Rimuovi assegnazione" %>';
+htmlf += ' <% end %>';
+htmlf += '</td>';
+htmlf += '<td>';
+htmlf += '<%= f.denominazione.html_safe.strip %>';
+htmlf += '</td>';
+
+htmlf += ' <% end %> ';
+htmlf += ' </tr>';
+htmlf += ' </tbody></table>';
+htmlf += '</div>';
+
+htmlf += '<hr>';
+
+htmlf += '<br>';
+htmlf += ' <%= form_with url: addchildinparent_operational_goals_path, method: :post, :remote => true do |p| %>';
+htmlf += ' <%= p.select(:id) do %>';
+htmlf += '  <% Phase.left_joins(:responsabile_principale).where("people.id = ?", @dirigente.id).order(:denominazione).each do |f| -%>';
+htmlf += '    <%= content_tag(:option, f.denominazione_completa, value: f.id) %>';
+htmlf += '  <% end %>';
+htmlf += ' <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+htmlf += ' <%= p.hidden_field :parent_type, :value => @target.class.name %>';
+htmlf += ' <%= p.hidden_field :parent_id, :value => @target.id %>';
+htmlf += ' <% end %>';
+htmlf += ' <%= p.submit "Aggiungi" %>';
+htmlf += ' <% end %>';
+htmlf += '<hr />';
+
+<%end %>
+
+<% if @target.class.name == "Phase" %>
+htmlf += '<b>Azioni:</b>';
+htmlf += '<br>';
+htmlf += '<div class="toleft">';
+htmlf += '<table class="blueTable"><thead></thead><tbody>';
+htmlf += '<% @target.azioni.each do |a| %>';
+htmlf += '<tr>';
+htmlf += '<td>';
+htmlf += ' <%= form_with  url: removechildfromparent_operational_goals_path, method: :post, :remote => true do |p| %>';
+htmlf += ' <%= p.hidden_field :target_id, :value => a.id %>';
+htmlf += ' <%= p.hidden_field :target_type, :value => a.class.name %>';
+htmlf += ' <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+htmlf += ' <%= p.hidden_field :parent_type, :value => @target.class.name %>';
+htmlf += ' <%= p.hidden_field :parent_id, :value => @target.id %>';
+htmlf += ' <%= p.submit "Rimuovi assegnazione" %>';
+htmlf += ' <% end %>';
+htmlf += '</td>';
+htmlf += '<td>';
+htmlf += '<%= a.denominazione_completa %>';
+htmlf += '</td>';
+
+htmlf += ' <% end %> ';
+htmlf += ' </tr>';
+htmlf += ' </tbody></table>';
+htmlf += '</div>';
+
+<%end %>
+
+
+<%end %>
+
+htmlf += '</div>';   
+
+includeDivFase.append(htmlf);
+
+includeDivTree.jstree("destroy");
+
+var data = [
+       { "id" : "radice", "parent" : "#", "text" : '<%= @dirigente.cognome %>', 'state' : { 'opened' : true} },
+       { "id" : "obiettivi", "parent" : "radice", "text" : "OBIETTIVI", 'state' : { 'opened' : true} },
+       { "id" : "fasi", "parent" : "radice", "text" : "FASI", 'state' : { 'opened' : true} },
+	   { "id" : "azioni", "parent" : "radice", "text" : "AZIONI", 'state' : { 'opened' : true} }
+    ];
+
+<% @target_array.sort_by{|t| t.denominazione}.each do |t| %>
+ <% if t.class.name == "OperationalGoal" %>
+   data.push({ "id" : '<%= "o-" + t.id.to_s %>', "parent" : "obiettivi", "text" : '<%= t.denominazione_completa %>', 'state' : { 'opened' : true} });
+ <% end %>
+ <% if t.class.name == "Phase" %>
+   <% if t.obiettivo_operativo_fase != nil %>
+     data.push({ "id" : '<%= "of-" + t.id.to_s %>', "parent" : '<%= "o-" + t.obiettivo_operativo_fase.id.to_s %>', "text" : '<%= t.denominazione_completa %>', 'state' : { 'opened' : true} });
+   <% else %>
+    data.push({ "id" : '<%= "f-" + t.id.to_s %>', "parent" : "fasi", "text" : '<%= t.denominazione_completa %>', 'state' : { 'opened' : false} });
+   <% end %>
+ <% end %>
+ <% if t.class.name == "SimpleAction" %>
+   data.push({ "id" : '<%= "a-" + t.id.to_s %>', "parent" : "fasi", "text" : '<%= t.denominazione_completa %>', 'state' : { 'opened' : true} });
+   <% if t.fase != nil %>
+     data.push({ "id" : '<%= "fa-" + t.id.to_s %>', "parent" : '<%= "of-" + t.fase.id.to_s %>', "text" : '<%= t.denominazione_completa %>', 'state' : { 'opened' : true} });
+   <% else %>
+    data.push({ "id" : '<%= "a-" + t.id.to_s %>', "parent" : "azioni", "text" : '<%= t.denominazione_completa %>', 'state' : { 'opened' : false} }); 
+   <% end %>
+ <% end %>
+<% end %>
+
+includeDivTree.jstree({
+     "core" : {
+       // so that create works
+       "check_callback" : true,
+        
+        "data": data
+     },
+	  "dnd" : {
+            "drop_finish" : function () {
+                console.log("DROP");
+            },
+	},
+
+	   
+	  "plugins" : ["types", "themes", "dnd"]
+	 
+	 
+	 });	
+
+$(document).on('dnd_stop.vakata', function (event, data) {
+   
+   Parent = includeDivTree.jstree(true).get_node(data.data.nodes[0]).parent;
+   nodo_dragged = includeDivTree.jstree(true).get_node(data.data.nodes[0]);
+   //console.log(nodo_dragged);
+   nodo_target = includeDivTree.jstree(true).get_node(data.event.target);
+   dirigente_id = '<%= @dirigente.id %>';
+   
+   target_id = '<%= @target != nil ? @target.id : nil %>';
+   target_type = '<%= @target != nil ? @target.class.name : nil %>';
+  
+   
+   //console.log(nodo_dragged.id);
+   //console.log(nodo_target.id);
+   mydata = {
+   
+    dirigente_id: dirigente_id,
+    target_id: target_id,
+	target_type: target_type,
+	nodo_dragged_id: nodo_dragged.id,
+	nodo_target_id: nodo_target.id
+   };
+   
+   //console.log(mydata);
+   console.log("DROP");
+   $.ajax({
+    method: 'POST',
+    url: 'movetarget',
+    data: mydata,
+    success: function(){},
+    error: function(){}
+    
+   });      
+})

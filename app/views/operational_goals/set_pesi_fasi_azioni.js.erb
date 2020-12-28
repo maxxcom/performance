@@ -1,0 +1,105 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+console.log("set_pesi_fasi_azioni.js.erb file");
+var includeDivRisultati = $("#division_risultati")
+
+includeDivRisultati.empty();
+
+
+var html = '<hr>';
+
+html += '<p> Dirigente : <%= @dirigente.cognome %></p>';
+html += '<p> Obiettivi come responsabile. Settaggio pesi di fasi ed azioni</p>';
+html += '  <table class="tabella_pesi_azioni_fasi"><thead>';
+
+html += '  <tr>';
+html += '      <th class="obiettivo">Obiettivo</th>';
+html += '      <th class="fase_azione">Fase</th>';
+html += '      <th class="formvalore"></th>';
+html += '      <th class="fase_azione">Azione</th>';
+html += '      <th class="formvalore"></th>';
+html += '     </tr>';
+html += ' </thead><tbody>';
+
+<% @dirigente.obiettivi_responsabile.each do |o| %>
+
+html += '  <tr>';
+html += '  <td class="obiettivo">';
+<%  if o.attivita_ordinaria  %>
+html += 'AC ';
+<%  else  %>
+html += ' ';
+<%  end  %>
+html += '  <%= o.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  </tr>';
+
+<% o.fasi.each do |f| %>
+<% identificatore_bottone = (f.id + 1000).to_s %>
+html += '  <tr>';
+html += '  <td class="obiettivo">';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= f.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '       <%= form_for :operational_goal, url: operational_goal_setpeso_fase_azione_path(o), method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => f.peso, min: 0, max: 100, :onchange => "abilita_save("+identificatore_bottone+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :tipo, :value => f.tipo %>';
+html += '	    <%= form.hidden_field :phase_id, :value => f.id %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+identificatore_bottone, disabled: true %>';
+html += '       <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  </tr>';
+
+<% f.azioni.each do |a| %>
+<% identificatore_bottone = (a.id + 10000).to_s %>
+html += '  <tr>';
+html += '  <td class="obiettivo">';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= a.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '       <%= form_for :operational_goal, url: operational_goal_setpeso_fase_azione_path(o), method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => a.peso, min: 0, max: 100, :onchange => "abilita_save("+identificatore_bottone+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :tipo, :value => a.tipo %>';
+html += '	    <%= form.hidden_field :simple_action_id, :value => a.id %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+identificatore_bottone, disabled: true %>';
+html += '       <% end %>';
+html += '  </td>';
+html += '  </tr>';
+
+
+<% end %>
+
+<% end %>
+
+<% end %>
+
+html += '  </tbody></table>';
+
+includeDivRisultati.append(html);

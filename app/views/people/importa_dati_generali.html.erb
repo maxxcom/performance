@@ -1,0 +1,70 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dipendenti generali importati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Categoria</th>
+	  <th>Figura giuridica</th>
+      <th>Ruolo</th>
+	  <th>Note</th>
+	  <th>Servizio %</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @modificate != nil %>
+    <% @modificate.each do |p| %>
+      <tr>
+        <td><%= p.nome %></td>
+		<td><%= p.cognome %></td>
+        <td><%= p.matricola %></td>
+        <td><%= p.email %></td>
+		<td><%= p.categoria %></td>
+        <td><%= p.figura_giuridica %></td>
+		<td><%= p.ruolo %></td>
+		<td><%= p.note %></td>
+		<td><%= p.servizio_percentuale %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @modificate.length == 0 then "Non sono state modificate persone" else "N° persone importate :" + @modificate.length.to_s end %>
+<br>
+<br>
+ 
+<table>
+  <thead>
+    <tr>
+      <th>A</th>
+	  <th>B</th>
+      <th>C</th>
+	  
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @scartate != nil %>
+    <% @scartate.each do |p| %>
+	<% campi = p.split('|') %>
+    <tr>
+        <td><%= campi[0] %></td>
+		<td><%= campi[1] %></td>
+        <td><%= campi[2] %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+	
+ 
+
+

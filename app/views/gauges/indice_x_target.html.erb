@@ -1,0 +1,138 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Indicatori obiettivi</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Obiettivo</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @og.each do |og| %>
+    <% if og.indicatori.length != 0 %>
+    
+	  <tr>
+	  <td><%= og.denominazione %></td>
+	  <td></td>
+	  </tr>
+	   <% og.indicatori.each do |i| %>
+         <tr>
+	   
+          <td></td>
+		  <td><%= i.nome %></td>
+         
+         </tr>
+	   <% end %> 
+	   
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Indicatori fasi</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Fase</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @fa.each do |f| %>
+    <% if f.indicatori.length != 0 %>
+    
+	  <tr>
+	  <td><%= f.denominazione %></td>
+	  <td></td>
+	  </tr>
+	   <% f.indicatori.each do |i| %>
+         <tr>
+	   
+          <td></td>
+		  <td><%= i.nome %></td>
+         
+         </tr>
+	   <% end %> 
+    
+	<% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Indicatori Azioni</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Azione</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @az.each do |a| %>
+    <% if a.indicatori.length != 0 %>
+    
+	  <tr>
+	  <td><%= a.denominazione %></td>
+	  <td></td>
+	  </tr>
+	   <% a.indicatori.each do |i| %>
+         <tr>
+	   
+          <td></td>
+		  <td><%= i.nome %></td>
+         
+         </tr>
+	   <% end %> 
+    
+	<% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Indicatori opere</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Opera</th>
+	  <th>Descrizione</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @op.each do |op| %>
+    <% if op.indicatori.length != 0 %>
+    
+	  <tr>
+	  <td><%= op.sub + " " + op.numero %></td>
+	  <td><%= op.descrizione %></td>
+	  <td></td>
+	  </tr>
+	   <% op.indicatori.each do |i| %>
+         <tr>
+	      <td></td>
+          <td></td>
+		  <td><%= i.nome %></td>
+         
+         </tr>
+	   <% end %> 
+	   
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<hr>
+
+
+

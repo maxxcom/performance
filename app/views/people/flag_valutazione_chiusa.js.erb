@@ -1,0 +1,64 @@
+
+function set_flag_valutazione_chiusa(id_person)
+{
+ console.log(id_person);
+ var f = document.getElementById(id_person).submit();
+ 
+}
+
+var includeDiv = $("#results_division")
+
+includeDiv.empty();
+
+
+var html = 'Flag valutazione chiusa';
+
+
+html += '<h1>Dipendenti</h1>';
+
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Nr</th>';
+html += '      <th>Nome</th>';
+html += '      <th>Cognome</th>';
+html += '      <th>Matricola</th>';
+html += '	  <th>Ufficio</th>';
+html += '      <th colspan="1"  class="flag_produttivita">Flag produttività</th>';
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+    <% i = 0 %>
+	<% if @people != nil %>
+    <%   @people.each do |person| %>
+
+html += '     <div id="<%= person.matricola %>">';	
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= person.nome %></td>';
+html += '        <td><%= person.cognome %></td>';
+html += '        <td><%= person.matricola %></td>';
+html += '		<td><%= person.categoria %></td>';
+html += '		<td>';
+html += '       <%= person.nomeUfficio %>';
+html += '       </td>';
+				
+html += '		<td class="flag_produttivita">'; 
+		
+html += '		 <%= form_for( person, :url => set_flag_valutazione_chiusa_people_path( person ), :html => { :method => :post, :id => (person.id.to_s )} ) do |f| %>';
+html += '		 <%= f.check_box :flag_valutazione_chiusa, :onclick=>'set_flag_valutazione_chiusa(' + person.id.to_s + ')' %> ';
+html += '		 <% end %>';
+		
+html += '		</td>';
+        
+html += '      </tr>';
+html += '     </div>';	 
+    <%   end %>
+	<% end %>
+html += '  </tbody>';
+html += '</table>';
+
+html += '<br>';
+
+

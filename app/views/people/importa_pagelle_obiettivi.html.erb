@@ -1,0 +1,63 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pagelle e obiettivi importati</h1>
+
+<h1>Valutazioni importate</h1>
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+	  <th>Nominativo</th>
+	  <th>Voto pagella</th>
+	  <th>Voto obiettivi</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @Importati != nil %>
+    <% @Importati.each do |persona| %>
+	<% p= Person.find(persona.id) %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><b><%= p.nominativo %></b></td>
+		<td><%= p.punteggiofinale.round(2).to_s %></td>
+		<td><%= p.valutazione_dirigente_obiettivi_fasi_azioni.round(2).to_s %></td>
+	  </tr>
+	<% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Errori</h1>
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+	  <th>Errore</th>
+	  
+    </tr>
+  </thead>
+
+  <tbody>
+  <% i = 0 %>
+    <% if @Errori != nil %>
+    <% @Errori.each do |err| %>
+	
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><b><%=err.to_s%></b></td>
+		
+	  </tr>
+	<% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+

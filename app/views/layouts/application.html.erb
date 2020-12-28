@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Performance</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body>
+   <% @color = Setting.where(denominazione: 'colore').length > 0 ?  "-" + Setting.where(denominazione: 'colore').first.value : ""%>
+   <header class="navbar<%= @color %> navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <nav>
+		  
+		  <% 
+		   titolo = Setting.where(denominazione: 'ente').length >0 ?  Setting.where(denominazione: 'ente').first.value : " - "
+		   titolo = titolo + " " + (Setting.where(denominazione: 'anno').length >0 ?  Setting.where(denominazione: 'anno').first.value : " - ")
+		   if logged_in?
+		     titolo = titolo + " [" + current_user.denominazione + "]"
+		   end
+		  %>
+             
+          <a class="navbar-brand" ><%= titolo %></a>
+          
+		  <ul class="nav navbar-nav pull-right">
+		  
+		  <% if current_user_admin? %>
+		  <li class="dropdown">		   
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Dati <b class="caret"></b>
+             </a>
+			     <ul class="dropdown-menu">
+				  <li><%= link_to "Importa SDOPE", "/sdope_rows/importcsv" %></li>
+				  <li><%= link_to "Importazione Dipendenti", "/people/importazione/" %></li>
+				  <li><%= link_to "Importazione Servizio percentuale", "/people/importazione_servizio_percentuale/" %></li>
+				  <li><%= link_to "Importazione Assenze", "/people/importazione_assenze/" %></li>
+				  <li><%= link_to "Importazione Organico", "/people/importazioneorganico/" %></li>
+				  <li><%= link_to "Setta assegnazione ufficio", "/people/view_setta_assegnazione_ufficio/" %></li>
+				  <li><%= link_to "Importazione Dipendenti da csv", "/people/importazione_csv/" %></li>
+				  <li><%= link_to "Importazione Categorie Dipendenti", "/people/importazione_categorie/" %></li>
+				  <li><%= link_to "Importazione Dipendenti 2020", "/people/importazione_2020/" %></li>
+				  <li><%= link_to "Importazione check uffici", "/people/importazione_check_uffici/" %></li>
+				  <li><%= link_to "Importazione Dati Generali Dipendenti", "/people/importazione_dati_generali/" %></li>
+				  <li><%= link_to "Importazione Analitico", "/people/importazione_analitico/" %></li>
+				  <li class="divider"></li>
+				  <li><%= link_to "Esportazione organico", "/people/excel_organico" %></li>
+				  <li><%= link_to "Esportazione organico per Servizio", "/people/esporta_personale_borghese" %></li>
+				  <li><%= link_to "Esportazione PEG per ufficio", "/offices/esporta_peg_xufficio" %></li>
+				  <li class="divider"></li>
+				  <li><%= link_to "Importazione Obiettivi da PEG", "/operational_goals/importazione/" %></li>
+				  <li><%= link_to "Importazione Obiettivi attività ordinaria", "/operational_goals/importazione_attivita_ordinaria/" %></li>
+				  <li><%= link_to "Importazione Valori attività ordinaria", "/operational_goals/importazione_valori_attivita_ordinaria/" %></li>
+				  <li><%= link_to "Importazione Dipendenti da PEG", "/people/importazionefrompeg/" %></li>
+				  <li><%= link_to "Importazione Indicatori da PEG", "/gauges/importazione/" %></li>
+				  <li><%= link_to "Importazione Valori e Misurazioni da PEG", "/operational_goals/importazionevalori/" %></li>
+				  <li><%= link_to "Importazione Opere da PEG", "/operas/importazione_opere/" %></li>
+				  <li><%= link_to "Importazione Misurazioni Opere da PEG", "/operas/importazione_valori_opere/" %></li>
+				  <li><%= link_to "Leggi file Borghese", "/people/view_leggi_file_borghese/" %></li>
+				  <li><%= link_to "Importazione riassuntivi pagelle", "/people/view_importa_riassuntivo_pagelle_valutazioni/" %></li>
+				  <li><%= link_to "Importazione pagelle + obiettivi", "/people/importazione_pagelle_obiettivi/" %></li>
+				  <li><%= link_to "Importazione Pesi obiettivi dipendenti", "/people/importazione_pesi_target/" %></li>
+				  <li><%= link_to "Check Matricole", "/people/view_check_matricole/" %></li>
+				  
+                </ul>
+          </li>
+		 <% end %>
+		 
+		<% if current_user_admin? %>		 
+		  <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Tabelle di base <b class="caret"></b>
+             </a>
+			 <ul class="dropdown-menu">
+				 
+                  <li><%= link_to "Tipi Ufficio", "/office_types/" %></li>
+                  <li><%= link_to "Tipologie Dipendenti", "/qualification_types/" %></li>
+				  <li><%= link_to "Categorie", "/categories/" %></li>
+				  <li><%= link_to "Percentuali FTE", "/fte_percentages/" %></li>
+				  <li><%= link_to "Fattori di valutazione", "/vfactors/" %></li>
+				  <li><%= link_to "Aree di valutazione", "/valuation_areas/" %></li>
+				  <li><%= link_to "Percentuali di calcolo", "/valuation_qualification_percentages/" %></li>
+				  <li><%= link_to "Periodi annuali", "/periods/" %></li>
+				  <li><%= link_to "Esporta tabelle di base", "/settings/esporta_tabelle_base/" %></li>
+				  <li><%= link_to "Importa tabelle di base", "/settings/importazione_tabelle_base/" %></li>
+				  <li class="divider"></li>
+				  <li><%= link_to "Esportazione organico", "/people/excel_organico" %></li>
+				  <li><%= link_to "Importazione organico", "/people/importazione_organico" %></li>
+			 </ul>
+          </li>
+		<% end %> 
+		
+		<% if current_user_admin? %>
+		  <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Admin <b class="caret"></b>
+             </a>
+                <ul class="dropdown-menu">
+				
+                  <li><%= link_to "Uffici", "/offices/" %></li>
+                  <li><%= link_to "Tipi Ufficio", "/office_types/" %></li>
+				  <li><%= link_to "Gestisci Uffici", "/offices/gestisciufficio/" %></li>
+				  
+                  <li class="divider"></li>
+                  <li><%= link_to "Dipendenti", "/people/" %></li>
+				  
+				  <li><%= link_to "Dipendenti x matricola", "/people/index_x_matricola" %></li>
+				  <li><%= link_to "Dipendenti flag valutazione chiusa", "/people/flag_valutazione_chiusa" %></li>
+                  <li><%= link_to "Tipologie Dipendenti", "/qualification_types/" %></li>
+				  
+				  <li class="divider"></li>
+				 
+                  <li><%= link_to "Dipendenti x dirigente", "/people/dipendenti_x_dirigente" %></li>
+				  <li><%= link_to "Dipendenti uffici x dirigente", "/people/dipendenti_uffici_dirigente" %></li>
+				  <li><%= link_to "Deleghe", "/delegations/index_nomi" %></li>
+				  <li class="divider"></li>
+				  <li><%= link_to "Pagelle dipendenti  x dirigente", "/people/tabellaxdirigente" %></li>
+				  <li class="divider"></li>
+				  <li><%= link_to "Work as", "/people/lavora_come" %></li>
+				  <li><%= link_to "Last operations", "/operations/last_operations" %></li>
+				  <li><%= link_to "Sessioni", "/people/vedi_sessioni" %></li>
+				  
+				  <li><%= link_to "Settaggi", "/settings" %></li>
+				  
+				
+                </ul>
+          </li>
+		  <% end %>
+		  
+		  
+		  <% if current_user_admin? %>
+		  <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                PEG <b class="caret"></b>
+             </a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Obiettivi Strategici", "/strategic_goals/" %></li>
+				  <li><%= link_to "Obiettivi Operativi", "/operational_goals/indexfiltro" %></li>
+				  <li><%= link_to "Nuovo obiettivo", "/operational_goals/nuovoobiettivo" %></li>
+				  <li><%= link_to "Nuovo target", "/operational_goals/nuovo_target" %></li>
+				  <li><%= link_to "Fasi", "/phases/indexfiltro" %></li>
+				  <li><%= link_to "Azioni", "/simple_actions/indexfiltro" %></li>
+				  <li><%= link_to "Opere", "/operas/indexfiltro" %></li>
+				  <li><%= link_to "Aggiungi Target", "/operational_goals/aggiungi_target" %></li>
+				  <li><%= link_to "Aggiungi Indicatore a Target", "/gauges/aggiungi_indicatore_default_target" %></li>
+				  <li><%= link_to "Cerca su tutti", "/operational_goals/indexfiltroall" %></li>
+				  <li><%= link_to "Struttura Obiettivi", "/operational_goals/strutturaobiettivixdirigente" %></li>
+				  <li><%= link_to "Indicatori", "/gauges/" %></li>
+				  <li><%= link_to "Indicatori per tipo", "/gauges/indice_x_target" %></li>
+				  <li><%= link_to "Assegna obiettivi", "/people/assegnaobiettivi/" %></li>
+				  <li><%= link_to "Assegna obiettivi per tipo", "/people/assegnaobiettivi_sel/" %></li>
+				  <li><%= link_to "Copia assegnazione obiettivi", "/people/copia_assegnazione_obiettivi" %></li>
+				  <li><%= link_to "Assegna multipla opere", "/people/assegnaopere/" %></li>
+				  <li><%= link_to "Gestione Obiettivi x dirigente", "/operational_goals/gestioneobiettivixdirigente" %></li>
+				  <li><%= link_to "Gestione Indicatori x dirigente", "/gauges/gaugesxdirigente" %></li>
+				  <li><%= link_to "Pesi Fasi ed Azioni", "/operational_goals/pesi_fasi_azioni" %></li>
+				  <li><%= link_to "Pesi assegnazioni x dipendente", "/people/pesixpersonexdirigente" %></li>
+				  <li><%= link_to "Misurazione obiettivi x dirigente", "/gauges/targetsxdirigente" %></li>
+				  <li><%= link_to "Valutazioni obiettivi OIV", "/item_evaluations/valutazioniobiettivixdirigente" %></li>
+				  <li><%= link_to "Valutazioni obiettivi dirigente", "/item_evaluations/valutazionitargetxdirigente" %></li>
+				  <li><%= link_to "Scheda obiettivi dirigente", "/people/scheda_valutazione_dirigente" %></li>
+				  <li><%= link_to "Scheda obiettivi dipendente", "/people/valutazione_obiettivi_dipendente" %></li>
+				  <li><%= link_to "Complessivo obiettivi dipendente", "/people/misurazionixpersonexdirigente" %></li>
+				  <li><%= link_to "Scheda personale dipendente", "/people/scheda_personale_x_dipendente/" %></li>
+				  
+                </ul>
+          </li>
+		  <% end %>
+		  
+		  
+		  <% if current_user_admin? %>
+		  <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Produttività <b class="caret"></b>
+             </a>
+                <ul class="dropdown-menu">
+				  <li><%= link_to "Importazione assenze", "/people/importazione_assenze" %></li>
+				  <li><%= link_to "Importazione servizio , tempo", "/people/importazione_servizio_tempo" %></li>
+				  <li><%= link_to "Importazione raggiungimento obiettivi", "/people/importazione_raggiungimento_obiettivi" %></li>
+				  <li><%= link_to "Dipendenti produttivita", "/people/flagproduttivita" %></li>
+				  <li><%= link_to "Dipendenti assenze", "/people/view_assenze" %></li>
+				  <li><%= link_to "Dipendenti servizio-tempo", "/people/view_servizio_tempo" %></li>
+				  <li><%= link_to "Dipendenti categoria, assegnazione, qualifica", "/people/view_assegnazione" %></li>
+				  <li><%= link_to "Tabellone valutazioni obiettivi", "/people/tabellone_valutazioni_obiettivi" %></li>
+                  <li><%= link_to "Quota categorie", "/people/quotacategorie" %></li>
+                  <li><%= link_to "Calcolo produttività 2020", "/people/view_calcolo_produttivita2020" %></li>
+				  <li><%= link_to "Calcolo produttività 2019", "/people/view_calcolo_produttivita2019" %></li>
+				  <li><%= link_to "Esportazione produttivita", "/people/esporta_excel_produttivita" %></li>
+				  <li><%= link_to "Esportazione txt per Ascot ALL", "/people/esporta_txt_ascot_all" %></li>
+				  <li><%= link_to "Esportazione txt per Ascot RUOLO", "/people/esporta_txt_ascot_ruolo" %></li>
+				  <li><%= link_to "Esportazione txt per Ascot NON RUOLO", "/people/esporta_txt_ascot_non_ruolo" %></li>
+				  <li><%= link_to "Esportazione txt per Ascot per cos", "/people/esporta_txt_ascot_per_cos" %></li>
+                </ul>
+          </li>
+		  <% end %>
+		  
+		  <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                User <b class="caret"></b>
+             </a>
+                <ul class="dropdown-menu">
+				<% if current_user != nil %>
+				  <li><%= link_to "Dipendenti x dirigente", "/people/dipendenti_x_dirigente" %></li>
+				  <li><%= link_to "Elenco dipendenti  x valutazione", "/people/tabellaxdirigente" %></li>
+				  <li><%= link_to "Importazione pagella", "/people/importazionepagella" %></li>
+				  <li class="divider"></li>
+ 				  
+				  <li><%= link_to "Obiettivi x dirigente", "/operational_goals/targetxdirigente" %></li>
+				  <li><%= link_to "Misurazione obiettivi x dirigente", "/gauges/targetsxdirigente" %></li>
+				  <li><%= link_to "Complessivo obiettivi dipendente", "/people/misurazionixpersonexdirigente" %></li>
+				  <li><%= link_to "Scheda obiettivi dipendente", "/people/valutazione_obiettivi_dipendente" %></li>
+				  <li class="divider"></li>
+				  
+				  
+				  
+				  <li><%= link_to "Assegna obiettivi", "/people/assegnaobiettivi/" %></li>
+				  <li><%= link_to "Assegna obiettivi per tipo", "/people/assegnaobiettivi_sel/" %></li>
+				  <li><%= link_to "Pesi assegnazioni x dipendente", "/people/pesixpersonexdirigente" %></li>
+				  <li><%= link_to "Aggiungi Target", "/operational_goals/aggiungi_target" %></li>
+				  
+				 <% end %>
+                </ul>
+          </li>
+		  
+		  <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                Account <b class="caret"></b>
+             </a>
+                <ul class="dropdown-menu">
+				 <% if current_user != nil %>
+				  <li><%= link_to "Istruzioni", "/pages/show" %></li>
+				  
+                  <li><%= link_to "Profilo", current_user %></li>
+                  <li><%= link_to "Password", person_password_path(current_user.id), method: :post %></li>
+                  <li class="divider"></li>
+                  <li><%= link_to "Log out", logout_path, method: :delete %></li>
+				 <% end %>
+                </ul>
+          </li>
+        </ul>
+        </nav>
+      </div>
+    </header>
+ 
+    <%= yield %>
+  </body>
+</html>

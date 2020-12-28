@@ -1,0 +1,20 @@
+<h1>Importazione opere</h1>
+
+
+<h4> Importazione opere</h4>
+	<%= form_tag importa_opere_operas_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= collection_select(:person, :id, @dirigenti, :id, :cognomenome, :include_blank => true)  %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati dai file Excel di Mauro Gaspardo </p>
+	<p> guarda tutti i fogli di lavoro </p>
+	<p> cerca in B1 la stringa sub </p>
+	<p> le opere sono dalla riga 4 (compresa) in poi  </p>
+	<p> A: numero </p>
+	<p> B: sub </p>
+	<p> C: descrizione </p>
+	<p> D: obiettivo | fase | azione correlata </p>
+	
+	<p> Se esistono già modifica le esistenti <p>

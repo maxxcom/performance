@@ -1,0 +1,71 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @operational_goal.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @operational_goal.descrizione %>
+</p>
+
+<p>
+  <strong>Responsabile:</strong>
+  <%= @operational_goal.responsabile_principale.nominativo %>
+</p>
+
+<p>
+  <strong>Altri Responsabili:</strong>
+  <% @operational_goal.altri_responsabili.each do |ar| %>
+  <%= ar.nominativo %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Obiettivo di ente:</strong>
+  <%= @operational_goal.obiettivo_di_ente %>
+</p>
+
+<p>
+  <strong>Obiettivo di gruppo:</strong>
+  <%= @operational_goal.obiettivo_di_gruppo %>
+</p>
+
+<p>
+  <strong>Obiettivo di struttura:</strong>
+  <%= @operational_goal.obiettivo_di_struttura %>
+</p>
+
+<p>
+  <strong>Obiettivo individuale:</strong>
+  <%= @operational_goal.obiettivo_individuale %>
+</p>
+
+<p>
+  <strong>Attivita ordinaria:</strong>
+  <%= @operational_goal.attivita_ordinaria %>
+</p>
+
+<p>
+  <strong>Flag variazione peg:</strong>
+  <%= @operational_goal.flag_variazione_peg %>
+</p>
+
+<p>
+  <strong>Indice strategicita:</strong>
+  <%= @operational_goal.indice_strategicita %>
+</p>
+
+<p>
+  <strong>Anno:</strong>
+  <%= @operational_goal.anno %>
+</p>
+
+<p>
+  <strong>Ente:</strong>
+  <%= @operational_goal.ente %>
+</p>
+
+<%= link_to 'Edit', edit_operational_goal_path(@operational_goal) %> |
+<%= link_to 'Back', indexfiltro_operational_goals_path %>

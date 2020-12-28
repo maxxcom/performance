@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Indicatori</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr.</th>
+      <th>Nome</th>
+      <th>Descrizione</th>
+      <th>Descrizione valore misurazione</th>
+      <th>Valore misurazione</th>
+	  <th>Target</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @gauges.each do |gauge| %>
+	  <% i = i + 1 %>
+      <tr>
+	    <td><%= i %></td>
+        <td><%= gauge.nome %></td>
+        <td><%= gauge.descrizione %></td>
+        <td><%= gauge.descrizione_valore_misurazione %></td>
+        <td><%= gauge.valore_misurazione.to_s %></td>
+		<td><%= 
+				gauge.target != nil ? 
+				    if gauge.target_type == "Opera"
+					  gauge.target.descrizione
+					else
+					  gauge.target.denominazione
+                    end					
+					: "-" %></td>
+        <td><%= link_to 'Show', gauge %></td>
+        <td><%= link_to 'Edit', edit_gauge_path(gauge) %></td>
+        <td><%= link_to 'Destroy', gauge, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Gauge', new_gauge_path %>

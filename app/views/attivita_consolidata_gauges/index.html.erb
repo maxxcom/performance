@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Attivita Consolidata Gauges</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Ufficio stringa</th>
+      <th>Linea di attivita</th>
+      <th>Indicatore di quantita</th>
+      <th>Consuntivo anno n meno 3</th>
+      <th>Consuntivo anno n meno 2</th>
+      <th>Consuntivo anno n meno 1</th>
+      <th>Previsionale anno n</th>
+      <th>Previsionale anno n piu 1</th>
+      <th>Previsionale anno n piu 2</th>
+      <th>Previsionale anno n piu 3</th>
+      <th>Obiettivo di performance</th>
+      <th>Note</th>
+      <th>Foglio di lavoro</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @attivita_consolidata_gauges.each do |attivita_consolidata_gauge| %>
+      <tr>
+        <td><%= attivita_consolidata_gauge.ufficio_stringa %></td>
+        <td><%= attivita_consolidata_gauge.linea_di_attivita %></td>
+        <td><%= attivita_consolidata_gauge.indicatore_di_quantita %></td>
+        <td><%= attivita_consolidata_gauge.consuntivo_anno_n_meno_3 %></td>
+        <td><%= attivita_consolidata_gauge.consuntivo_anno_n_meno_2 %></td>
+        <td><%= attivita_consolidata_gauge.consuntivo_anno_n_meno_1 %></td>
+        <td><%= attivita_consolidata_gauge.previsionale_anno_n %></td>
+        <td><%= attivita_consolidata_gauge.previsionale_anno_n_piu_1 %></td>
+        <td><%= attivita_consolidata_gauge.previsionale_anno_n_piu_2 %></td>
+        <td><%= attivita_consolidata_gauge.previsionale_anno_n_piu_3 %></td>
+        <td><%= attivita_consolidata_gauge.obiettivo_di_performance %></td>
+        <td><%= attivita_consolidata_gauge.note %></td>
+        <td><%= attivita_consolidata_gauge.foglio_di_lavoro %></td>
+        <td><%= link_to 'Show', attivita_consolidata_gauge %></td>
+        <td><%= link_to 'Edit', edit_attivita_consolidata_gauge_path(attivita_consolidata_gauge) %></td>
+        <td><%= link_to 'Destroy', attivita_consolidata_gauge, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Attivita Consolidata Gauge', new_attivita_consolidata_gauge_path %>

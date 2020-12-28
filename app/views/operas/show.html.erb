@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Numero:</strong>
+  <%= @opera.numero %>
+</p>
+
+<p>
+  <strong>Sub:</strong>
+  <%= @opera.sub %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @opera.descrizione %>
+</p>
+
+<p>
+  <strong>Anno:</strong>
+  <%= @opera.anno %>
+</p>
+
+<p>
+  <strong>Ente:</strong>
+  <%= @opera.ente %>
+</p>
+
+<p>
+  <strong>Target:</strong>
+  <%= @opera.target != nil ? @opera.target.tipo_dirigente_denominazione80 : "-"%>
+</p>
+
+<p>
+  <strong>Responsabile:</strong>
+  <%= @opera.responsabile_principale.nominativo %>
+</p>
+
+<%= link_to 'Edit', edit_opera_path(@opera) %> |
+<%= link_to 'Back', operas_path %>

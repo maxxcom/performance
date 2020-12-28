@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Obiettivi Operativi</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+      <th>Obiettivo di ente</th>
+      <th>Obiettivo di gruppo</th>
+	  <th>Obiettivo di struttura</th>
+	  <th>Obiettivo individuale</th>
+      <th>Indice strategicita</th>
+	  <th>Responsabile</th>
+      <th>Anno</th>
+      <th>Ente</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @operational_goals.each do |operational_goal| %>
+      <tr>
+        <td><%= operational_goal.denominazione %></td>
+        <td><%= operational_goal.descrizione %></td>
+        <td><%= operational_goal.obiettivo_di_ente %></td>
+        <td><%= operational_goal.obiettivo_di_gruppo %></td>
+		<td><%= operational_goal.obiettivo_di_struttura %></td>
+		<td><%= operational_goal.obiettivo_individuale %></td>
+        <td><%= operational_goal.indice_strategicita %></td>
+		<td><%= operational_goal.responsabile_principale != nil ? operational_goal.responsabile_principale.cognome : " - "  %></td>
+        <td><%= operational_goal.anno %></td>
+        <td><%= operational_goal.ente %></td>
+        <td><%= link_to 'Show', operational_goal %></td>
+        <td><%= link_to 'Edit', edit_operational_goal_path(operational_goal) %></td>
+		<td><%= link_to 'Gestisci Responsabili', set_responsabili_operational_goals_path(operational_goal) %></td>
+        <td><%= link_to 'Destroy', operational_goal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Operational Goal', new_operational_goal_path %>

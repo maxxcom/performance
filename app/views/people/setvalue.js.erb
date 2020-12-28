@@ -1,0 +1,100 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+console.log("setvalue.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = '';
+
+
+html += '<h1> Valutazione</h1>';
+
+html += '<table class="pagella_table">';
+html += '  <thead>';
+html += '    <tr>';
+html += '      <th class="fattore_valutazione">Denominazione</th>';
+html += '      <th>Peso</th>';
+html += '      <th>Voto</th>';
+      
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+html += '    <% @valutazioni.each do |v| %>';
+html += '      <tr>';
+html += '      <td class="fattore_valutazione"><%= v.vfactor.denominazione.gsub(/\r\n/, "").strip %></td>';
+html += '        <td><%=v.vfactor.peso(@person)%></td>';
+html += '        <td>';
+html += '       <%= form_for :valutazione, url: setvalue_people_path, method: :post, :remote => true do |f| %>';
+html += '		<%= f.number_field :value,  :value => v.value, min: v.vfactor.min, max: v.vfactor.max, :step :any, :onchange => "abilita_save("+v.id.to_s+")" %>';
+html += '		<%= f.hidden_field :person_id, :value => @person.id %>';
+html += '	    <%= f.hidden_field :valutation_id, :value => v.id %>';
+html += '       <%= f.hidden_field :vfactor_id, :value => v.vfactor.id %>';
+html += '	    <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '		<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva"+v.id.to_s, disabled: true %>';
+html += '        </td>';
+html += '       <% end %>';
+html += '      </tr>';
+html += '     <% end %>';
+html += '<tr>';
+html += '	 <td>';
+html += ' <b> Media pesata </b>';
+html += '   </td>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td><%= @person.punteggiocomplessivo.round(2) %></td>';
+html += '</tr>';
+html += '<tr>';
+html += '	 <td> <b> Punteggio finale </b> </td>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td> <b><%= @person.punteggiofinale.round(2) %></b></td>';
+html += '</tr>';
+html += '	 <tr>';
+html += '	 <td>  </td>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td>';
+html += '	 <%= form_for :chiusura_valutazione, url: chiusura_valutazione_people_path, method: :post, :remote => true do |f| %>';
+html += '     <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 <%= f.submit "Chiudi valutazione"%>';
+html += '	 <% end %>';
+html += '	 </td>';
+html += '	 </tr>';
+html += '	 <tr>';
+html += '	 <td>  </td>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td>';
+html += '	 <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>';
+html += '     <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '     <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 <%= f.submit "PDF"%>';
+html += '	 <% end %>';
+html += '	 </td>';
+html += '	 </tr>';
+html += '	 <tr>';
+html += '	 	 <td>  </td>';
+html += '	 	 <td>';
+html += '	 	 </td>';
+html += '	 	 <td>';
+html += '	 	 <%= form_for :schedaxls, url: people_schedavalutazionedipendentexls_path, method: :get, :remote => false do |f| %>';
+html += '	      <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '	      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "Excel"%>';
+html += '	 	 <% end %>';
+html += '	 	 </td>';
+html += '	 	 </tr>';
+html += '  </tbody>';
+html += '</table>';
+html += '        </div>';
+
+
+
+includeDiv.append(html);

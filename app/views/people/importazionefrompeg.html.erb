@@ -1,0 +1,16 @@
+<h1>Importazione dipendenti</h1>
+
+
+<h4> Importazione dipendenti</h4>
+	<%= form_tag importafrompeg_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	
+	<p> Importazione dai fogli di lavoro Personale del PEG dell'ufficio di ciascun dipendent.</p>
+	<p> Non importa nuovi dipendenti ma assegna l'ufficio per quelli esistenti.</p>
+	<p> Cerca di far matchare nomi e cognomi con il db </p>
+	<p> Colonna A : COGNOME spazio NOME o Nome ufficio </p>
+	<p> Colonna B : COGNOME spazio NOME o qualifica </p>
+	

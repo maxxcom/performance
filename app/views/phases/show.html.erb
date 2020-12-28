@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @phase.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @phase.descrizione %>
+</p>
+
+<p>
+  <strong>Peso:</strong>
+  <%= @phase.peso %>
+</p>
+
+<p>
+  <strong>Anno:</strong>
+  <%= @phase.anno %>
+</p>
+
+<p>
+  <strong>Ente:</strong>
+  <%= @phase.ente %>
+</p>
+
+<p>
+  <strong>Obiettivo Operativo:</strong>
+  <%= @phase.obiettivo_operativo_fase != nil ? @phase.obiettivo_operativo_fase.denominazione : " - " %>
+</p>
+
+<%= link_to 'Edit', edit_phase_path(@phase) %> |
+<%= link_to 'Back', phases_path %>

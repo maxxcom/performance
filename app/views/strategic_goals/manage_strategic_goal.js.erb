@@ -1,0 +1,36 @@
+console.log("manage_strategic_goal.js.erb file");
+var includeDiv = $("#operational_goals_division")
+includeDiv.empty();
+
+var html = '';
+
+html += '<p>';
+html += '  <strong>Obiettivi Operativi:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @strategic_goal.obiettivi_operativi.each do |oo| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @strategic_goal, url: strategic_goal_remove_operational_goal_path(@strategic_goal), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :operational_goal_id, :value => oo.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= oo.denominazione %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+
+html += '<%= form_for @strategic_goal, url: strategic_goal_add_operational_goal_path(@strategic_goal), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     OperationalGoal.order(:denominazione).each do |c| %>';
+html += '<%=      content_tag(:option, c.denominazione, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+   
+includeDiv.append(html);

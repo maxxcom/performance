@@ -1,0 +1,46 @@
+<div class="row">
+<div class="column">
+
+<%= form_tag("/operational_goals/obiettivixdirigente", method: "get", remote: true, name: "obiettivixdirigente"  )  do  %>
+<%= collection_select(:person, :id, @dirigenti.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+
+<br>
+<div class="flags">
+<table align="left">
+
+<tr>
+<td >
+
+<table align="left"  >
+  <tr>
+    <td style="border:1px solid #FFFFFF;"><b>Obiettivi PEG</b></td>
+    <td align="right" style="border:1px solid #FFFFFF;" width="50px"><%= check_box_tag :opzionepeg %></td>
+    
+  </tr>
+  <tr>
+    <td style="border:1px solid #FFFFFF;"><b>Attività ordinaria</b></td>
+    <td align="right" style="border:1px solid #FFFFFF;" width="50px"><%= check_box_tag :opzioneac %></td>
+    
+  </tr>
+  <tr>
+    <td style="border:1px solid #FFFFFF;"><b>Opere</b></td>
+    <td align="right" style="border:1px solid #FFFFFF;" width="50px"><%= check_box_tag :opzioneopere %></td>
+    
+  </tr>
+</table>
+
+</td>
+</tr>
+
+<tr>
+<td style="border:1px solid #FFFFFF;">
+<%= submit_tag "Cerca", class:'btn btn-sm btn-info' %>
+</td>
+</tr>
+</table>
+</div>
+<% end %>
+<br>
+
+</div>
+</div>

@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dipendenti importati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @aggiunte != nil %>
+    <% @aggiunte.each do |person| %>
+      <tr>
+        <td><%= person.nome %></td>
+		<td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.email %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @aggiunte.length == 0 then "Non sono state importate persone" else "N° persone importate :" + @aggiunte.length.to_s end %>
+<br>
+
+
+
+

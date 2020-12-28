@@ -1,0 +1,21 @@
+<h1>Importazione organico dipendenti</h1>
+
+
+<h4> Importazione organico dipendenti</h4>
+	<%= form_tag importa_organico_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende un file xls ottenuto da Esportazione Organico con questo formato </p>
+<p> Un foglio di lavoro "Lista Dipendenti" </p>
+<p> nome: colonna B </p>
+<p> cognome: colonna C </p>
+<p> matricola: colonna D </p>
+<p> ufficio: colonna E </p>
+<p> email (eventuale): colonna F </p>
+<p> Un foglio di lavoro "Lista Uffici" </p>
+<p> nome ufficio: colonna B </p>
+<p> tipo ufficio: colonna C </p>
+<p> direttore ufficio (eventuale): colonna D </p>
+<p> ufficio padre (eventuale): colonna E </p>

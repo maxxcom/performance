@@ -1,0 +1,34 @@
+
+<h1>Sessioni</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>data</th>
+      <th>Nome Cognome</th>
+      <th>tempo</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @sessioni.each do |sessione| %>
+      <tr>
+		<td>
+		<%= sessione["inizio"].to_s %>
+		</td>
+		<td>
+		<%= sessione["operatore"].to_s %>
+		</td>
+		<td>
+		<%= ((((sessione["fine"] - sessione["inizio"])/60).ceil)/60).ceil.to_s + "h " + (((sessione["fine"] - sessione["inizio"])/60)%60).ceil.to_s + "m " %>
+		</td>
+	  </tr>
+	 <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

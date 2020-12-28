@@ -1,0 +1,186 @@
+console.log("showtabellaxdirigente.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = '<p> Dipendenti per Ufficio </p>';
+html += '<p> Dirigente: <%= @dirigente.nome + " " + @dirigente.cognome %><p>  ';
+html += '	 	 <%= form_for :schedaxls, url: people_riassuntivo_pagelle_x_dirigente_path, method: :get, :remote => false do |f| %>';
+html += '	      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "Riassuntivo valutazione comportamenti dipendenti"%>';
+html += '	 	 <% end %>';
+
+<% if  !Setting.disabilita_pagelle_singole %> 
+html += '	 	 <%= form_for :schedaxls, url: people_riassuntivo_obiettivi_x_dirigente_path, method: :get, :remote => false do |f| %>';
+html += '	      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "Riassuntivo valutazione obiettivi dipendenti"%>';
+html += '	 	 <% end %>';
+
+html += '	 	 <%= form_for :schedaxls, url: people_riassuntivo_pagelle_obiettivi_x_dirigente_path, method: :get, :remote => false do |f| %>';
+html += '	      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "Riassuntivo comportamenti + obiettivi dipendenti"%>';
+html += '	 	 <% end %>';
+<% end %>
+
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+	  
+html += '      <th>Nome Ufficio</th>';
+html += '	   <th>Direttore / Dipendente</th>';
+html += '      <th colspan="1"  class="text-center">OPERAZIONI</th>';	 
+html += '      <th>Valutazione comportamento</th>'; 
+html += '      <th>Misurazione obiettivi</th>'; 
+html += '      <th>Valutazione obiettivi</th>'; 
+html += '      <th>Complessivo valutazione</th>'; 
+html += '      <th>Stampa</th>'; 
+html += '      <th>Stato</th>'; 
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+
+<% i = 0 %>
+<% @risultati.each do |r| %>
+    
+html += '      <tr>';
+html += '       <td><b><%= r[:ufficio] != nil ? r[:ufficio].nome : " - " %></b></td>';
+
+html += '		<td><b><%= (r[:ufficio].director != nil ? r[:ufficio].director.nome : " ") + " " + (r[:ufficio].director != nil ? r[:ufficio].director.cognome : " ") %></b></td>';
+html += '       <td>';
+
+html += '       </td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '';
+html += '</td>';
+html += '<td>';
+html += '';
+html += '</td>';
+html += '<td>';
+html += '';
+html += '</td>';
+html += '<td>';
+html += '';
+html += '</td>';
+html += '<td>';
+html += '';
+html += '</td>';
+html += '      </tr>';
+<% i = i + 1 %>
+<% r[:ufficio].dipendenti_ufficio.each do |p| %>
+
+html += '      <tr>';
+html += '       <td></td>';	
+html += '		<td><%= (p.nome ) + " " + (p.cognome ) %></td>';
+
+html += '<td>';
+<% if p != current_user %>
+html += '<%= link_to("Valutazione", valutazionedipendente_path(p, @dirigente), title: "Valuta dipendente", class: "btn btn-xs btn-success", target: :_blank ) %>';
+
+
+<% end %>
+html += '</td>';
+html += '<td style="text-align:center">';
+<% if  !Setting.disabilita_pagelle_singole %> 
+html += '<%= p.punteggiofinale %>';
+<% else %>
+html += '<%= p.valutazione %>';
+<% end %>
+html += '</td>';
+html += '<td style="text-align:center">';
+html += '<%= p.valutazione_obiettivi_fasi_azioni %>';
+html += '</td>';
+html += '<td style="text-align:center">';
+<% if  !Setting.disabilita_pagelle_singole %> 
+html += '<%= p.valutazione_dirigente_obiettivi_fasi_azioni %>';
+<% else %>
+html += '<%= p.raggiungimento_obiettivi %>';
+<% end %>
+html += '</td>';
+
+html += '<%  moltiplicatore_valutazione_pagella = p.percentuale_pagella %>';
+html += '<%	 moltiplicatore_valutazione_obiettivi = p.percentuale_obiettivi %>';
+html += '<%	 valutazione_complessiva = (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) != 0 ? (moltiplicatore_valutazione_pagella *  p.punteggiofinale.to_f  + moltiplicatore_valutazione_obiettivi * p.valutazione_dirigente_obiettivi_fasi_azioni) / (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) : 0.0 %>';
+<% if valutazione_complessiva == 0 %>
+html += '<td style="text-align:center;color:#ff0000">';
+<% elsif  (valutazione_complessiva > 0) && (valutazione_complessiva < 60)%>
+html += '<td style="text-align:center;color:#ffa500">';
+<% else %>
+html += '<td style="text-align:center">';
+<% end %>
+html += '<%= "" + moltiplicatore_valutazione_pagella.to_s + "*" +p.punteggiofinale.to_s + " + " + moltiplicatore_valutazione_obiettivi.to_s + "*" + p.valutazione_dirigente_obiettivi_fasi_azioni.to_s + " = " + valutazione_complessiva.round(2).to_s  %>';
+html += '</td>';
+html += '<td style="text-align:center">';
+html += '     <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>';
+html += '     <%= f.hidden_field :person_id, :value => p.id %>';
+html += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 <%= f.button "PDF"%>';
+html += '	 <% end %>';
+html += '</td>';
+html += '<td style="text-align:center">';
+html += '<%= p.char_flag_valutazione_chiusa %>';
+html += '</td>';		
+html += '</tr>';
+	
+<% end %>
+		
+<% end %>
+
+html += '      <tr>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '	 	 <%= form_for :person, url: chiudi_tutte_valutazioni_people_path, method: :post, :remote => true do |f| %>';
+html += '	     <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "CHIUDI TUTTE",  data: {confirm: 'Sicuro di chiudere tutte le valutazioni?'} %>';
+html += '	 	 <% end %>';
+html += '</td>';
+html += '      </tr>';
+
+<%if super_user? %>
+html += '      <tr>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td>';
+html += '</td>';
+html += '<td style="text-align:center">';
+html += '	 	 <%= form_for :person, url: apri_tutte_valutazioni_people_path, method: :post, :remote => true do |f| %>';
+html += '	     <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 	 <%= f.submit "APRI TUTTE"%>';
+html += '	 	 <% end %>';
+html += '</td>';
+html += '      </tr>';
+<% end %>	
+html += '  </tbody>';
+html += '</table>';
+
+
+
+includeDiv.append(html);

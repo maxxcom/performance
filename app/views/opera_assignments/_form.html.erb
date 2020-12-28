@@ -1,0 +1,32 @@
+<%= form_with(model: opera_assignment, local: true) do |form| %>
+  <% if opera_assignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(opera_assignment.errors.count, "error") %> prohibited this opera_assignment from being saved:</h2>
+
+      <ul>
+      <% opera_assignment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :person_id %>
+    <%= form.number_field :person_id, id: :opera_assignment_person_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :opera_id %>
+    <%= form.number_field :opera_id, id: :opera_assignment_opera_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wheight %>
+    <%= form.number_field :wheight, id: :opera_assignment_wheight %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

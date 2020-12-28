@@ -1,0 +1,6 @@
+<h1>Obiettivi Operativi</h1>
+
+<%= form_for(:operational_goal, method: "get", remote: false, url: indexfiltro_operational_goals_path  )  do |f| %>
+<%= f.text_field(:stringa , :value => @stringa_ricerca, size: 20) %>
+<% end %>
+

@@ -1,0 +1,446 @@
+<script>
+function abilita_save(button_code)
+{
+ $button = $('#'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+function abilita_save_btn_salva_pga(button_code)
+{
+ $button = $('#btn-salva-pga'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_mga(button_code)
+{
+ $button = $('#btn-salva-mga'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_pfa(button_code)
+{
+ $button = $('#btn-salva-pfa'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_mfa(button_code)
+{
+ $button = $('#btn-salva-mfa'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_paa(button_code)
+{
+ $button = $('#btn-salva-paa'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_maa(button_code)
+{
+ $button = $('#btn-salva-maa'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_popa(button_code)
+{
+ $button = $('#btn-salva-popa'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_btn_salva_mopa(button_code)
+{
+ $button = $('#btn-salva-mopa'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+</script>
+
+
+<h1> Valutazione obiettivi </h1>
+<br>
+Ufficio:
+<b><%= @dipendente.nomeUfficio %></b>
+<br>
+Direttore: 
+<%= @dipendente.nomeDirettoreUfficio %>
+<br>
+
+
+<div id="results_division">
+
+
+<p> Dipendente ::  
+<%= @dipendente.nominativo %>
+</p>
+<table  class="tabella_pesi_misurazioni_valutazioni_rimuovi">
+  <tr>
+    <th>Qualifica</th>
+    <th>Categoria</th>
+    <th>Tempo</th>
+	<th>Part-time</th>
+	<th>Tot gg</th>
+	<th>Assenze</th>
+	<th>Percentuale</th>
+  </tr>
+  <tr>
+    <td><%= @dipendente.qualification != nil ? @dipendente.qualification.denominazione :  " - " %></td>
+    <td><%= @dipendente.stringa_categoria != nil ? @dipendente.stringa_categoria :  " - " %></td>
+    <td><%= @dipendente.tempo != nil ? @dipendente.tempo.round(2).to_s :  " - " %></td>
+	<td><%= @dipendente.servizio_percentuale != nil ? @dipendente.servizio_percentuale.round(2).to_s :  " - " %></td>
+    <td><%= @dipendente.totgg != nil ? @dipendente.totgg.round(2).to_s :  " - " %></td>
+    <td><%= @dipendente.totassenze != nil ? @dipendente.totassenze.round(2).to_s :  " - " %></td>
+	<td><%= ((@dipendente.totassenze != nil) && (@dipendente.totgg != nil)) ? (( @dipendente.totgg != 0) ? (100*@dipendente.totassenze/@dipendente.totgg).round(2).to_s :  " n.a. ") : " n.a. " %></td>
+  </tr>
+</table>
+
+<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">
+  <tr>
+  <td> 
+  
+  <div class="aiuto" title="La percentuale di assenza incide sul calcolo della produttività. La quota premio erosa viene suddivisa sugli altri componenti dell'ufficio"> Assenze incidono sul premio
+  
+  </div>
+   
+  </td>
+  <td>
+  <%= form_for( @dipendente, :url => set_flag_assenze_incidono_people_path( @dipendente ), :html => { :method => :post, :id => (@dipendente.id.to_s )} ) do |f| %>
+  <%= f.hidden_field :person_id, :value => @dipendente.id %>
+  <%= f.check_box :flag_assenze_incidono, :value => @dipendente.flag_assenze_incidono , :onclick=>'setFlagAssenze(' + @dipendente.id.to_s + ')', disabled: !@dipendente.assenze_incidono_abilitato? %> 
+  <% end %>
+  </td>
+  </tr>
+</table>
+
+<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">
+  <thead>
+  <tr>
+	  
+   <th class="tipo_target" >Tipo </th>
+   <th class="obiettivo" >Denominazione</th>
+   <th class="form_peso" >Peso</th>
+   <th class="form_misurazione" >Misurazione</th>
+   <th class="form_misurazione" >Valutazione</th>
+   <th class="form_peso" >Rimuovi</th>
+
+   </tr>
+  </thead>
+  <tbody>
+
+<% somma_obiettivi = 0 %>
+<% somma_fasi = 0 %>
+<% somma_azioni = 0 %>
+<% somma_opere = 0 %>
+
+<% @dipendente.obiettivi.each do |o| %>
+      <tr>
+      <td class="tipo_target" >Obiettivo</td>
+      <td class="obiettivo" > 
+	  <%= o.denominazione_completa %> 
+	  <% o.indicatori.each do |i| %>
+		<p class="indicatore_sotto"> <%= i.denominazione  %> </p>
+	  <% end %>
+	   
+	  <% o.fasi.each do |f| %>
+		<p class="fase_sotto_obiettivo"> <%= f.denominazione_completa %> </p>
+		<% f.indicatori.each do |i| %>
+		  <p class="indicatore_sotto"> <%= i.denominazione.strip.html_safe  %> </p>
+	    <% end %>
+	  <% end %>
+	  </td>
+      <td class="form_peso" >
+      <% ga = GoalAssignment.where(persona: @dipendente, obiettivo: o).first  %>
+	 
+<% if super_user? %>
+       <%= form_for :goal_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>
+	   <%= form.number_field :value,  :value => ga.wheight, min: 0, max: 100, :onchange => "abilita_save_btn_salva_pga("+ga.id.to_s+")" %>
+		<%= form.hidden_field :operational_goal_assignment_id, :value => ga.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-pga"+ga.id.to_s, disabled: true %>
+       <% end %>
+<% else %>
+	<%= ga.wheight %>
+<% end %>	 
+	  
+       
+       </td>
+
+       <td>
+  <%= o.valore_totale.round(2) %>
+       </td>
+
+       <td class="form_valutazione_dirigente" >
+<%                @val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: o).first  %>
+
+        <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => (@val != nil ? @val.valore : 0), min: 0, max: 100, :onchange => "abilita_save_btn_salva_mga("+ga.id.to_s+")" %>
+		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (@val != nil ? @val.id : nil) %>
+	    <%= form.hidden_field :person_id, :value => @dipendente.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :target_id, :value => o.id %>
+	    <%= form.hidden_field :target_type, :value => o.tipo %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-mga"+ga.id.to_s %>
+       <% end %>
+       </td>
+
+<td class="form_peso" >
+<% if super_user? %>
+
+	
+       <%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>
+		<%= form.hidden_field :operational_goal_assignment_id, :value => ga.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Rimuovi" , class: "btn-salva"  %>
+       <% end %>
+      
+       
+<% else %>
+	
+<% end %>
+      </td>
+
+      </tr>
+<% somma_obiettivi = somma_obiettivi + (ga.wheight != nil ? ga.wheight : 0)%>
+<% end %>
+
+
+<% @dipendente.fasi.each do |f| %>
+      <tr>
+       <td class="tipo_target">Fase</td>
+		<td class="fase" >
+		<p class="obiettivo_sopra_fase"><%= f.obiettivo_operativo_fase.denominazione_completa%> </p>
+		<p class="fase"><%= f.denominazione_completa %> </p>
+		 <% f.indicatori.each do |i| %>
+		  <p class="indicatore_sotto"> <%= i.denominazione  %> </p>
+	     <% end %>
+	   
+	     <% f.azioni.each do |a| %>
+		  <p class="azione_sotto_fase"> <%= a.denominazione_completa %> </p>
+	     <% end %>
+	  
+	  
+		</td>
+       <td class="form_peso" >
+<%                fa = PhaseAssignment.where(persona: @dipendente, fase: f).first  %>
+<% if super_user? %>
+       <%= form_for :phase_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => fa.wheight, min: 0, max: 100, :onchange => "abilita_save_btn_salva_pfa("+fa.id.to_s+")" %>
+		<%= form.hidden_field :phase_assignment_id, :value => fa.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-pfa"+fa.id.to_s, disabled: true %>
+       <% end %>
+<% else %>
+	<%= fa.wheight %>
+<% end %>
+       </td>
+
+       <td>
+  <%= f.valore_totale.round(2) %>
+       </td>
+
+       <td class="form_valutazione_dirigente" >
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: f).first  %>
+
+       <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100, :onchange => "abilita_save_btn_salva_mfa("+fa.id.to_s+")"  %>
+		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (@al != nil ? @val.id : nil) %>
+	    <%= form.hidden_field :person_id, :value => @dipendente.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :target_id, :value => f.id %>
+	    <%= form.hidden_field :target_type, :value => f.tipo %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-mfa"+fa.id.to_s %>
+       <% end %>
+       </td>
+
+       <td class="form_peso" > 
+	   <% if super_user? %>
+       <%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>
+		<%= form.hidden_field :phase_assignment_id, :value => fa.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Rimuovi" , class: "btn-salva"  %>
+       <% end %>
+
+	
+	<% end %>
+       
+      </td>
+
+     </tr>
+<% somma_fasi = somma_fasi + (fa.wheight != nil ? fa.wheight : 0) %>
+<% end %>
+
+
+<% @dipendente.azioni.each do |a| %>
+     <tr>
+       <td class="tipo_target">Azione</td>
+	    
+		<td class="azione" > 
+		 <p class="obiettivo_sopra_fase"><%= a.obiettivo_operativo_denominazione_completa %></p> 
+		 <p class="fase_sopra"><%= a.fase_denominazione_completa %></p>
+		 <p class="azione"><%= a.denominazione_completa %></p> 
+		
+		<% a.indicatori.each do |i| %>
+		  <p class="indicatore_sotto"> <%= i.denominazione  %> </p>
+	     <% end %>
+		</td>
+       <td class="form_peso" >
+<%                aa = SimpleActionAssignment.where(persona: @dipendente, azione: a).first  %>
+<% if super_user? %>
+
+        <%= form_for :action_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => aa.wheight, min: 0, max: 100, :onchange => "abilita_save_btn_salva_paa("+aa.id.to_s+")" %>
+		<%= form.hidden_field :simple_action_assignment_id, :value => aa.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-paa"+aa.id.to_s, disabled: true %>
+       <% end %>
+       
+<% else %>
+	<%= aa.wheight %>
+<% end %>
+
+       
+       </td>
+
+       <td>
+  <%= a.valore_totale.round(2) %>
+       </td>
+
+       <td class="form_valutazione_dirigente" >
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: a).first  %>
+       <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100, :onchange => "abilita_save_btn_salva_maa("+aa.id.to_s+")" %>
+		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (val != nil ? val.id : nil) %>
+	    <%= form.hidden_field :person_id, :value => @dipendente.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :target_id, :value => a.id %>
+	    <%= form.hidden_field :target_type, :value => a.tipo %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva",  id: "btn-salva-maa"+aa.id.to_s %>
+       <% end %>
+       </td>
+
+       <td class="form_peso" >
+	   
+	   <% if super_user? %>
+       
+	<%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>
+		<%= form.hidden_field :simple_action_assignment_id, :value => aa.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Rimuovi" , class: "btn-salva"  %>
+       <% end %>
+	
+<% end %>
+       
+      </td>
+
+      </tr>
+<% somma_azioni = somma_azioni + (aa.wheight != nil ? aa.wheight : 0) %>
+<% end %>
+
+
+<% @dipendente.opere_assegnate.each do |op| %>
+      <tr>
+       <td class="tipo_target">Opera</td>
+		<td class="obiettivo" > <%= op.denominazione_completa %> </td>
+       <td class="form_peso" >
+<%                opa = OperaAssignment.where(persona: @dipendente, opera: op).first  %>
+<% if super_user? %>
+       <%= form_for :opera_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => opa.wheight, min: 0, max: 100, :onchange => "abilita_save_btn_salva_popa("+opa.id.to_s+")" %>
+		<%= form.hidden_field :opera_assignment_id, :value => opa.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-popa"+opa.id.to_s, disabled: true %>
+       <% end %>
+<% else %>
+      <%= opa.wheight %>
+<%end %>
+       </td>
+
+       <td>
+  <%= op.valore_totale.round(2) %>
+       </td>
+
+       <td class="form_valutazione_dirigente" >
+<%                val = TargetDipendenteEvaluation.where(dipendente: @dipendente, target: op).first  %>
+      
+	   <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>
+		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100, :onchange => "abilita_save_btn_salva_mopa("+opa.id.to_s+")" %>
+		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (val != nil ? val.id : nil) %>
+	    <%= form.hidden_field :person_id, :value => @dipendente.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :target_id, :value => op.id %>
+	    <%= form.hidden_field :target_type, :value => op.tipo %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva-mopa"+opa.id.to_s  %>
+       <% end %>
+       
+   
+       </td>
+
+      <td class="form_peso" >
+	  
+	  <% if super_user? %>
+       
+<%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>
+		<%= form.hidden_field :opera_assignment_id, :value => opa.id %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Rimuovi" , class: "btn-salva"  %>
+       <% end %>
+	
+<% end %>
+       
+      </td>
+
+      </tr>
+<% somma_opere = somma_opere + (opa.wheight != nil ? opa.wheight : 0) %>
+<% end %>
+
+    <tr>
+      <td class="tipo_target" > </td>
+	   <td class="obiettivo" > </td>
+	   <td class="form_peso" >  </td>
+	   <td>
+	    <%= form_for :target_dipendente_evaluation, url: conferma_misurazione_dirigente_x_dipendente_people_path, method: :post, :remote => true do |form| %>
+	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>
+	    <%= form.hidden_field :person_id, :value => @dipendente.id %>
+	    <%= form.hidden_field :from, :value => "modifica_valutazioni_target_dipendente" %>
+		<%= form.submit "Copia misurazione" , class: "btn-salva"  %>
+        <% end %>
+	   </td>
+	   <td>
+      
+	   </td>
+	   <td></td>
+    </tr>
+	<tr>
+      <td class="tipo_target" > </td>
+	   <td class="obiettivo" > Totale  </td>
+	   <td class="form_peso" > <%= somma_obiettivi + somma_fasi + somma_azioni + somma_opere  %>  </td>
+	   <td></td>
+	   <td>
+       <%= @dipendente.valutazione_dirigente_obiettivi_fasi_azioni %> 
+	   </td>
+	   <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+</div>

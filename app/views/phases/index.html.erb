@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Fasi</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+      <th>Anno</th>
+      <th>Ente</th>
+	  <th>Responsabile</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @phases.each do |phase| %>
+      <tr>
+        <td><%= phase.denominazione %></td>
+        <td><%= phase.descrizione %></td>
+        <td><%= phase.anno %></td>
+        <td><%= phase.ente %></td>
+		<td><%= phase.responsabile_principale != nil ? phase.responsabile_principale.cognome : " - "  %></td>
+        <td><%= link_to 'Show', phase %></td>
+        <td><%= link_to 'Edit', edit_phase_path(phase) %></td>
+        <td><%= link_to 'Destroy', phase, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Phase', new_phase_path %>

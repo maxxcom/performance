@@ -1,0 +1,16 @@
+<h1>Importa riassuntivo pagelle valutazioni</h1>
+
+
+<h4> Lettura file</h4>
+	<%= form_tag importa_riassuntivo_pagelle_valutazioni_people_path, multipart: true do %>
+	 <p><%= file_field_tag :file %></p>
+	 
+	 
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende un file excel prodotto da Laura borghese </p>
+<p> Colonna C: matricola </p>
+<p> Colonna D: cognome </p>
+<p> Colonna E: nome </p>
+<p> Colonna K: punteggio </p>

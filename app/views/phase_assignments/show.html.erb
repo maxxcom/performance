@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @phase_assignment.person_id %>
+</p>
+
+<p>
+  <strong>Phase:</strong>
+  <%= @phase_assignment.phase_id %>
+</p>
+
+<p>
+  <strong>Wheight:</strong>
+  <%= @phase_assignment.wheight %>
+</p>
+
+<%= link_to 'Edit', edit_phase_assignment_path(@phase_assignment) %> |
+<%= link_to 'Back', phase_assignments_path %>

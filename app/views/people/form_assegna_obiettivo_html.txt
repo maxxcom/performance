@@ -1,0 +1,60 @@
+
+<h1> Obiettivi/Fasi/Azioni (html) *<%= @scelta.to_s %>* </h1>
+
+<% if @target_array.length > 0 %>
+ <br>
+ <%= form_for :person, url: selecttarget_people_path, method: :post, :remote => false do |p| %>
+  <%= p.select(:selected) do %>
+   <% @target_array.each do |t| -%>
+   <%= content_tag(:option, (t.tipo[0] + " - " + t.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip), value: [t.id, t.class.name]) %>
+   <% end %>
+  <% end %>
+  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>
+  <%= p.submit "Seleziona2" %>
+ <% end %>
+ <br>
+<% end %>
+
+<% if @scelta != nil %>
+
+ <p><%= @scelta.tipo %> : <b><%= @scelta.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %></b></p> 
+
+ <b>Assegnatari:</b>
+ <br>
+ <div class="toleft">
+  <table class="blueTable"><thead></thead><tbody>
+  <% @scelta.assegnatari.each do |p| %>
+   <tr>
+   <td>
+    <%= form_for p, url: removeassegnazione_people_path, method: :post, :remote => false do |f| %>
+    <%= f.hidden_field :target_id, :value => @scelta.id %>
+	<%= f.hidden_field :assegnatario_id, :value => p.id %>
+    <%= f.hidden_field :target_type, :value => @scelta.class.name %>
+    <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+    <%= f.submit "Rimuovi assegnazione" %>
+    <% end %>
+   </td>
+  <td>
+   <%= p.cognome + " " + p.nome %>
+  </td>
+
+ 
+ </tr>
+ <% end %> 
+ </tbody></table>
+</div>
+
+<br>
+
+<hr>
+<p>
+ <%=  form_for :person, url: aggiungiassegnazioni_people_path, method: :post, :remote => false do |p| %>
+ <%= p.text_area :text, cols: 40, rows: 15, :value => @testo %>
+ <%= p.hidden_field :target_id, :value => @scelta.id %>
+ <%= p.hidden_field :target_type, :value => @scelta.class.name %>
+ <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>
+</p>
+ <%= p.submit "Aggiungi assegnazioni" %>
+ <% end %>
+<% end %>
+   

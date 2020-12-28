@@ -1,0 +1,81 @@
+
+function setflagproduttivita(id_person)
+{
+ console.log(id_person);
+ var f = document.getElementById(id_person).submit();
+ 
+}
+
+var includeDiv = $("#results_division")
+
+includeDiv.empty();
+
+
+var html = 'Flag produttivita';
+
+
+html += '<h1>Dipendenti</h1>';
+
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Nr</th>';
+html += '      <th>Nome</th>';
+html += '      <th>Cognome</th>';
+html += '      <th>Matricola</th>';
+html += '	  <th>Categoria</th>';
+html += '	  <th>COS</th>';
+html += '	  <th>Assegnazione</th>';
+html += '	  <th>totgg %</th>';
+html += '	  <th>totassenze %</th>';
+html += '	  <th>Servizio %</th>';
+html += '	  <th>Tempo</th>';
+html += '	  <th>Ufficio</th>';
+html += '	  <th>Qualifica</th>';
+html += '      <th colspan="1"  class="flag_produttivita">Flag produttività</th>';
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+    <% i = 0 %>
+	<% if @people != nil %>
+    <%   @people.each do |person| %>
+
+html += '     <div id="<%= person.matricola %>">';	
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= person.nome %></td>';
+html += '        <td><%= person.cognome %></td>';
+html += '        <td><%= person.matricola %></td>';
+html += '		<td><%= person.categoria %></td>';
+html += '		<td><%= person.cos %></td>';
+html += '		<td><%= person.assegnazione %></td>';
+html += '		<td><%= person.totgg %></td>';
+html += '		<td><%= person.totassenze %></td>';
+html += '		<td><%= person.servizio_percentuale %></td>';
+html += '		<td><%= person.tempo %></td>';
+html += '		<td>';
+html += '       <%= person.nomeUfficio %>';
+html += '       </td>';
+html += '		<td>';
+html += '       <%= person.qualifica %>';
+html += '       </td>';
+				
+html += '		<td class="flag_produttivita">'; 
+		
+html += '		 <%= form_for( person, :url => setflagproduttivita_people_path( person ), :html => { :method => :post, :id => (person.id.to_s )} ) do |f| %>';
+html += '		 <%= f.check_box :flag_calcolo_produttivita, :onclick=>'setflagproduttivita(' + person.id.to_s + ')' %> ';
+html += '		 <% end %>';
+		
+html += '		</td>';
+        
+html += '      </tr>';
+html += '     </div>';	 
+    <%   end %>
+	<% end %>
+html += '  </tbody>';
+html += '</table>';
+
+html += '<br>';
+
+

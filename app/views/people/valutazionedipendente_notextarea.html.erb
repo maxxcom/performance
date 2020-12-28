@@ -1,0 +1,236 @@
+
+
+<div id="search_division">
+    <%= render 'intestazionepagella' %>
+</div>
+<div id="pagella_division">
+<h1> Valutazione comportamenti</h1>
+<center> <%= link_to "Istruzioni", "/pages/show", target: :_blank %> </center>
+
+<table class="pagella_table">
+  <tr>
+  <td> 
+  
+  <div class="aiuto" title="La percentuale di assenza incide sul calcolo della produttività. La quota premio erosa viene suddivisa sugli altri componenti dell'ufficio"> Assenze incidono sul premio
+  
+  </div>
+   
+  </td>
+  <td>
+  <%= form_for( @person, :url => set_flag_assenze_incidono_people_path( @person ), :html => { :method => :post, :id => (@person.id.to_s )} ) do |f| %>
+  <%= f.hidden_field :person_id, :value => @person.id %>
+  <%= f.check_box :flag_assenze_incidono, :value => @person.flag_assenze_incidono , :onclick=>'setFlagAssenze(' + @person.id.to_s + ')', disabled: !@person.assenze_incidono_abilitato? %> 
+  <% end %>
+  </td>
+  </tr>
+</table>
+
+
+<table class="pagella_table">
+  <thead>
+    <tr>
+      <th class="fattore_valutazione">Denominazione</th>
+      <th>Peso</th>
+      <th>Voto</th>
+      <th>Voto Pesato</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+  <% indice = 0 %>
+  
+  <%= form_for :valutazione, url: setvalueall_people_path, method: :post, :remote => true do |f| %>
+    <% @valutazioni.each do |v| %>
+	  <% indice = indice + 1 %>
+      <tr>
+	    <% if v.vfactor != nil %>
+         <td class="fattore_valutazione" title="<%= v.vfactor.descrizione.gsub(/\r\n/, "").strip%>" ><%= v.vfactor.denominazione.gsub(/\r\n/, "").strip  %></td>
+         <td><%= v.vfactor.peso(@person)  %></td>
+         <td>
+		 <% stringa_campo =  @person.id.to_s + "_" + v.id.to_s + "_" + v.vfactor.id.to_s %>
+		 <%= f.number_field stringa_campo,  :value => v.value, min: v.vfactor.min, max: v.vfactor.max, step: :any %>
+         
+         </td>
+		 <td>
+		 <%= (v.value * v.vfactor.peso(@person)/v.vfactor.max).round(2) %>
+		 </td>
+		<% else %>
+		  <td></td>
+          <td></td>
+          <td></td>
+		  <td></td>
+		 <% end %>  
+        
+       
+      </tr>
+    <% end %>
+	<tr>
+	 <td>  </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+	 
+	 <%= f.hidden_field :numero_voti, :value => indice %>
+	 <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Salva tutto"), class: 'btn_salva', id: 'btn_salva_tutto', disabled: @person.flag_valutazione_chiusa %>
+	 <% end %>
+	 </td>
+	 <td>
+	 </td>
+	 </tr>
+	 <tr>
+	 <td>
+	 
+	 </td>
+	 <td>
+<% if Setting.where(denominazione: 'anno').first.value == '2019' %>
+	 <b> Media pesata </b> 
+<% end %>	 
+	 </td>
+	 <td>
+	 
+	 </td>
+	 <td>
+<% if Setting.where(denominazione: 'anno').first.value == '2019' %>
+	 <%= @person.punteggiocomplessivo.round(2) %>
+<% end %>	 
+	 </td>
+	 </tr>
+	 <tr>
+	 <td> <b> Punteggio finale </b> </td>
+	 <td >
+	 
+	 </td>
+	 <td align="center">
+	 <%= @person.flag_valutazione_chiusa ? "VALUTAZIONE CHIUSA" : "" %>
+	 </td>
+	 <td><b><%= @person.punteggiofinale.round(2) %></b></td>
+	 </tr>
+	 
+	 
+	
+  </tbody>
+</table>
+
+<table class="pagella_table">
+  <thead>
+    
+  </thead>
+  <tbody>
+  <tr>
+	 <td> <b> Valutazione complessiva </b> </td>
+	 <td ><b>
+	 <% moltiplicatore_valutazione_pagella = @person.percentuale_pagella %>
+	 <% moltiplicatore_valutazione_obiettivi = @person.percentuale_obiettivi %>
+	 <% valutazione_complessiva = (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) != 0 ? (moltiplicatore_valutazione_pagella *  @person.punteggiofinale  + moltiplicatore_valutazione_obiettivi * @person.valutazione_dirigente_obiettivi_fasi_azioni) / (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) : 0.0 %>
+	 <%= "" + moltiplicatore_valutazione_pagella.to_s + "*" + @person.punteggiofinale.to_s + " + " + moltiplicatore_valutazione_obiettivi.to_s + "*" + @person.valutazione_dirigente_obiettivi_fasi_azioni.to_s + " = " + valutazione_complessiva.round(2).to_s %>
+	 </b>
+	 </td>
+  </tr> 
+  
+  </tbody>
+</table>
+
+</div>
+
+<div id="indicazioni_division">
+
+<%= form_for(:person, url: valutazionedipendente_indicazioni_considerazioni_people_path, method: :get, :remote => false) do |f| %>
+<table class="pagella_table">
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ 
+</td>
+</tr>
+<tr>
+<td>
+<%= f.hidden_field :person_id, :value => @person.id %>
+<%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+<%= submit_tag( (@person.flag_valutazione_chiusa ? "X" : "Indicazioni e considerazioni"), disabled: @person.flag_valutazione_chiusa) %>
+<% end %>  
+</td>
+</tr>
+</tbody>
+</table> 
+
+</div>
+
+<div id="comandi_division">
+
+	 
+<table class="pagella_table">
+<thead>
+<tr>
+<th></th>
+<th>OPERAZIONI FINALI</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+
+   <%= form_for @person, url: chiusura_valutazione_people_path, method: :post, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Chiudi valutazione") , class: 'btn_chiudi', id: 'btn_chiudi_valutazione', disabled: @person.flag_valutazione_chiusa, data: {confirm: 'Sicuro di chiudere la valutazione?'} %>
+	 <% end %>
+     
+
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+
+     <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "PDF"%>
+	 <% end %>
+    
+
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+
+         <%= form_for :schedaxls, url: people_schedavalutazionedipendentexls_path, method: :get, :remote => false do |f| %>
+     <%= f.hidden_field :person_id, :value => @person.id %>
+	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+	 <%= f.submit "Excel"%>
+	 <% end %>
+
+</td>
+<td>
+</td>
+</tr>
+   </tbody>
+</table>    
+	 
+	 
+</div>
+
+
+<div id="instruction_division">
+    <%= render 'istruzionipagella' %>
+</div>
+

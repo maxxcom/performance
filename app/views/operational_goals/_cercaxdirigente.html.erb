@@ -1,0 +1,10 @@
+<div class="row">
+<div class="column">
+
+<%= form_tag("/operational_goals/searchobiettividipendentixdirigente", method: "get", remote: true, name: "searchobiettividipendentixdirigente"  )  do  %>
+<%= collection_select(:person, :id, @dirigenti.sort_by{|p| p.cognome}, :id, :cognomenome,)  %>
+<%= submit_tag "Cerca", class:'btn btn-sm btn-info' %>
+<% end %>
+
+</div>
+</div>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Target:</strong>
+  <%= @target_dipendente_evaluation.target_id %>
+</p>
+
+<p>
+  <strong>Target type:</strong>
+  <%= @target_dipendente_evaluation.target_type %>
+</p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @target_dipendente_evaluation.person_id %>
+</p>
+
+<p>
+  <strong>Dirigente:</strong>
+  <%= @target_dipendente_evaluation.dirigente_id %>
+</p>
+
+<p>
+  <strong>Valore:</strong>
+  <%= @target_dipendente_evaluation.valore %>
+</p>
+
+<%= link_to 'Edit', edit_target_dipendente_evaluation_path(@target_dipendente_evaluation) %> |
+<%= link_to 'Back', target_dipendente_evaluations_path %>

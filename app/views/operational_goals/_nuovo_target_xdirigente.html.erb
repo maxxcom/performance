@@ -1,0 +1,10 @@
+<div class="row">
+<div class="column">
+
+<%= form_tag("/operational_goals/nuovo_target", method: "post", remote: true, name: "nuovo_target"  )  do  %>
+<%= collection_select(:person, :dirigente_id, filtro_dirigenti.sort_by{|p| p.cognome}, :id, :cognomenome,)  %>
+<%= submit_tag "Seleziona", class:'btn btn-sm btn-info' %>
+<% end %>
+
+</div>
+</div>

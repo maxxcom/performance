@@ -1,0 +1,30 @@
+<h1>Importazione servizio percentuale dipendenti </h1>
+
+
+<h4> Importazione 2020</h4>
+	<%= form_tag importa_2020_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p><%= check_box_tag :sposta_persona %> Sposta persona se trovi ufficio</p>
+	 <p><%= check_box_tag :crea_ufficio %> Crea Ufficio se non esistente</p>
+	 <p><%= check_box_tag :solo_prova %> Non creare ne uffici ne persone ne spostare realmente persone (solo per prova)</p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> File Excel di Laura Borghese </p>
+<p>  </p>
+<p>  </p>
+<p>  matricola     = colonna A </p>
+<p>  NOMINATIVO     = colonna B </p>
+<p>  POSIZIONE_DESC     = colonna C </p>
+<p>  QUALIFICA_DESC     = colonna D </p>
+<p>  FIGURA_GIURIDICA_DESC     = colonna E </p>
+<p>  SETTORE_DESC     = colonna F </p>
+<p>  SERVIZIO     = colonna G </p>
+<p>  SETTORE_B_DESC     = colonna H </p>
+<p>  ORE     = colonna I </p>
+<p>  NOTE     = colonna J </p>
+
+
+
+
+								

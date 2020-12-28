@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @valuation_area.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @valuation_area.descrizione %>
+</p>
+
+<%= link_to 'Edit', edit_valuation_area_path(@valuation_area) %> |
+<%= link_to 'Back', valuation_areas_path %>

@@ -1,0 +1,27 @@
+<%= form_with(model: item_evaluation, local: true) do |form| %>
+  <% if item_evaluation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(item_evaluation.errors.count, "error") %> prohibited this item_evaluation from being saved:</h2>
+
+      <ul>
+      <% item_evaluation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :valore_valutazione_dirigente %>
+    <%= form.text_field :valore_valutazione_dirigente, id: :item_evaluation_valore_valutazione_dirigente %>
+  </div>
+
+  <div class="field">
+    <%= form.label :valore_valutazione_oiv %>
+    <%= form.text_field :valore_valutazione_oiv, id: :item_evaluation_valore_valutazione_oiv %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

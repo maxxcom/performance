@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Uffici e dipendenti</h1>
+
+
+<% @offices.each do |office| %>
+ <%= tag.div class: office.nome do %>
+ <p><b> <%= office.nome %></b></p>
+ <p>Direttore: <%= if office.director != nil
+                     office.director.nome + " " + office.director.cognome
+                   else
+                     " - "
+                   end %>
+				
+ 
+ <%= form_for(office, method: :post, url: office_setdirector_path(office), :remote => true )  do |p| %>
+ <%= p.collection_select(:director_id, Person.all, :id, :cognomenome, :include_blank => "NON ASSEGNATO") %>
+ <%= p.submit "Direttore", data: { disable_with: "Working..." } %>
+ <% end %>
+ </p>
+ 
+ <% office.people.each do |person| %>
+ <p> - <%= person.nome %> <%= person.cognome %></p>
+ <% end %> 
+ 
+ 
+ 
+ <% end %> 
+ <%= form_for(office, method: :post, url: office_setperson_path(office), :remote => true )  do |p| %>
+ <%= p.collection_select(:id, Person.all, :id, :cognomenome, :include_blank => "NON SELEZIONATO") %>
+ <%= p.submit "Aggiungi", data: { disable_with: "Working..." } %>
+ <% end %>
+<% end %>
+

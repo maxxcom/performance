@@ -1,0 +1,17 @@
+<h1>Importazione Pesi per obiettivi/fasi/azioni dipendenti</h1>
+
+
+<h4> Importazione Pesi</h4>
+	<%= form_tag importa_pesi_target_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p> Crea mancanti <%= check_box_tag :crea_mancanti %></p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Dai file Excel si importano le assegnazioni con il peso </p>
+<p> Vengono analizzati tutti i fogli di lavoro. Per ciascun foglio le colonne sono: </p>
+<p> Colonna B : obiettivo/fase/azione (il titolo) </p>
+<p> Colonna C : cognome nome dipendente  </p>
+<p> Colonna D : peso dell'obiettivo/fase/azione per il dipendente  </p>
+<p> L'importazione può essere fatta più volte, viene eventualmente modificato il peso </p>
+<p> L'obiettivo/fase/azione viene cercato per stringa  </p>

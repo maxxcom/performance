@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+
+<h1>Statistiche </h1>
+
+<h2>Progetti Fasi Azioni e Opere</h2>
+<p> Nr Obiettivi <%= OperationalGoal.count() %></p>
+<p> Nr Fasi <%= Phase.count() %></p>
+<p> Nr Azioni <%= SimpleAction.count() %></p>
+<p> Nr Opere <%= Opera.count() %></p>
+<p> Totale <%= OperationalGoal.count() + Opera.count() + Phase.count() + SimpleAction.count()  %></p>
+
+
+<h2>Dipendenti</h2>
+<p> Nr dipendenti : <%= Person.count() %></p>
+<p> Nr dipendenti produttivita : <%= Person.where(flag_calcolo_produttivita: true).count()  %></p>
+
+
+

@@ -1,0 +1,67 @@
+<%= form_with(model: sdope_row, local: true) do |form| %>
+  <% if sdope_row.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sdope_row.errors.count, "error") %> prohibited this sdope_row from being saved:</h2>
+
+      <ul>
+      <% sdope_row.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :matricola %>
+    <%= form.text_field :matricola, id: :sdope_row_matricola %>
+  </div>
+
+  <div class="field">
+    <%= form.label :nominativo %>
+    <%= form.text_field :nominativo, id: :sdope_row_nominativo %>
+  </div>
+
+  <div class="field">
+    <%= form.label :livello %>
+    <%= form.text_field :livello, id: :sdope_row_livello %>
+  </div>
+
+  <div class="field">
+    <%= form.label :figuracod %>
+    <%= form.text_field :figuracod, id: :sdope_row_figuracod %>
+  </div>
+
+  <div class="field">
+    <%= form.label :figurades %>
+    <%= form.text_field :figurades, id: :sdope_row_figurades %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ruolo %>
+    <%= form.text_field :ruolo, id: :sdope_row_ruolo %>
+  </div>
+
+  <div class="field">
+    <%= form.label :titolo1 %>
+    <%= form.text_field :titolo1, id: :sdope_row_titolo1 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :titolo2 %>
+    <%= form.text_field :titolo2, id: :sdope_row_titolo2 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :titolo3 %>
+    <%= form.text_field :titolo3, id: :sdope_row_titolo3 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :titolo4 %>
+    <%= form.text_field :titolo4, id: :sdope_row_titolo4 %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

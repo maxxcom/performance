@@ -1,0 +1,5 @@
+
+<%= form_tag("/offices/esportazione_peg_xufficio", method: "get", remote: false, name: "esportazione_peg_xufficio"  )  do  %>
+<%= collection_select(:office, :id, @uffici.sort_by{|p| p.nome}, :id, :nome,)  %>
+<%= submit_tag "Seleziona", class:'btn btn-sm btn-info' %>
+<% end %>

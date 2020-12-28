@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Valori importati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  
+      <th>Valore</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @valori_assegnati != nil %>
+    <% @valori_assegnati.each do |indicatore| %>
+      <tr>
+        <td><%= indicatore.nome %></td>
+		<td><%= indicatore.valore_misurazione %></td>
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @obiettivi.length == 0 then "Non sono stati importati obiettivi" else "N° obiettivi importati :" + @obiettivi.length.to_s end %>
+<br>
+
+<hr>
+
+
+<h1>Obiettivi modificati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Peso</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @obiettivi_modificati != nil %>
+    <% @obiettivi_modificati.each do |obiettivo| %>
+      <tr>
+        <td><%= obiettivo.denominazione %></td>
+		<td><%= obiettivo.descrizione %></td>
+        <td><%= obiettivo.responsabile_principale != nil ? obiettivo.responsabile_principale.nominativo : " - "  %></td>
+        <td><%= obiettivo.anno %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Righe non determinate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Testo riga</th>
+	</tr>
+  </thead>
+
+  <tbody>
+    <% if @righe_non_determinate != nil %>
+    <% @righe_non_determinate.each do |riga| %>
+      <tr>
+        <td><%= riga %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

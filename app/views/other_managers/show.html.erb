@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Altro responsabile:</strong>
+  <%= @other_manager.altro_responsabile_id %>
+</p>
+
+<p>
+  <strong>Obiettivo operativo:</strong>
+  <%= @other_manager.obiettivo_operativo_id %>
+</p>
+
+<%= link_to 'Edit', edit_other_manager_path(@other_manager) %> |
+<%= link_to 'Back', other_managers_path %>

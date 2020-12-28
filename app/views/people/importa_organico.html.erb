@@ -1,0 +1,104 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dipendenti importati</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @aggiunte != nil %>
+	<% index = 1 %>
+    <% @aggiunte.each do |person| %>
+      <tr>
+	    <td><%= index %></td>
+        <td><%= person.nome %></td>
+		<td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.email %></td>
+        </tr>
+	  <% index = index + 1 %>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @aggiunte.length == 0 then "Non sono state importate persone" else "N° persone importate :" + @aggiunte.length.to_s end %>
+<br>
+
+<h1>Dipendenti modificati</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @modificate != nil %>
+	<% index = 1 %>
+    <% @modificate.each do |person| %>
+      <tr>
+	    <td><%= index %></td>
+        <td><%= person.nome %></td>
+		<td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.email %></td>
+        </tr>
+	  <% index = index + 1 %>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @modificate.length == 0 then "Non sono state modificate persone" else "N° persone modificate :" + @modificate.length.to_s end %>
+<br>
+
+
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Testo</th>
+	  
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @scartate != nil %>
+	<% index = 1 %>
+    <% @scartate.each do |riga| %>
+      <tr>
+	    <td><%= index %></td>
+        <td><%= riga %></td>
+		
+        </tr>
+	  <% index = index + 1 %>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+
+
+
+

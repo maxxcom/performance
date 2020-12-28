@@ -1,0 +1,93 @@
+
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva_'+button_code)
+ $.rails.enableElement($button)
+ //$button.removeAttr('disabled')
+}
+
+
+
+var includeDiv = $("#results_division")
+includeDiv.empty();
+var html = '';
+
+html += '<h1>Tabellone valutazioni</h1>';
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Nr</th>';
+html += '      <th>Nome</th>';
+html += '      <th>Cognome</th>';
+html += '      <th>Matricola</th>';
+html += '	  <th>Categoria</th>';
+html += '	  <th>COS</th>';
+html += '	  <th>Comportamento</th>';
+html += '	  <th>Obiettivi</th>';
+html += '	  <th>Punteggio Finale</th>';
+html += '	  <th>Punteggio Discretizzato</th>';
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+    <% i = 0 %>
+html += '	<tr>';
+html += '	<td></td>';
+html += '    <td></td>';
+html += '    <td></td>';
+html += '    <td></td>';
+html += '	<td></td>';
+html += '    <td></td>';
+html += '	<td>';
+html += '	<%= form_for :person, url: ricalcola_tutti_finale_valutazione_people_path, method: :post, :remote => true do |f| %>';
+html += '	<%= f.submit "Ricalcola" , class: "btn-salva", id: "ricalcola_valutazioni" %>';
+html += '	<% end %>';
+html += '	</td>';
+html += '	<td>';
+html += '	<%= form_for :person, url: ricalcola_tutti_finale_obiettivi_people_path, method: :post, :remote => true do |f| %>';
+html += '	<%= f.submit "Ricalcola" , class: "btn-salva", id: "ricalcola_valutazioni" %>';
+html += '	<% end %>';
+html += '	</td>';
+html += '	<td></td>';
+html += '	<td></td>';
+html += '	</tr>';
+	<% if @people != nil %>
+    <%   @people.each do |person| %>
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '       <td><%= person.nome %></td>';
+html += '       <td><%= person.cognome %></td>';
+html += '       <td><%= person.matricola %></td>';
+html += '		<td><%= person.stringa_categoria %></td>';
+html += '		<td><%= person.cos %></td>';
+
+html += '		<td>';
+html += '				<%= form_for :person, url: set_finale_valutazione_people_path, method: :post, :remote => true do |f| %>';
+html += '		        <%= f.number_field :value,  :value => person.valutazione, min: 0, max: 100, step: :any, :onchange => "abilita_save(v"+i.to_s+")" %>';
+html += '				<%= f.hidden_field :person_id, :value => person.id %>';
+html += '				<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_v"+i.to_s %>';
+html += '				<% end %>';
+html += '       </td>';
+html += '		<td>'; 
+html += '				<%= form_for :person, url: set_finale_raggiungimento_obiettivi_people_path, method: :post, :remote => true do |f| %>';
+html += '		    	<%= f.number_field :value,  :value => person.raggiungimento_obiettivi, min: 0, max: 100, step: :any, :onchange => "abilita_save(o"+i.to_s+")" %>';
+html += '				<%= f.hidden_field :person_id, :value => person.id %>';
+html += '				<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_o"+i.to_s %>';
+html += '				<% end %>';				
+html += '       </td>';
+html += '	<td style="text-align: center">';
+html += '   <%= ((person.raggiungimento_obiettivi.to_f * person.percentuale_obiettivi.to_f + person.percentuale_pagella.to_f * person.valutazione.to_f)/(person.percentuale_obiettivi.to_f + person.percentuale_pagella.to_f)).round(2) %>';
+html += '   </td>';
+html += '	<td style="text-align: center">';
+html += '   <%= person.punteggio_finale_totale_discretizzato %>';
+html += '	</td>';
+html += '      </tr>';
+	 
+    <%   end %>
+	<% end %>
+html += '  </tbody>';
+html += '</table>';
+
+html += '<br>';
+
+includeDiv.append(html);

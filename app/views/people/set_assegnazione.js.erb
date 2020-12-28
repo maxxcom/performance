@@ -1,0 +1,59 @@
+
+
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+
+var html = 'Flag produttivita';
+
+
+html += '<h1>Utenti</h1>';
+
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Nr</th>';
+html += '      <th>Nome</th>';
+html += '      <th>Cognome</th>';
+html += '      <th>Matricola</th>';
+html += '	  <th>Categoria</th>';
+html += '	  <th>COS</th>';
+html += '	  <th>Assegnazione</th>';
+html += '	  <th>Ufficio</th>';
+html += '	  <th>Set assegnazione</th>';
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+    <% i = 0 %>
+	<% if @people != nil %>
+    <%   @people.each do |person| %>
+	  
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+html += '        <td><%= person.nome %></td>';
+html += '        <td><%= person.cognome %></td>';
+html += '        <td><%= person.matricola %></td>';
+html += '		<td><%= person.stringa_categoria %></td>';
+html += '		<td><%= person.cos %></td>';
+html += '		<td>';
+html += '       <%= person.nomeUfficio %>';
+html += '       </td>';
+			
+html += '       <td><%= form_for :person, url: set_assegnazione_people_path, method: :post, :remote => true do |f| %>
+html += '       <%= f.text_field :assegnazione,  :value => person.assegnazione, :onchange => "abilita_save_s("+person.id.to_s+")" %>
+html += '       <%= f.hidden_field :person_id, :value => person.id %>
+html += '       <%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_s"+person.id.to_s, disabled: true %>
+html += '       <% end %>
+html += '       </td>
+        
+html += '      </tr>';
+	 
+    <%   end %>
+	<% end %>
+html += '  </tbody>';
+html += '</table>';
+
+html += '<br>';
+
+

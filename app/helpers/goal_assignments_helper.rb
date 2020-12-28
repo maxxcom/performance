@@ -1,0 +1,2 @@
+module GoalAssignmentsHelper
+end

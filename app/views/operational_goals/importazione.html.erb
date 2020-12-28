@@ -1,0 +1,21 @@
+<h1>Importazione obiettivi</h1>
+
+
+<h4> Importazione obiettivi</h4>
+	<%= form_tag importa_operational_goals_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati dai file Excel di Mauro Gaspardo </p>
+	<p> Dal foglio di lavoro Obiettivi vengono presi: </p>
+	<p> Obiettivi, Fasi, Azioni, Responsabile e peso. </p>
+	<p> Titolo: colonna A </p>
+	<p> Descrizione: colonna B </p>
+	<p> Tipo (Obiettivo/Fase/Azione): colonna C </p>
+	<p> Servizio: colonna D </p>
+	<p> Responsabile (cognome): colonna E </p>
+	<p> Se esistono già non fa niente <p>
+	
+	<p> Uguale dal foglio di lavoro Obiettivi Individuale, (entrambe maiuscolo, poi nella colonna tipo vuole Obiettivo individuale, minuscolo) ù
+	vengono presi gli obiettivi individuali. La colonna Struttura organizzativa rimane vuota. </p>

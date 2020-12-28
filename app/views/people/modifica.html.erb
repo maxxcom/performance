@@ -1,0 +1,29 @@
+<%= form_with(model: person, local: true) do |form| %>
+  
+  <div class="field">
+    <%= form.label :nome %>
+    <%= form.text_field :nome, id: :person_nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cognome %>
+    <%= form.text_field :cognome, id: :person_cognome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :matricola %>
+    <%= form.text_field :matricola, id: :person_matricola %>
+  </div>
+  
+ 
+  
+  <div class="field">
+    <%= form.label :qualification %>
+    <%= form.collection_select(:qualification_type_id, QualificationType.all, :id, :denominazione, :include_blank => true) %>
+  </div>
+  
+   
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,311 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ 
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+ 
+}
+
+console.log("targetdipendntixdirigente.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = 'Lista';
+<% @risultati.each do |r| %>
+
+html += '<br>';
+html += 'Ufficio:';
+html += '<b><%= r[:ufficio].nome %></b>'; 
+html += '<br>';
+html += 'Direttore: ';
+html += '<%= r[:ufficio].director != nil ? r[:ufficio].director.nome : " " %>'; 
+html += ' ';
+html += '<%= r[:ufficio].director != nil ? r[:ufficio].director.cognome : " " %>'; 
+html += '<br>';
+
+<% r[:ufficio].people.each do |p| %>
+html += '<p> - ';
+html += '<%= p.nome %>';
+html += ' ';
+html += '<%= p.cognome %></p>';
+
+html += '<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">';
+html += '  <thead>';
+html += '    <tr>';
+	  
+html += '      <th class="tipo_target" >Tipo </th>';
+html += '	   <th class="obiettivo" >Denominazione</th>';
+html += '	   <th class="form_peso" >Peso</th>';
+html += '	   <th class="form_misurazione" >Misurazione</th>';
+html += '	   <th class="form_misurazione" >Valutazione</th>';
+html += '	   <th class="form_peso" >Rimuovi</th>';
+
+html += '    </tr>';
+html += '  </thead>';
+
+html += '  <tbody>';
+
+<% somma_obiettivi = 0 %>
+<% somma_fasi = 0 %>
+<% somma_azioni = 0 %>
+<% somma_opere = 0 %>
+
+<% p.obiettivi.each do |o| %>
+html += '      <tr>';
+html += '       <td class="tipo_target" >Obiettivo</td>';
+html += '		<td class="obiettivo" > <%= o.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %> </td>';
+
+html += '       <td class="form_peso" >';
+
+<%                ga = GoalAssignment.where(persona: p, obiettivo: o).first  %>
+<% if super_user? %>
+html += '       <%= form_for :goal_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => ga.wheight, min: 0, max: 100, :onchange => "abilita_save("+ga.id.to_s+")" %>';
+html += '		<%= form.hidden_field :operational_goal_assignment_id, :value => ga.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+ga.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% else %>
+html += ' <%= ga.wheight %>';
+<% end %>
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= o.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: p, target: o).first  %>
+html += '       <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100 %>';
+html += '		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (val != nil ? val.id : nil) %>';
+html += '	    <%= form.hidden_field :person_id, :value => p.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :target_id, :value => o.id %>';
+html += '	    <%= form.hidden_field :target_type, :value => o.tipo %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva" %>';
+html += '       <% end %>';
+html += '       </td>';
+
+
+html += '       <td class="form_peso" >'; 
+<% if super_user? %>
+html += '       <%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.hidden_field :operational_goal_assignment_id, :value => ga.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Rimuovi" , class: "btn-salva"  %>';
+html += '       <% end %>';
+<% end %>
+
+html += '      </td>';
+
+html += '      </tr>';
+<% somma_obiettivi = somma_obiettivi + (ga.wheight != nil ? ga.wheight : 0)%>
+<% end %>
+
+
+<% p.fasi.each do |f| %>
+html += '      <tr>';
+html += '       <td class="tipo_target">Fase</td>';
+html += '		<td class="obiettivo" > <%= f.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %> </td>';
+html += '       <td class="form_peso" >';
+<%                fa = PhaseAssignment.where(persona: p, fase: f).first  %>
+
+<% if super_user? %>
+html += '       <%= form_for :phase_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => fa.wheight, min: 0, max: 100, :onchange => "abilita_save("+fa.id.to_s+")" %>';
+html += '		<%= form.hidden_field :phase_assignment_id, :value => fa.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+fa.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% else %>
+html += ' <%= fa.wheight %>';
+<% end %>
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= f.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: p, target: f).first  %>
+
+html += '       <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100 %>';
+html += '		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (val != nil ? val.id : nil) %>';
+html += '	    <%= form.hidden_field :person_id, :value => p.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :target_id, :value => f.id %>';
+html += '	    <%= form.hidden_field :target_type, :value => f.tipo %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva" %>';
+html += '       <% end %>';
+html += '       </td>';
+
+html += '       <td class="form_peso" >'; 
+<% if super_user? %>
+html += '       <%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.hidden_field :phase_assignment_id, :value => fa.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Rimuovi" , class: "btn-salva"  %>';
+html += '       <% end %>';
+<% end %>
+
+html += '      </td>';
+
+html += '      </tr>';
+<% somma_fasi = somma_fasi + (fa.wheight != nil ? fa.wheight : 0) %>
+<% end %>
+
+
+<% p.azioni.each do |a| %>
+html += '      <tr>';
+html += '       <td class="tipo_target">Azione</td>';
+html += '		<td class="obiettivo" > <%= a.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %> </td>';
+html += '       <td class="form_peso" >';
+<%                aa = SimpleActionAssignment.where(persona: p, azione: a).first  %>
+
+<% if super_user? %>
+html += '       <%= form_for :action_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => aa.wheight, min: 0, max: 100, :onchange => "abilita_save("+aa.id.to_s+")" %>';
+html += '		<%= form.hidden_field :simple_action_assignment_id, :value => aa.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+aa.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% else %>
+html += ' <%= aa.wheight %>';
+<% end %>
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= a.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: p, target: a).first  %>
+html += '       <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100 %>';
+html += '		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (val != nil ? val.id : nil) %>';
+html += '	    <%= form.hidden_field :person_id, :value => p.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :target_id, :value => a.id %>';
+html += '	    <%= form.hidden_field :target_type, :value => a.tipo %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva" %>';
+html += '       <% end %>';
+html += '       </td>';
+
+
+html += '       <td class="form_peso" >'; 
+<% if super_user? %>
+html += '       <%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.hidden_field :simple_action_assignment_id, :value => aa.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Rimuovi" , class: "btn-salva"  %>';
+html += '       <% end %>';
+<% end %>
+
+html += '      </td>';
+
+html += '      </tr>';
+<% somma_azioni = somma_azioni + (aa.wheight != nil ? aa.wheight : 0) %>
+<% end %>
+
+
+<% p.opere_assegnate.each do |op| %>
+html += '      <tr>';
+html += '       <td class="tipo_target">Opera</td>';
+html += '		<td class="obiettivo" > <%= op.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %> </td>';
+html += '       <td class="form_peso" >';
+<%                opa = OperaAssignment.where(persona: p, opera: op).first  %>
+
+<% if super_user? %>
+html += '       <%= form_for :opera_assignment, url: setwheight_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => opa.wheight, min: 0, max: 100, :onchange => "abilita_save("+opa.id.to_s+")" %>';
+html += '		<%= form.hidden_field :opera_assignment_id, :value => opa.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+opa.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% else %>
+html += ' <%= opa.wheight %>';
+<% end %>
+
+html += '       </td>';
+
+html += '       <td>';
+html += '  <%= op.valore_totale.round(2) %>';
+html += '       </td>';
+
+html += '       <td class="form_valutazione_dirigente" >';
+<%                val = TargetDipendenteEvaluation.where(dipendente: p, target: op).first  %>
+html += '       <%= form_for :target_dipendente_evaluation, url: setvalutazionedirigente_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => (val != nil ? val.valore : 0), min: 0, max: 100 %>';
+html += '		<%= form.hidden_field :target_dipendente_evaluation_id, :value => (val != nil ? val.id : nil) %>';
+html += '	    <%= form.hidden_field :person_id, :value => p.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :target_id, :value => op.id %>';
+html += '	    <%= form.hidden_field :target_type, :value => op.tipo %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva" %>';
+html += '       <% end %>';
+html += '       </td>';
+
+html += '       <td class="form_peso" >'; 
+<% if super_user? %>
+html += '       <%= form_for :person, url: rimuovi_assegnazione_target_people_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.hidden_field :opera_assignment_id, :value => opa.id %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Rimuovi" , class: "btn-salva"  %>';
+html += '       <% end %>';
+<% end %>
+
+html += '      </td>';
+
+html += '      </tr>';
+<% somma_opere = somma_opere + (opa.wheight != nil ? opa.wheight : 0) %>
+<% end %>
+
+html += '    <tr>';
+html += '      <td class="tipo_target" > </td>';
+html += '	   <td class="obiettivo" > </td>';
+html += '	   <td class="form_peso" > <%= somma_obiettivi + somma_fasi + somma_azioni + somma_opere  %>  </td>';
+html += '	   <td></td>';
+html += '	   <td>';
+html += '       <%= form_for :target_dipendente_evaluation, url: conferma_misurazione_dirigente_x_dipendente_people_path, method: :post, :remote => true do |form| %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :person_id, :value => p.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "Conferma" , class: "btn-salva"  %>';
+html += '       <% end %>';
+html += '	   </td>';
+html += '	   <td></td>';
+html += '    </tr>';
+html += '  </tbody>';
+html += '</table>';
+
+html += '<br>'; 
+<% end %>
+
+html += '       <%= form_for :person, url: conferma_tutti_misurazione_people_path, method: :post, :remote => true do |form| %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :from, :value => "targetdipendentixdirigente" %>';
+html += '		<%= form.submit "CONFERMA TUTTI" , class: "btn-salva"  %>';
+html += '       <% end %>';
+html += '<br>';
+
+<% end %>
+
+includeDiv.append(html);

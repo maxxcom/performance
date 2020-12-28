@@ -1,0 +1,15 @@
+<h1>Check matricole</h1>
+
+
+<h4> Lettura file Excel</h4>
+	<%= form_tag check_matricole_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende un file excel  </p>
+<p> un foglio di lavoro  </p>
+<p> - matricola in A </p>
+<p> - cognome in B </p>
+<p> - nome in C </p>
+<p>  </p>

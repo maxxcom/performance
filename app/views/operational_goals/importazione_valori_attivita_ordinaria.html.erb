@@ -1,0 +1,15 @@
+<h1>Importazione misurazioni attività ordinaria</h1>
+
+
+<h4> Importazione misurazioni attività ordinaria</h4>
+	<%= form_tag importa_valori_attivita_ordinaria_operational_goals_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= collection_select(:person, :id, @dirigenti.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati dai file Excel di Mauro Gaspardo </p>
+	<p> Dai fogli di lavoro AC quantità e AC_qualità (tutti i foglio che iniziano con AC) vengono presi: </p>
+	<p> Valori colonna H  attività ordinaria con OBIETTIVO PREFORMANCE = SI. </p>
+	
+	<p> Se non esistono non fa niente <p>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @valutation.value %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @valutation.year %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @valutation.state %>
+</p>
+
+<p>
+  <strong>Person:</strong>
+  <%= @valutation.person_id %>
+</p>
+
+<p>
+  <strong>Vfator:</strong>
+  <%= @valutation.vfator_id %>
+</p>
+
+<%= link_to 'Edit', edit_valutation_path(@valutation) %> |
+<%= link_to 'Back', valutations_path %>

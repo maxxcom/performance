@@ -1,0 +1,55 @@
+<table>
+  <thead>
+    <tr>
+	  <th>Nr.</th>
+	  <th>ID</th>
+	  <th>Tipo</th>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Indicatori</th>
+      
+      <th>Add</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% index = 0 %>
+    <% @risultati.each do |r| %>
+	<% index = index + 1 %>
+	<% sid = r.tipo + "_" + r.id.to_s %>
+	<div id="<%= sid %>" >
+      <tr>
+	    <td><%= index %></td>
+	    <td><%= r.id %></td>
+		<td><%= r.tipo %></td>
+        <td><%= r.denominazione.gsub(/[^0-9A-Za-z .,;]/,"").strip %></td>
+        <td><%= r.descrizione.gsub(/[^0-9A-Za-z .,;]/,"").strip %></td>
+        <td><%= r.responsabile_principale != nil ? r.responsabile_principale.cognome : " - "  %></td>
+		<td>
+		<% r.indicatori.each do |indicatore| %>
+		  <p> <%= indicatore.nome %> </p>
+		<% end %>
+		
+		</td>
+        <td>
+		<% if ((r.indicatori.length == 0) && (r.sotto_target.length == 0)) %>
+		  <%= form_for :gauge, url: set_aggiungi_indicatore_default_target_gauges_path, method: :post, :remote => false do |p| %>
+          <%= p.hidden_field :target_id, :value => r.id %>
+          <%= p.hidden_field :target_type, :value => r.tipo %>
+		  <%= p.hidden_field :stringa_ricerca, :value => @stringa_ricerca %>
+          <%= p.submit "Aggiungi Indicatore Default" %>
+          <% end %>
+		<%end %>
+		
+		
+		</td>
+        
+        
+      </tr>
+	 </div>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

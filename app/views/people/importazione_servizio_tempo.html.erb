@@ -1,0 +1,23 @@
+<h1>Importazione Servizio percentuale e Tempo </h1>
+
+
+<h4> Importazione Servizio percentuale e Tempo</h4>
+	<%= form_tag importa_servizio_tempo_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p> Aggiungi mancanti <%= check_box_tag :aggiungi_mancanti %></p>
+	 <p> Aggiorna matricole <%= check_box_tag :correggi_matricole %></p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende il file Excel mandato da Insiel (giugno 2019) </p>
+<p> Una riga di intestazione </p>
+<p>  </p>
+<p>  codice fiscale/matricola    = colonna A </p>
+<p>	 cognome           = colonna B </p>
+<p>	 nome              = colonna C </p>
+<p>	 impegno assoluto  = colonna E : sarebbe il risultato finale servizio * tempo </p>
+<p>	 impegno relativo  = colonna F : sarebbe la percentuale di tempo pieno</p>
+
+<p> da questi due numeri viene ricavato tempo = impegno assoluto / impegno relativo </p>
+
+<p> Fornito da Insiel </p>

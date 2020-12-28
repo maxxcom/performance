@@ -1,0 +1,82 @@
+<%= form_with(model: attivita_consolidata_gauge, local: true) do |form| %>
+  <% if attivita_consolidata_gauge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(attivita_consolidata_gauge.errors.count, "error") %> prohibited this attivita_consolidata_gauge from being saved:</h2>
+
+      <ul>
+      <% attivita_consolidata_gauge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :ufficio_stringa %>
+    <%= form.text_field :ufficio_stringa, id: :attivita_consolidata_gauge_ufficio_stringa %>
+  </div>
+
+  <div class="field">
+    <%= form.label :linea_di_attivita %>
+    <%= form.text_field :linea_di_attivita, id: :attivita_consolidata_gauge_linea_di_attivita %>
+  </div>
+
+  <div class="field">
+    <%= form.label :indicatore_di_quantita %>
+    <%= form.text_field :indicatore_di_quantita, id: :attivita_consolidata_gauge_indicatore_di_quantita %>
+  </div>
+
+  <div class="field">
+    <%= form.label :consuntivo_anno_n_meno_3 %>
+    <%= form.text_field :consuntivo_anno_n_meno_3, id: :attivita_consolidata_gauge_consuntivo_anno_n_meno_3 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :consuntivo_anno_n_meno_2 %>
+    <%= form.text_field :consuntivo_anno_n_meno_2, id: :attivita_consolidata_gauge_consuntivo_anno_n_meno_2 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :consuntivo_anno_n_meno_1 %>
+    <%= form.text_field :consuntivo_anno_n_meno_1, id: :attivita_consolidata_gauge_consuntivo_anno_n_meno_1 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :previsionale_anno_n %>
+    <%= form.text_field :previsionale_anno_n, id: :attivita_consolidata_gauge_previsionale_anno_n %>
+  </div>
+
+  <div class="field">
+    <%= form.label :previsionale_anno_n_piu_1 %>
+    <%= form.text_field :previsionale_anno_n_piu_1, id: :attivita_consolidata_gauge_previsionale_anno_n_piu_1 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :previsionale_anno_n_piu_2 %>
+    <%= form.text_field :previsionale_anno_n_piu_2, id: :attivita_consolidata_gauge_previsionale_anno_n_piu_2 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :previsionale_anno_n_piu_3 %>
+    <%= form.text_field :previsionale_anno_n_piu_3, id: :attivita_consolidata_gauge_previsionale_anno_n_piu_3 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :obiettivo_di_performance %>
+    <%= form.check_box :obiettivo_di_performance, id: :attivita_consolidata_gauge_obiettivo_di_performance %>
+  </div>
+
+  <div class="field">
+    <%= form.label :note %>
+    <%= form.text_field :note, id: :attivita_consolidata_gauge_note %>
+  </div>
+
+  <div class="field">
+    <%= form.label :foglio_di_lavoro %>
+    <%= form.text_field :foglio_di_lavoro, id: :attivita_consolidata_gauge_foglio_di_lavoro %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

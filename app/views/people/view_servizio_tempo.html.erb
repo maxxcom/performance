@@ -1,0 +1,116 @@
+<script>
+function setflagproduttivita(id_person)
+{
+ console.log(id_person);
+ var f = document.getElementById(id_person);
+ $.ajax({
+    method:'POST',
+    url: 'setflagproduttivita',
+    dataType: "json",
+    data: { content: id_person }
+  });
+ 
+}
+
+function abilita_save_s(button_code)
+{
+ $button = $('#btn-salva_s'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_t(button_code)
+{
+ $button = $('#btn-salva_t'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+</script>
+
+<div id="results_division">
+   
+<h1>Dipendenti</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>Categoria</th>
+	  <th>COS</th>
+	  <th>Assegnazione</th>
+	  <th>Ufficio</th>
+	  <th>Servizio %</th>
+	  <th>Tempo</th>
+      <th>Flag produttività</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+	  
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		<td><%= person.categoria %></td>
+		<td><%= person.cos %></td>
+		<td><%= person.assegnazione %></td>
+		<td class="ufficio"><%= if person.ufficio != nil
+                 person.ufficio.nome
+                else
+				 if person.dirige.length != 0
+                   person.dirige.first.nome
+                 else				 
+                  "-" 
+				 end
+				end %></td>
+		
+		<td>
+		<% sid = "s"+person.id.to_s %>
+		<div id=<%= sid %> >
+			<%= form_for :person, url: set_servizio_tempo_people_path, method: :post, :remote => true do |f| %>
+     		<%= f.number_field :value_servizio_percentuale,  :value => person.servizio_percentuale, min: 0, max: 1, step: :any, :onchange => "abilita_save_s("+person.id.to_s+")" %>
+     		<%= f.hidden_field :person_id, :value => person.id %>
+			<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_s"+person.id.to_s, disabled: true %>
+            <% end %>
+	    </div>
+		</td>
+		
+		<% tid = "t"+person.id.to_s %>
+		<td>
+		<div id=<%= tid %> >
+			<%= form_for :person, url: set_servizio_tempo_people_path, method: :post, :remote => true do |f| %>
+     		<%= f.number_field :value_tempo,  :value => person.tempo, min: 0, max: 1, step: :any, :onchange => "abilita_save_t("+person.id.to_s+")" %>
+			<%= f.hidden_field :person_id, :value => person.id %>
+     		<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_t"+person.id.to_s, disabled: true %>
+            <% end %>
+		</div>
+		</td>
+		
+		
+		
+		
+		
+		<td class="flag_produttivita"> 
+		
+		 <%= form_for( person, :url => setflagproduttivita_people_path( person ), :html => { :method => :post, :id => (person.id.to_s )} ) do |f| %>
+		 <%= f.check_box :flag_calcolo_produttivita, :onclick=>'setflagproduttivita(' + person.id.to_s + ')' %> 
+		 <% end %>
+		
+		</td>
+        
+      </tr>
+	 
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

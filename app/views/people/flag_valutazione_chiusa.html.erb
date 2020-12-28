@@ -1,0 +1,70 @@
+<script>
+function set_flag_valutazione_chiusa(id_person)
+{
+ console.log("ciao");
+ console.log(id_person);
+ var f = document.getElementById(id_person);
+ $.ajax({
+    method:'POST',
+    url: 'set_flag_valutazione_chiusa',
+    dataType: "json",
+    data: { content: id_person }
+  });
+ 
+}
+
+</script>
+
+<div id="results_division">
+   
+<h1>Dipendenti</h1>
+
+<table>
+  <thead>
+  
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>Ufficio</th>
+	  <th colspan="1"  class="flag_produttivita">Flag valutazione chiusa</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+	 
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		<td><%= if person.ufficio != nil
+                 person.ufficio.nome
+                else
+				 if person.dirige.length != 0
+                   person.dirige.first.nome
+                 else				 
+                  "-" 
+				 end
+				end %></td>
+		
+		<td class="flag_produttivita"> 
+		 <div id="<%= person.matricola %>">
+		 <%= form_for( person, :url => set_flag_valutazione_chiusa_people_path( person ), :html => { :method => :post, :id => (person.id.to_s )} ) do |f| %>
+		 <%= f.check_box :flag_valutazione_chiusa, :onclick=>'set_flag_valutazione_chiusa(' + person.id.to_s + ')' %> 
+		 <% end %>
+		 </div>
+		</td>
+        
+      </tr>
+	  </div>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

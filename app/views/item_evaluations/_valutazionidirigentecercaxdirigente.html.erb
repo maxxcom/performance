@@ -1,0 +1,6 @@
+
+<%= form_tag("/item_evaluations/searchvalutazionidirigentexdirigente", method: "get", remote: true, name: "searchvalutazionidirigentexdirigente"  )  do  %>
+<%= collection_select(:person, :id, @dirigenti, :id, :cognomenome,)  %>
+<%= submit_tag "Cerca", class:'btn btn-sm btn-info' %>
+<% end %>
+

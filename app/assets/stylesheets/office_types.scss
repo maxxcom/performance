@@ -1,0 +1,21 @@
+// Place all the styles related to the OfficeTypes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.toleft {
+ width: 50%;
+}
+table.blueTable {
+  border: 0px solid #1C6EA4;
+  background-color: #FFFFFF;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.blueTable td, table.blueTable th {
+  border: 0px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.blueTable tbody td {
+  font-size: 13px;
+}

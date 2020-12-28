@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nome:</strong>
+  <%= @person.nome %>
+</p>
+
+<p>
+  <strong>Cognome:</strong>
+  <%= @person.cognome %>
+</p>
+
+<p>
+  <strong>Matricola:</strong>
+  <%= @person.matricola %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @person.email %>
+</p>
+
+<p>
+  <strong>Qualifica:</strong>
+  <%= if @person.qualification != nil
+                 @person.qualification.denominazione
+                else
+                 "-" 
+				end %>
+</p>
+
+<p>
+  <strong>Abilitato:</strong>
+  <%= @person.abilitato %>
+</p>
+
+<%= link_to 'Back', '/pages/show' %>

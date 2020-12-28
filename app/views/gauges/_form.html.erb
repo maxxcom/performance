@@ -1,0 +1,37 @@
+<%= form_with(model: gauge, local: true) do |form| %>
+  <% if gauge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(gauge.errors.count, "error") %> prohibited this gauge from being saved:</h2>
+
+      <ul>
+      <% gauge.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nome %>
+    <%= form.text_field :nome, id: :gauge_nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione %>
+    <%= form.text_area :descrizione, id: :gauge_descrizione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione_valore_misurazione %>
+    <%= form.text_area :descrizione_valore_misurazione, id: :gauge_descrizione_valore_misurazione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :valore_misurazione %>
+    <%= form.text_field :valore_misurazione, id: :gauge_valore_misurazione %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

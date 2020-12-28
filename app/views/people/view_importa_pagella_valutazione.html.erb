@@ -1,0 +1,15 @@
+<h1>Importa pagella valutazione</h1>
+
+
+<h4> Lettura file</h4>
+	<%= form_tag importa_pagella_valutazione_people_path, multipart: true do %>
+	 <p><%= file_field_tag :file %></p>
+	 
+	 
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende il file excel della pagellina </p>
+<p> Colonna C: C4 </p>
+<p> Colonna C: C3 nome e cognome </p>
+<p> Colonna C: C12:C19 punteggi </p>

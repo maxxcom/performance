@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @operational_goal.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @operational_goal.descrizione %>
+</p>
+
+<p>
+  <strong>Responsabile:</strong>
+  <%= @operational_goal.responsabile_principale.nominativo %>
+</p>
+
+<p>
+  <strong>Altri Responsabili:</strong>
+  <table class="blueTable"><thead></thead><tbody>
+  <% @operational_goal.altri_responsabili.each do |ar| %>
+  <tr>
+  <td>
+  <%= form_for @operational_goal, url: operational_goal_remove_altro_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>
+  <%= p.hidden_field :person_id, :value => ar.id %>
+  <%= p.submit "Rimuovi" %>
+  <% end %>
+  </td>
+  <td>
+  <%= ar.nominativo %>
+  </td>
+  <% end %>
+  </tr>
+  </tbody></table>
+</p>
+
+
+<%= form_for @operational_goal, url: operational_goal_add_altro_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>
+<%=   p.select(:id) do %>
+<%     Person.order(:cognome).each do |c| %>
+<%=      content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>
+<%     end %>
+<%    end %>
+<%=   p.submit "Aggiungi" %>
+<% end %>
+
+
+

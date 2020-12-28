@@ -1,0 +1,42 @@
+
+
+
+var sid = 'ob2'
+
+console.log(sid);
+var element1 = $(sid);
+
+element1.empty();
+
+var html1 = '';
+
+<% if @target != nil %>
+
+html1 += '<tr>
+html1 += '	    <td></td>
+html1 += '	    <td><%= @target.id %></td>
+html1 += '		<td><%= @target.tipo %></td>
+html1 += '        <td><%= @target.denominazione.gsub(/[^0-9A-Za-z .,;]/,"").strip %></td>
+html1 += '        <td><%= @target.descrizione.gsub(/[^0-9A-Za-z .,;]/,"").strip %></td>
+html1 += '        <td><%= @target.responsabile_principale != nil ? @target.responsabile_principale.cognome : " - "  %></td>
+html1 += '		<td>
+html1 += '		<% @target.indicatori.each do |indicatore| %>
+html1 += '		  <p> <%= indicatore.nome %> </p>
+html1 += '		<% end %>
+		
+html1 += '		</td>
+html1 += '        <td>
+		
+html1 += '		<%= form_for :gauge, url: set_aggiungi_indicatore_default_target_gauges_path, method: :post, :remote => true do |p| %>
+html1 += '        <%= p.hidden_field :target_id, :value => @target.id %>
+html1 += '        <%= p.hidden_field :target_type, :value => @target.tipo %>
+html1 += '        <%= p.submit "Aggiungi Indicatore Default" %>
+		
+html1 += '        <% end %>
+html1 += '		</td>
+html1 += '</tr>
+
+<% end %>
+
+element1.append(html1);
+

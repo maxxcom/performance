@@ -1,0 +1,32 @@
+<%= form_with(model: categoria_quotum, local: true) do |form| %>
+  <% if categoria_quotum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(categoria_quotum.errors.count, "error") %> prohibited this categoria_quotum from being saved:</h2>
+
+      <ul>
+      <% categoria_quotum.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :chiave %>
+    <%= form.text_field :chiave, id: :categoria_quotum_chiave %>
+  </div>
+
+  <div class="field">
+    <%= form.label :quota_comportamento %>
+    <%= form.text_field :quota_comportamento, id: :categoria_quotum_quota_comportamento %>
+  </div>
+
+  <div class="field">
+    <%= form.label :quota_obiettivi %>
+    <%= form.text_field :quota_obiettivi, id: :categoria_quotum_quota_obiettivi %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+<h1>Importazione tabelle base</h1>
+
+
+<h4> Importazione tabelle base</h4>
+	<%= form_tag importa_tabelle_base_settings_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa xlsx" %>
+	<% end %>
+	
+<p> Prende un file xlsx con questo formato </p>
+<p> ogni foglio una tabella </p>
+   
+<p> Settings </p>
+<p>  TipologieDipendenti </p>
+<p>	 FattoriValutazione </p>
+<p>	 AreeValutazione </p>
+
+<p> E' il file che si ottiene in esportazione </p>

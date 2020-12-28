@@ -1,0 +1,11 @@
+
+<div class="row">
+<div class="column">
+
+<%= form_tag("/people/set_dipendenti_uffici_dirigente", method: "post", remote: true, name: "set_dipendenti_uffici_dirigente"  )  do  %>
+<%= collection_select(:person, :dirigente_id, @dirigenti.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+<%= submit_tag "Cerca", class:'btn btn-sm btn-info' %>
+<% end %>
+
+</div>
+</div>

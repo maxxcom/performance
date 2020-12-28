@@ -1,0 +1,54 @@
+console.log("create.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = '';
+
+html += '<br>';
+<% @risultati.each do |o| %>
+//html += '<b><%= o.id %> - </b>';
+<%  if o.attivita_ordinaria  %>
+html += 'Obiettivo AC:';
+<%  else  %>
+html += '<p style="font-size:20px">  Obiettivo:';
+<%  end  %>
+html += '<b style="font-size:20px"> <%= o.denominazione_completa %></b></p> ';
+html += '<p> Indice strategicità:<b>[<%= o.indice_strategicita.to_s %>]</b> </p>';
+
+   <% o.indicatori.each do |indicatore| %>
+      html += '<p style="text-indent: 40px"> Indicatore: <%= indicatore.nome.to_s %></b> </p>';
+   <% end %> 
+<% o.fasi.each do |f| %>
+html += '<p style="text-indent: 40px; font-size:14px"> <b> - </b> Fase: [ <%= f.peso %> ] <b><%= f.denominazione_completa %></b></p>';
+    <% f.indicatori.each do |indicatore| %>
+      html += '<p style="text-indent: 60px"> Indicatore: <%= indicatore.nome.to_s %></b> </p>';
+    <% end %> 
+
+
+   <% f.azioni.each do |a| %>
+     html += '<p style="text-indent: 80px"> -  Azione: [ <%= a.peso %> ] <b>  <i><%= a.denominazione_completa %></i></b></p>';
+	 <% a.indicatori.each do |indicatore| %>
+      html += '<p style="text-indent: 100px"> Indicatore: <%= indicatore.nome.to_s %></b> </p>';
+     <% end %>
+	 
+   <% end %>
+
+<% end %>
+html += '<br>'; 
+html += '<br>'; 
+<% end %>
+
+html += '<br>';
+
+<% if @opere.length > 0 %>
+<% @opere.each do |op| %>
+html += '<p  style="font-size:14px" ><b><%= op.numero.to_s + " " + op.sub.to_s + " -> " + op.descrizione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %></b></p>';
+    <% op.indicatori.each do |indicatore| %>
+      html += '<p style="text-indent: 100px"> Indicatore: <%= indicatore.nome.to_s %></b> </p>';
+     <% end %>
+<% end %>
+<% end %>
+
+
+
+includeDiv.append(html);

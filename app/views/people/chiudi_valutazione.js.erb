@@ -1,0 +1,79 @@
+
+console.log("chiudi_valutazione.js.erb file");
+
+var comandiDiv = $("#comandi_division")
+
+comandiDiv.empty();
+
+var html = '';
+
+html += '<table class="pagella_table">';
+html += '  <thead>';
+html += '    <tr>';
+html += '      <th></th>';
+html += '      <th>OPERAZIONI FINALI</th>';
+html += '      <th></th>';
+html += '    </tr>';
+html += '  </thead>';
+html += '  <tbody>';
+html += '    <tr>';
+html += '      <td>';
+
+html += '      </td>';
+html += '      <td>';
+
+html += '    <%= form_for @person, url: chiusura_valutazione_people_path, method: :post, :remote => true do |f| %>';
+html += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 <%= f.submit "Chiudi valutazione", class: 'btn_chiudi', id: 'btn_chiudi_valutazione' %>';
+html += '	 <% end %>';
+
+
+
+	 
+html += '      </td>';
+html += '      <td>';
+
+html += '      </td>';
+html += '    </tr>';
+
+html += '    <tr>';
+html += '      <td>';
+
+html += '      </td>';
+html += '      <td>';
+
+html += '    <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>';
+html += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 <%= f.submit "PDF"%>';
+html += '	 <% end %>';
+	 
+html += '      </td>';
+html += '      <td>';
+
+html += '      </td>';
+html += '    </tr>';
+
+html += '    <tr>';
+html += '      <td>';
+
+html += '      </td>';
+html += '      <td>';
+
+html += '    <%= form_for :schedaxls, url: people_schedavalutazionedipendentexls_path, method: :get, :remote => false do |f| %>';
+html += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	 <%= f.submit "Excel"%>';
+html += '	 <% end %>';
+	 
+html += '      </td>';
+html += '      <td>';
+
+html += '      </td>';
+html += '    </tr>';
+
+html += '  </tbody>';
+html += '</table>';
+
+comandiDiv.append(html);

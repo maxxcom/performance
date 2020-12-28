@@ -1,0 +1,96 @@
+<script>
+function setFlagAssenze(id_dipendente)
+{
+ console.log(id_dipendente);
+ var f = document.getElementById(id_dipendente).submit();
+ 
+}
+
+</script>
+
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <div class="column">
+  <p>
+  <strong>Nome:</strong>
+  <%= @person.nome %>
+  </p>
+
+  <p>
+  <strong>Cognome:</strong>
+  <%= @person.cognome %>
+  </p>
+
+  <p>
+  <strong>Matricola:</strong>
+  <%= @person.matricola %>
+  </p>
+
+  <p>
+  <strong>Email:</strong>
+  <%= @person.email %>
+  </p>
+  </div>
+  <div class="column">
+  
+  <p>
+  
+  <table>
+  <tr>
+    <th>Qualifica</th>
+    <th>Categoria</th>
+    <th>Tempo</th>
+	<th>Part-time</th>
+	<th>Tot gg</th>
+	<th>Assenze</th>
+	<th>Percentuale</th>
+  </tr>
+  <tr>
+    <td><%= @person.qualification != nil ? @person.qualification.denominazione :  " - " %></td>
+    <td><%= @person.stringa_categoria != nil ? @person.stringa_categoria :  " - " %></td>
+    <td><%= @person.tempo != nil ? @person.tempo.round(2).to_s :  " - " %></td>
+	<td><%= @person.servizio_percentuale != nil ? @person.servizio_percentuale.round(2).to_s :  " - " %></td>
+    <td><%= @person.totgg != nil ? @person.totgg.round(2).to_s :  " - " %></td>
+    <td><%= @person.totassenze != nil ? @person.totassenze.round(2).to_s :  " - " %></td>
+	<td><%= ((@person.totassenze != nil) && (@person.totgg != nil)) ? (( @person.totgg != 0) ? (100*@person.totassenze/@person.totgg).round(2).to_s :  " n.a. ") : " n.a. " %></td>
+  </tr>
+  
+  </table>
+  
+  </p>
+  
+  </div>
+</div>
+
+
+
+
+
+<p>
+  <strong>Dirigente responsabile:</strong>
+  <%= @dirigente != nil ? @dirigente.nome + " " + @dirigente.cognome : " - " %>
+</p>
+
+<p>
+  <strong>Obiettivi assegnati:</strong>
+  <%= @person.numero_target_assegnati.to_s + " / " + @person.totale_pesi_target_assegnati.to_s %> 
+</p>
+
+<p>
+  <strong>Misurazione obiettivi assegnati:</strong>
+  <%= @person.valutazione_obiettivi_fasi_azioni.to_s %> 
+</p>
+
+<p>
+  <strong>Valutazione obiettivi assegnati:</strong>
+  <%= @person.valutazione_dirigente_obiettivi_fasi_azioni != nil ? @person.valutazione_dirigente_obiettivi_fasi_azioni :  " - " %>
+</p>
+
+<p>
+<%= link_to("Refresh", valutazionedipendente_path(@person, @dirigente), title: "Valuta dipendente", class: "btn btn-xs btn-success" ) %>
+</p>
+
+<p>
+<%= link_to 'Scheda valutazioni obiettivi', modifica_valutazioni_target_dipendente_people_path(@person), class: "btn btn-xs btn-success",  :target => "_blank" %>
+<p>

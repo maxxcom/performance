@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Chiave:</strong>
+  <%= @categoria_quotum.chiave %>
+</p>
+
+<p>
+  <strong>Quota comportamento:</strong>
+  <%= @categoria_quotum.quota_comportamento %>
+</p>
+
+<p>
+  <strong>Quota obiettivi:</strong>
+  <%= @categoria_quotum.quota_obiettivi %>
+</p>
+
+<%= link_to 'Edit', edit_categoria_quotum_path(@categoria_quotum) %> |
+<%= link_to 'Back', categoria_quota_path %>

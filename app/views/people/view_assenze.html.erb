@@ -1,0 +1,78 @@
+<script>
+
+function abilita_save_t(button_code)
+{
+ $button = $('#btn-salva_t'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+function abilita_save_a(button_code)
+{
+ $button = $('#btn-salva_a'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+</script>
+
+<div id="results_division">
+   
+<h1>Assenze dipendenti</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>Categoria</th>
+	  <th>Assegnazione</th>
+	  <th>Totgg</th>
+	  <th>Totassenze</th>	  
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+	  
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		<td><%= person.categoria %></td>
+		<td><%= person.assegnazione %></td>
+		<td>
+		<% tid = "t"+person.id.to_s %>
+		<div id=<%= tid %> >
+			<%= form_for :person, url: set_assenze_people_path, method: :post, :remote => true do |f| %>
+     		<%= f.number_field :totgg,  :value => person.totgg, step: :any, :onchange => "abilita_save_t("+person.id.to_s+")" %>
+     		<%= f.hidden_field :person_id, :value => person.id %>
+			<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_t"+person.id.to_s, disabled: true %>
+            <% end %>
+	    </div>
+		</td>
+		
+		<% aid = "a"+person.id.to_s %>
+		<td>
+		<div id=<%= aid %> >
+			<%= form_for :person, url: set_assenze_people_path, method: :post, :remote => true do |f| %>
+     		<%= f.number_field :totassenze,  :value => person.totassenze, step: :any, :onchange => "abilita_save_a("+person.id.to_s+")" %>
+			<%= f.hidden_field :person_id, :value => person.id %>
+     		<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_a"+person.id.to_s, disabled: true %>
+            <% end %>
+		</div>
+		</td>
+		        
+      </tr>
+	 
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

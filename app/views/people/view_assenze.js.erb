@@ -1,0 +1,27 @@
+
+
+var tid='<%= "#t" + @p.id.to_s %>';
+var aid='<%= "#a" + @p.id.to_s %>';
+console.log(tid);
+var element1 = $(tid);
+var element2 = $(aid);
+element1.empty();
+element2.empty();
+var html1 = '';
+var html2 = '';
+
+html1 += '	<%= form_for :person, url: set_assenze_people_path, method: :post, :remote => true do |f| %>';
+html1 += '	<%= f.number_field :totgg,  :value => @p.totgg, step: :any, :onchange => "abilita_save_t("+@p.id.to_s+")"  %>';
+html1 += '	<%= f.hidden_field :person_id, :value => @p.id %>';
+html1 += '	<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_t"+@p.id.to_s, disabled: true %>';
+html1 += '   <% end %>';
+
+element1.append(html1);
+
+html2 += '<%= form_for :person, url: set_assenze_people_path, method: :post, :remote => true do |f| %>';
+html2 += '<%= f.number_field :totassenze,  :value => @p.totassenze, step: :any, :onchange => "abilita_save_a("+@p.id.to_s+")" %>';
+html2 += '<%= f.hidden_field :person_id, :value => @p.id %>';
+html2 += '<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_a"+@p.id.to_s, disabled: true %>';
+html2 += '<% end %>';
+
+element2.append(html2);

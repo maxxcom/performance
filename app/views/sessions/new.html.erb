@@ -1,0 +1,27 @@
+
+<h1>Performance</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(:session, url: login_path) do |f| %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email, class: 'form-control' %>
+
+      <%= f.label :password %>
+	  <%= link_to "(password dimenticata)", new_password_reset_path, title: "Password dimenticata o mai ricevuta (i.e. primo accesso all'applicativo)" %>
+      <%= f.password_field :password, class: 'form-control' %>
+
+      <%= f.submit "Log in", class: "btn btn-primary" %>
+    <% end %>
+
+   
+  </div>
+</div>
+
+
+
+
+
+
+

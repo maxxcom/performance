@@ -1,0 +1,23 @@
+<h1>Importazione obiettivi attività ordinaria</h1>
+
+
+<h4> Importazione obiettivi attività ordinaria</h4>
+	<%= form_tag importa_attivita_ordinaria_operational_goals_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= collection_select(:person, :id, @dirigenti.sort_by{|p| p.cognome}, :id, :cognomenome, :include_blank => true)  %>
+	 <p> Colonna nome ufficio <%= select_tag(:colonna_nome_ufficio, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna nome obiettivo <%= select_tag(:colonna_obiettivo, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna indicatore <%= select_tag(:colonna_indicatore, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna valore preventivo <%= select_tag(:colonna_valore, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Colonna OBIETTIVO PREFORMANCE <%= select_tag(:colonna_obiettivo_performance, options_for_select(["nessuna", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"])) %> </p>
+	 <p> Nome foglio excel  <%= text_field_tag :nome_foglio %> </p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati dai file Excel degli Obiettivi scegliendo i fogli dell'attività consolidata (anche detta attività ordinaria) </p>
+	<p> Dal foglio di lavoro indicato (una volta era AC quantità e AC_qualità) vengono presi: </p>
+	<p> Obiettivi attività ordinaria con OBIETTIVO PREFORMANCE = SI. </p>
+	<p> Setta il responsabile principale con il dirigente <p>
+	<p> Se esistono già modifica gli esistenti <p>
+	<p> <b> Va lanciato due volte sullo stesso file per importare correttamente gli indicatori (che vengono messi cme FASI AC) </b> <p>
+	<p> crea un obiettivo e dentro una fase con l'indicatore in modo si possa assegnare (l'indicatore che però ora sta dentro la fase: chiedere a Roberta Pavone) </p>

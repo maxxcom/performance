@@ -1,0 +1,287 @@
+console.log("searchgaugesxdirigente.js.erb file");
+var includeDivObiettivo = $("#division_obiettivo")
+var includeDivFase = $("#division_fase")
+var includeDivAzione = $("#division_azione")
+
+includeDivObiettivo.empty();
+includeDivFase.empty();
+includeDivAzione.empty();
+
+var html = '<hr>';
+
+<% if @dirigente != nil %>
+
+html += '<%= form_for @dirigente, url: gauges_selectobiettivoxdirigente_path, method: :get, :remote => true do |p|  %>';
+html += '<%= p.select(:id) do  %>';
+html += '<%=      content_tag(:option, "   ", value: nil) %>';
+html += '<%     @obiettivi.sort_by{|ob| ob.denominazione}.each do |c| %>';
+html += '<%=      content_tag(:option, c.denominazione80, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<% end %>
+
+<% if @obiettivo != nil %>
+
+html += '<p><b> Obiettivo: ';
+html += '<%= @obiettivo.denominazione_completa %></b>';
+html += '</p>';
+html += '<% @obiettivo.fasi.sort_by{|fase| fase.denominazione}.each do |f| %>';
+html += '<p> Fase: ';
+html += '<%= f.denominazione80 %>';
+html += '</p>';
+html += '<p>';
+html += '<%   f.azioni.sort_by{|az| az.denominazione80}.each do |a| %>';
+html += '- <i><%=   a.id.to_s + " " + a.denominazione80 %> <i>';
+html += '<%   end %>';
+html += '</p>';
+html += '<br>';
+html += '<% end %>';
+
+html += '<hr>';
+
+html += '<p>';
+html += '  <strong>Indicatori obiettivo:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @obiettivo.indicatori.sort_by{|az| az.nome}.each do |ind| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @obiettivo, url: gauge_remove_indicatore_from_og_path(@obiettivo), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :indicatore_id, :value => ind.id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ind.nome %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+html += '<%= form_for @obiettivo, url: gauge_add_indicatore_to_og_path(@obiettivo), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     @listaindicatori.sort_by{|az| az.nome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.id.to_s + " - " + c.nome80, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+html += '<hr>';
+
+html += '<p>Obbligatorio compilare tutti i campi</p>';
+html += '<%= form_for :gauge, url: gauge_add_new_indicatore_to_og_path(@obiettivo), method: :post, :remote => true do |p| %>';
+
+html += '    <%= p.label 'Nome (almeno due caratteri)' %>';
+html += '    <%= p.text_field :nome, id: :gauge_nome %>';
+
+html += '    <%= p.label 'Descrizione  (almeno due caratteri)' %>';
+html += '    <%= p.text_field :descrizione, id: :gauge_descrizione %>';
+
+html += '    <%= p.label 'Descrizione valore misurazione  (almeno due caratteri)' %>';
+html += '    <%= p.text_field :descrizione_valore_misurazione, id: :gauge_descrizione_valore_misurazione %>';
+
+html += '    <%= p.label 'Valore misurazione' %>';
+html += '    <%= p.text_field :valore_misurazione, id: :gauge_valore_misurazione %>';
+html += '    <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '    <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <p><%= p.submit "Aggiungi nuovo indicatore" %></p>';
+
+html += '<% end %>';
+
+
+<% end %>
+
+html += '<hr>';
+
+<% if @fasi.length > 0 %>
+
+html += '<p> Selezionare una fase: </p> ';
+html += '<%= form_for :gauge, url: gauges_selectfasexdirigente_path, method: :get, :remote => true do |p|  %>';
+html += '<%= p.select(:id) do  %>';
+html += '<%=      content_tag(:option, "   ", value: nil) %>';
+html += '<%     @fasi.sort_by{|f| f.denominazione}.each do |c| %>';
+html += '<%=      content_tag(:option, c.id.to_s + " - " + c.denominazione80, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<%end %>
+
+
+<% if @fase != nil %>
+
+html += '<p> Fase: ';
+html += '<b><%= @fase.denominazione80 %></b>';
+html += '</p>';
+html += '<% @fase.azioni.sort_by{|az| az.denominazione}.each do |a| %>';
+html += '<p> Azione: ';
+html += '<i><%= a.denominazione80 %></i>';
+html += '</p>';
+html += '<% end %>';
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Indicatori fase:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @fase.indicatori.sort_by{|az| az.nome}.each do |ind| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @fase, url: gauge_remove_indicatore_fase_path(@obiettivo), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :indicatore_id, :value => ind.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ind.nome %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+html += '<%= form_for @fase, url: gauge_add_indicatore_fase_path(@fase), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     @listaindicatori.sort_by{|az| az.nome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.id.to_s + " - " + c.nome80, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+html += '<hr>';
+
+html += '<%= form_for :gauge, url: gauge_add_new_indicatore_to_fase_path(@fase), method: :post, :remote => true do |p| %>';
+
+html += '    <%= p.label 'Nome' %>';
+html += '    <%= p.text_field :nome, id: :gauge_nome %>';
+
+html += '    <%= p.label 'Descrizione' %>';
+html += '    <%= p.text_field :descrizione, id: :gauge_descrizione %>';
+
+html += '    <%= p.label 'Descrizione valore misurazione' %>';
+html += '    <%= p.text_field :descrizione_valore_misurazione, id: :gauge_descrizione_valore_misurazione %>';
+
+html += '    <%= p.label 'Valore misurazione' %>';
+html += '    <%= p.text_field :valore_misurazione, id: :gauge_valore_misurazione %>';
+html += '    <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '    <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '    <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <p><%= p.submit "Aggiungi nuovo indicatore" %></p>';
+html += '<% end %>';
+
+html += '<hr>';
+
+
+
+<% if @fase.azioni.length > 0 %>
+
+html += '<p> Selezionare una azione: </p> ';
+html += '<%= form_for @fase, url: gauges_selectazionexdirigente_path, method: :get, :remote => true do |p|  %>';
+html += '<%= p.select(:id) do  %>';
+html += '<%=      content_tag(:option, "   ", value: nil) %>';
+html += '<%     @fase.azioni.sort_by{|az| az.denominazione}.each do |c| %>';
+html += '<%=      content_tag(:option, c.id.to_s + " - " + c.denominazione80, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<%end %>
+
+<% if @azione != nil %>
+
+html += '<p> Azione: ';
+html += '<b><%= @azione.denominazione80 %></b>';
+html += '</p>';
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Indicatori Azione:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @azione.indicatori.sort_by{|az| az.nome}.each do |ind| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @azione, url: gauge_remove_indicatore_azione_path(@azione), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :indicatore_id, :value => ind.id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <%= p.hidden_field :azione_id, :value => @azione.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ind.nome %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+html += '<%= form_for @azione, url: gauge_add_indicatore_azione_path(@azione), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     @listaindicatori.sort_by{|az| az.nome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.id.to_s + " - " + c.nome80, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <%= p.hidden_field :azione_id, :value => @azione.id %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+html += '<hr>';
+
+html += '<%= form_for :gauge, url: gauge_add_new_indicatore_to_azione_path(@fase), method: :post, :remote => true do |p| %>';
+
+html += '    <%= p.label 'Nome' %>';
+html += '    <%= p.text_field :nome, id: :gauge_nome %>';
+
+html += '    <%= p.label 'Descrizione' %>';
+html += '    <%= p.text_field :descrizione, id: :gauge_descrizione %>';
+
+html += '    <%= p.label 'Descrizione valore misurazione' %>';
+html += '    <%= p.text_field :descrizione_valore_misurazione, id: :gauge_descrizione_valore_misurazione %>';
+
+html += '    <%= p.label 'Valore misurazione' %>';
+html += '    <%= p.text_field :valore_misurazione, id: :gauge_valore_misurazione %>';
+html += '    <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '    <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '    <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '    <%= p.hidden_field :azione_id, :value => @azione.id %>';
+html += '  <p><%= p.submit "Aggiungi nuovo indicatore" %></p>';
+html += '<% end %>';
+
+
+<%end %>
+
+<%end %>
+
+includeDivObiettivo.append(html);
+
+
+
+

@@ -1,0 +1,511 @@
+
+console.log("assegnaobiettivifasiazionixdirigente.js.erb file");
+var includeDivForm = $("#form_division")
+var includeDivTree = $("#jstree_aggiungi_target")
+
+includeDivForm.empty();
+includeDivTree.empty();
+
+
+var html = '<hr>';
+
+<% if (@obiettivo_padre == nil) %>
+
+html += '<p> Selezionare un tipo target da aggiungere: </p> ';
+html += '<%= form_for :person, url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>';
+html += '<%= p.select(:tipo_target) do  %>';
+html += '<%=    content_tag(:option, @tipo_target, value: @tipo_target) %>';
+html += '<%     @lista_tipi.each do |t| %>';
+html += '<%=      content_tag(:option, t , value: t) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :operazione, :value => "scelta" %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<% else %>
+
+  <% if @fase_padre == nil %>
+    <% if OperationalGoal.find(@obiettivo_padre).indicatori.length < 1 %>
+	  <% denominazione_fase_creata = "" %>
+      <% descrizione_fase_creata = ""  %>
+      html +=  '<p> Aggiungi fase: </p> ';
+	  html += '<p> Aggiunta di fase sottostante <%= OperationalGoal.find(@obiettivo_padre).denominazione %>: </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '    <%= p.label "Denominazione fase"  %>';
+      html += '    <%= p.text_field :denominazione_fase_sottostante, value: denominazione_fase_creata %>';
+      html += '<br>';
+      html += '    <%= p.label "Descrizione fase"  %>';
+      html += '    <%= p.text_field :descrizione_fase_sottostante, value: descrizione_fase_creata %>';
+      html += '<br>';
+      html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+      html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+      html += '  </tr>';
+      html += '</table>';
+	  html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td>Crea indicatore personalizzato</td>';
+      html += '    <td>Stringa </td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Nome</td>';
+      html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione valore misurazione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+      html += '  </tr>';
+      html += '</table>';
+      html += '</p>';
+      html += '  <%= p.hidden_field :operazione, :value => "crea_fase" %>';
+      html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      html += '  <%= p.hidden_field :target_creato, :value => @target_creato %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Salva " %>';
+      html += '  </div>';
+      html += '<% end %>';
+
+   <% end # obiettivo creato ha indicatori quindi non si crea una fase sotto %>
+    
+
+  <% else # fase_padre != nil%>
+    
+	<% if Phase.find(@fase_padre).indicatori.length < 1 %>
+	  
+      html +=  '<p> Aggiungi azione: </p> ';
+      html += '<p> Aggiunta di azione sottostante <%= Phase.find(@fase_padre).denominazione %> di : </p> ';
+      html += '<%= form_for :person,  url: aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+      html += '    <%= p.label "Denominazione azione"  %>';
+      html += '    <%= p.text_field :denominazione_azione_sottostante, value: "" %>';
+      html += '<br>';
+      html += '    <%= p.label "Descrizione azione"  %>';
+      html += '    <%= p.text_field :descrizione_azione_sottostante, value: "" %>';
+      html += '<br>';
+      html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+      html += '    <td width="50px"><%= p.check_box :crea_indicatore_default %></td>';
+      html += '  </tr>';
+      html += '</table>';
+	  html += '<table align="left">';
+      html += '  <tr>';
+      html += '    <td>Crea indicatore personalizzato</td>';
+      html += '    <td>Stringa </td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Nome</td>';
+      html += '    <td><%= p.text_field :indicatore_nome, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione, value: "" %></td>';
+      html += '  </tr>';
+	  html += '  <tr>';
+      html += '    <td>Descrizione valore misurazione</td>';
+      html += '    <td><%= p.text_field :indicatore_descrizione_valore_misurazione, value: "" %></td>';
+      html += '  </tr>';
+      html += '</table>';
+      html += '</p>';
+      html += '  <%= p.hidden_field :operazione, :value => "crea_azione" %>';
+      html += '  <%= p.hidden_field :denominazione, :value => @denominazione %>';
+      html += '  <%= p.hidden_field :descrizione, :value => @descrizione %>';
+      html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+      html += '  <%= p.hidden_field :target_creato, :value => @target_creato %>';
+      html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+      html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+      html += '  <%= p.hidden_field :fase_padre, :value => @fase_padre %>';
+      html += '<br>';
+      html += '<br>';
+      html += '<br>';
+      html += '  <div class="actions">';
+      html += '    <%= p.submit "Salva " %>';
+      html += '  </div>';
+      html += '<% end %>';
+
+	<% else # fase_padre ha indicatore%>
+	
+	  html +=  '<p> Fase con indicatore: </p> ';
+	  <% Phase.find(@fase_padre).indicatori.each do |indicatore| %>
+	    html +=  '<p> <%= indicatore.nome %> </p> ';
+	   
+	  <% end %>
+
+    <% end # if su indicatori fase_padre %>
+
+
+  <% end # fase_padre == nil%>
+<% end # if (@obiettivo_padre == nil)%>
+
+<% if @tipo_target.length > 1 %>
+
+   <% if @obiettivo_padre != nil %>
+   <%    puts "OBIETTIVO PADRE" + @obiettivo_padre.to_s %>
+   <% end %>
+
+ <% if (@selezionato != nil) %>
+
+   html += '<p> Modifica elemento selezionato: <%= @selezionato.to_s %> </p> ';
+   <%   tipo = @selezionato.split("-")[0] %>
+   <%   id = @selezionato.split("-")[1] %>
+	
+	
+   <%   case tipo %>
+   <%     when "o" %>
+   <%         @obiettivo_padre = OperationalGoal.find(id).id %>
+        html += '<p> selezionato obiettivo  </p> ';
+   <%   	when "f" %>
+   <%   		f = Phase.find(id) %>
+   <%   		@fase_padre = f.id %>
+   <%   		@target_creato = @fase_padre %>
+         html += '<p> selezionato fase  </p> ';
+   <%   	when "a" %>
+   <%   		a = SimpleAction.find(id) %>
+   <%   		@azione_creata = a.id %>
+         html += '<p> selezionato azione  </p> ';
+   <%   	else %>
+         html += '<p> altro  </p> ';
+   <% 	end # fine del case%>
+
+<% end # @selezionato != nil %>
+
+
+ <% if (@obiettivo_padre != nil) %>
+  <% o = OperationalGoal.find(@obiettivo_padre.to_i) %>
+
+  <% valore_flag_obiettivo_di_ente = o.obiettivo_di_ente %>
+  <% valore_flag_obiettivo_di_gruppo = o.obiettivo_di_gruppo %>
+  <% valore_flag_obiettivo_di_struttura = o.obiettivo_di_struttura %>
+  <% valore_flag_obiettivo_individuale = o.obiettivo_individuale %>
+  <% valore_flag_attivita_ordinaria = o.attivita_ordinaria %>
+  <% denominazione_obiettivo = o.denominazione %>
+  <% descrizione_obiettivo = o.descrizione %>
+
+ <% else %>
+  <% valore_flag_obiettivo_di_ente = false %>
+  <% valore_flag_obiettivo_di_gruppo = false %>
+  <% valore_flag_obiettivo_di_struttura = false %>
+  <% valore_flag_obiettivo_individuale = false %>
+  <% valore_flag_attivita_ordinaria = false %>
+  <% denominazione_obiettivo = "" %>
+  <% descrizione_obiettivo = "" %>
+ <% end %>
+
+html += '<p> Nome <%= @tipo_target %>: </p> ';
+
+
+
+html += '  <%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+html += '<br>';
+
+
+html += '<p>';
+html += '<div class="flags">';
+
+<% if @tipo_target == "Obiettivo operativo"  # se sto scegliendo un obiettivo operativo metto la tabella dei flag %>
+html += '<table align="left">';
+<% if ((@obiettivo_padre != nil) && ( (OperationalGoal.find(@obiettivo_padre.to_i).fasi.length == 0) && (OperationalGoal.find(@obiettivo_padre.to_i).indicatori.length == 0) )) || (@obiettivo_padre == nil) %>
+html += '  <tr>';
+html += '    <td><%= p.label "Crea indicatore di default" %></td>';
+html += '    <td><%= p.check_box :crea_indicatore_default %></td>';
+html += '  </tr>';
+<% end # if non ha fasi %>
+html += '  <tr>';
+html += '    <td><%= p.label :obiettivo_di_ente %></td>';
+html += '    <td width="50px"><%= p.check_box :obiettivo_di_ente, {checked: valore_flag_obiettivo_di_ente} %></td>';
+html += '  </tr>';
+html += '  <tr>';
+html += '    <td><%= p.label :obiettivo_di_gruppo %></td>';
+html += '    <td><%= p.check_box :obiettivo_di_gruppo, {checked: valore_flag_obiettivo_di_gruppo} %></td>';
+html += '  </tr>';
+html += '  <tr>';
+html += '    <td><%= p.label :obiettivo_di_struttura %></td>';
+html += '    <td><%= p.check_box :obiettivo_di_struttura, {checked: valore_flag_obiettivo_di_struttura} %></td>';
+html += '  </tr>';
+html += '  <tr>';
+html += '    <td><%= p.label :obiettivo_individuale %></td>';
+html += '    <td><%= p.check_box :obiettivo_individuale, {checked: valore_flag_obiettivo_individuale} %></td>';
+html += '  </tr>';
+html += '  <tr>';
+html += '    <td><%= p.label :attivita_ordinaria %></td>';
+html += '    <td><%= p.check_box :attivita_ordinaria, {checked: valore_flag_attivita_ordinaria} %></td>';
+html += '  </tr>';
+html += '  <tr>';
+html += '    <td><%= p.label :indice_strategicita %></td>';
+html += '    <td><%= p.number_field :indice_strategicita, id: :operational_goal_indice_strategicita, :size=>"10"  %></td>';
+html += '  </tr>';
+html += '</table >';
+
+html += '</p>';
+html += '  </div>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+html += '<br>';
+<% end # if obiettivo operativo%>
+
+html += '  <div class="actions">';
+<% if @target_creato > 0 %>
+ html += '    <%= p.hidden_field :operazione, :value => "modifica_obiettivo" %>';
+ html += '    <%= p.hidden_field :selezionato, :value => @selezionato.to_s %>';
+ html += '    <%= p.submit "Modifica" %>';
+<% else %>
+ html += '    <%= p.hidden_field :operazione, :value => "crea_obiettivo" %>';
+ html += '    <%= p.hidden_field :selezionato, :value => @selezionato.to_s %>';
+ html += '    <%= p.submit "Salva" %>';
+<% end %> 
+
+
+html += '<% end %>'; 
+html += '  </div>';
+
+<% if @target_creato > 0 %>
+html += '<%= form_for :person,  url: rimuovi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+html += '    <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '    <%= p.hidden_field :selezionato, :value => @selezionato.to_s %>';
+html += '    <%= p.submit "Rimuovi" %>';
+html += '<% end %>';  
+<% end %> 
+
+html += '  <div id="rimozione_indicatori">';
+<% if (@obiettivo_padre != nil) %>
+ <% o = OperationalGoal.find(@obiettivo_padre.to_i) %>
+ <% o.indicatori.each do |indicatore| %>
+
+html += '<%= form_for :person,  url: rimuovi_indicatore_aggiungi_target_form_operational_goals_path, method: :post, :remote => true do |p|  %>'; 
+html += '<%= p.label "Denominazione indicatore: " + indicatore.nome %>';
+html += '<%= p.hidden_field :obiettivo_padre, :value => @obiettivo_padre %>';
+html += '<%= p.hidden_field :tipo_target, :value => @tipo_target %>';
+html += '<%= p.hidden_field :indicatore_id, :value => indicatore.id %>';
+html += '<%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%= p.submit "Rimuovi" %>';
+html += '<% end %>';
+
+<% end # end  di indicatori.each %> 
+<% end # end  di if @obiettivo_padre diverso da nil %> 
+
+html += '  </div>'; 
+
+
+
+<% end # chiude if che dice che abbiamo scelto qualcosa da creare %>
+
+includeDivForm.append(html);
+
+includeDivTree.jstree("destroy");
+
+var data = [];
+
+
+<% if @target_creato != 0 %>
+data.push({ "id" : '<%= "d-" + @dirigente.id.to_s %>', "parent" : "#", "text" : '<%= @dirigente.nominativo2 %>', 'state' : { 'opened' : true} });
+
+
+<%  case @tipo_target %>
+<%    when "Obiettivo operativo" %>
+<%    o = OperationalGoal.find(@obiettivo_padre) %>
+      data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 %>', 'state' : { 'opened' : true} });
+	  
+	   <%    o.indicatori.each do |i| %>	  
+       data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>
+	  
+<%    o.fasi.each do |f| %>	
+       
+       data.push({ "id" : '<%= "f-" + f.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= f.denominazione80 %>', 'state' : { 'opened' : true} });
+	   <%    f.indicatori.each do |i| %>	  
+        data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>  
+<%        f.azioni.each do |a| %>
+           data.push({ "id" : '<%= "a-" + a.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= a.denominazione80 %>', 'state' : { 'opened' : true} });
+			<%    a.indicatori.each do |i| %>	  
+				data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "a-" + a.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+			<%    end # end di indicatori.each%>
+<%        end # end di azioni.each%>
+<%    end # end di fasi.each %>
+						   
+<%    when "Fase" %>
+<%    f = Phase.find(@fase_padre) %>
+<%    o = f.obiettivo_operativo_fase %>
+      data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 %>', 'state' : { 'opened' : true} });
+	  
+	   <%    o.indicatori.each do |i| %>	  
+       data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>
+	  
+<%    o.fasi.each do |f| %>	
+       
+       data.push({ "id" : '<%= "f-" + f.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= f.denominazione80 %>', 'state' : { 'opened' : true} });
+	   <%    f.indicatori.each do |i| %>	  
+        data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>  
+<%        f.azioni.each do |a| %>
+           data.push({ "id" : '<%= "a-" + a.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= a.denominazione80 %>', 'state' : { 'opened' : true} });
+			<%    a.indicatori.each do |i| %>	  
+				data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "a-" + a.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+			<%    end # end di indicatori.each%>
+<%        end # end di azioni.each%>
+<%    end # end di fasi.each %>
+      							   
+<%    when "Azione" %>
+<%    a = SimpleAction.find(@azione_creata) %>
+<%    f = a.fase %>
+<%    o = f.obiettivo_operativo_fase %>
+
+            data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 %>', 'state' : { 'opened' : true} });
+	  
+	   <%    o.indicatori.each do |i| %>	  
+       data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>
+	  
+<%    o.fasi.each do |f| %>	
+       
+       data.push({ "id" : '<%= "f-" + f.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= f.denominazione80 %>', 'state' : { 'opened' : true} });
+	   <%    f.indicatori.each do |i| %>	  
+        data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>  
+<%        f.azioni.each do |a| %>
+           data.push({ "id" : '<%= "a-" + a.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= a.denominazione80 %>', 'state' : { 'opened' : true} });
+			<%    a.indicatori.each do |i| %>	  
+				data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "a-" + a.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+			<%    end # end di indicatori.each%>
+<%        end # end di azioni.each%>
+<%    end # end di fasi.each %>
+
+							   
+<%    when "Opera" %>
+<%    o = Opera.find(@opera_creata) %>
+      data.push({ "id" : '<%= "op-" + op.id.to_s %>', "parent" : "#", "text" : '<%= op.denominazione80 %>', 'state' : { 'opened' : true} });
+<%    else %>
+      data.push({ "id" : '<%= "null-" + " " %>', "parent" : "#", "text" : '<%= "NULL" %>', 'state' : { 'opened' : true} });;
+<%    end # case @tipo_target %>
+
+
+
+<% else %>
+
+data.push({ "id" : '<%= "d-" + @dirigente.id.to_s %>', "parent" : "#", "text" : '<%= @dirigente.nominativo2 %>', 'state' : { 'opened' : true} });
+
+ <% if @obiettivo_attivo.to_s.length > 0 %> 
+ 
+ <%    o = OperationalGoal.find(@obiettivo_attivo) %>
+      data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 %>', 'state' : { 'opened' : true} });
+	  
+	   <%    o.indicatori.each do |i| %>	  
+       data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>
+	  
+ <%    o.fasi.each do |f| %>	
+       
+       data.push({ "id" : '<%= "f-" + f.id.to_s %>', "parent" : "<%= "o-" + o.id.to_s %>", "text" : '<%= f.denominazione80 %>', 'state' : { 'opened' : true} });
+	   <%    f.indicatori.each do |i| %>	  
+        data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+	   <%    end %>  
+ <%        f.azioni.each do |a| %>
+           data.push({ "id" : '<%= "a-" + a.id.to_s %>', "parent" : "<%= "f-" + f.id.to_s %>", "text" : '<%= a.denominazione80 %>', 'state' : { 'opened' : true} });
+			<%    a.indicatori.each do |i| %>	  
+				data.push({ "id" : '<%= "i-" + i.id.to_s %>', "parent" : "<%= "a-" + a.id.to_s %>", "text" : '<%= "Indicatore: " + i.nome.to_s %>', 'state' : { 'opened' : false} });
+			<%    end # end di indicatori.each%>
+ <%        end # end di azioni.each%>
+ <%    end # end di fasi.each %>
+
+ 
+ <% else %>
+
+   <% @dirigente.obiettivi_responsabile.each do |o| %>
+  
+     data.push({ "id" : '<%= "o-" + o.id.to_s %>', "parent" : "#", "text" : '<%= o.denominazione80 %>', 'state' : { 'opened' : true} });
+
+   <% end %>
+
+ <% end %>
+
+<% end %>
+
+
+includeDivTree.on("changed.jstree", function (e, data) {
+			if(data.selected.length) {
+			    selezionato = data.instance.get_node(data.selected[0]).id
+				alert('The selected node is: ' + data.instance.get_node(data.selected[0]).text + data.instance.get_node(data.selected[0]).id);
+				
+				mydata = {
+					nodo: data.instance.get_node(data.selected[0]).id,
+					dirigente_id: <%= @dirigente.id.to_s %>,
+				};
+				console.log(mydata);
+				$.ajax({
+					method: 'POST',
+					url: 'selected_target',
+					data: mydata,
+					success: function(){},
+					error: function(){}
+    
+				})
+			}
+		}).jstree({
+     "core" : {
+       // so that create works
+       "check_callback" : true,
+	   "themes": {
+            "icons": true,
+			'name': 'default',
+			'url': '/style.css'
+        },
+        
+       "data": data
+	   
+	   
+     },
+	 "ui" : {
+		"select_limit" : 1
+			},
+
+	 
+	 
+	   
+	  "plugins" : ["types", "themes", "ui"]
+	 
+	 });
+	 
+includeDivTree.on("dblclick.jstree", function (e, data) {
+			if(data.selected.length) {
+				alert('Double click on selected node : ' + data.instance.get_node(data.selected[0]).text + data.instance.get_node(data.selected[0]).id);
+				mydata = {
+					nodo: data.instance.get_node(data.selected[0]).id,
+					dirigente_id: <%= @dirigente.id.to_s %>,
+				};
+				console.log(mydata);
+				$.ajax({
+					method: 'POST',
+					url: 'modifica_target',
+					data: mydata,
+					success: function(){},
+					error: function(){}
+    
+				})
+			}
+		})	 
+	 
+	

@@ -1,0 +1,52 @@
+<div id="intestazione_division">
+    <%= render 'intestazione_set_responsabili' %>
+</div>
+<div id="responsabili_division">
+
+<hr>
+<p>
+<strong>Responsabile:</strong>
+<%= @operational_goal.responsabile_principale.nominativo %>
+</p>
+<p>
+<%= form_for @operational_goal, url: operational_goal_set_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>
+<%=   p.select(:id) do %>
+<%     Person.dirigenti.each do |c| %>
+<%=      content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>
+<%     end %>
+<%    end %>
+<%=   p.submit "Responsabile" %>
+<% end %>
+</p>
+
+<hr>
+<p>
+  <strong>Altri Responsabili:</strong>
+  <table class="blueTable"><thead></thead><tbody>
+  <% @operational_goal.altri_responsabili.each do |ar| %>
+  <tr>
+  <td>
+  <%= form_for @operational_goal, url: operational_goal_remove_altro_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>
+  <%= p.hidden_field :person_id, :value => ar.id %>
+  <%= p.submit "Rimuovi" %>
+  <% end %>
+  </td>
+  <td>
+  <%= ar.nominativo %>
+  </td>
+  <% end %>
+  </tr>
+  </tbody></table>
+</p>
+
+
+<%= form_for @operational_goal, url: operational_goal_add_altro_responsabile_path(@operational_goal), method: :post, :remote => true do |p| %>
+<%=   p.select(:id) do %>
+<%     Person.dirigenti.each do |c| %>
+<%=      content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>
+<%     end %>
+<%    end %>
+<%=   p.submit "Aggiungi" %>
+<% end %>
+   
+</div>

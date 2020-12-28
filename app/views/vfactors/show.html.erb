@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @vfactor.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @vfactor.descrizione %>
+</p>
+
+<p>
+  <strong>Ordine apparizione:</strong>
+  <%= @vfactor.ordine_apparizione %>
+</p>
+
+<p>
+  <strong>Peso sg:</strong>
+  <%= @vfactor.peso_sg %>
+</p>
+
+<p>
+  <strong>Peso dirigenti:</strong>
+  <%= @vfactor.peso_dirigenti %>
+</p>
+
+<p>
+  <strong>Peso po:</strong>
+  <%= @vfactor.peso_po %>
+</p>
+
+<p>
+  <strong>Peso preposti:</strong>
+  <%= @vfactor.peso_preposti %>
+</p>
+
+<p>
+  <strong>Peso nonpreposti:</strong>
+  <%= @vfactor.peso_nonpreposti %>
+</p>
+
+<p>
+  <strong>Min:</strong>
+  <%= @vfactor.min %>
+</p>
+
+<p>
+  <strong>Max:</strong>
+  <%= @vfactor.max %>
+</p>
+
+<%= link_to 'Edit', edit_vfactor_path(@vfactor) %> |
+<%= link_to 'Back', vfactors_path %>

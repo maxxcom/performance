@@ -1,0 +1,135 @@
+<h1> Scheda valutazione obiettivi dipendente </h1>
+
+<p>Nominativo : <%= @dipendente.cognome + "  " + @dipendente.nome %></p>
+<p>Dipartimento : <%= @dipartimento.nome %></p>
+<p>Ufficio : <%= @ufficio.nome %></p>
+
+<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">
+  <tr>
+    <th>Qualifica</th>
+    <th>Categoria</th>
+    <th>Tempo</th>
+	<th>Part-time</th>
+	<th>Tot gg</th>
+	<th>Assenze</th>
+	<th>Percentuale</th>
+  </tr>
+  <tr>
+    <td><%= @dipendente.qualification != nil ? @dipendente.qualification.denominazione :  " - " %></td>
+    <td><%= @dipendente.stringa_categoria != nil ? @dipendente.stringa_categoria :  " - " %></td>
+    <td><%= @dipendente.tempo != nil ? @dipendente.tempo.round(2).to_s :  " - " %></td>
+	<td><%= @dipendente.servizio_percentuale != nil ? @dipendente.servizio_percentuale.round(2).to_s :  " - " %></td>
+    <td><%= @dipendente.totgg != nil ? @dipendente.totgg.round(2).to_s :  " - " %></td>
+    <td><%= @dipendente.totassenze != nil ? @dipendente.totassenze.round(2).to_s :  " - " %></td>
+	<td><%= ((@dipendente.totassenze != nil) && (@dipendente.totgg != nil)) ? (( @dipendente.totgg != 0) ? (100*@dipendente.totassenze/@dipendente.totgg).round(2).to_s :  " n.a. ") : " n.a. " %></td>
+  </tr>
+</table>
+
+<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">
+  <tr>
+  <td> 
+  
+  <div class="aiuto" title="La percentuale di assenza incide sul calcolo della produttività. La quota premio erosa viene suddivisa sugli altri componenti dell'ufficio"> Assenze incidono sul premio
+  
+  </div>
+   
+  </td>
+  <td>
+  <%= form_for( @dipendente, :url => set_flag_assenze_incidono_people_path( @dipendente ), :html => { :method => :post, :id => (@dipendente.id.to_s )} ) do |f| %>
+  <%= f.hidden_field :person_id, :value => @dipendente.id %>
+  <%= f.check_box :flag_assenze_incidono, :value => @dipendente.flag_assenze_incidono , :onclick=>'setFlagAssenze(' + @dipendente.id.to_s + ')', disabled: !@dipendente.assenze_incidono_abilitato? %> 
+  <% end %>
+  </td>
+  </tr>
+</table>
+
+<br>
+
+<p> Obiettivi/Fasi/Azioni/Opere : </p>
+
+
+
+<table class="tabella_pesi_misurazioni_valutazioni_rimuovi">
+  <thead>
+    <tr>
+	  <th>Nr</th>
+	  <th>Tipo</th>
+      <th>Denominazione</th>
+      <th>Percentuale raggiungimento</th>
+	  <th>Valutazione dirigente</th>
+	  
+      
+    </tr>
+  </thead>
+
+  
+    <tbody>
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @targets.each do |t| %>
+	  <% num = num + t.valore_totale %>
+	  <% den = den + 1 %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+		<td><%= t.tipo %></td>
+        <td><%= t.denominazione %></td>
+        <td><%= t.valore_totale %></td>
+		
+	  </tr>
+    <% end %>
+	  <tr>
+	  <td></td>
+	  <td></td>
+      <td>Totale</td>
+      <td><%=den !=0 ? 100.00*(num/den).round(2) : " n.a." %></td> </td>
+	  <td></td>
+	  <td><%= @dipendente.peso_totale_obiettivi_fasi_azioni.round(2) %></td>
+	  </tr>
+	  <tr>
+	  <td></td>
+	  <td></td>
+      <td></td>
+      <td>
+	  <%= form_for :target_dipendente_evaluation, url: conferma_misurazione_dirigente_people_path, method: :post, :remote => true do |f| %>
+      <%= f.hidden_field :person_id, :value => @dipendente.id %>
+      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+      <%= f.submit "Copia misurazione" , class: "btn-salva", id: "btn-salva"+i.to_s %>
+      <% end %>';
+	  
+	  </td>
+	  <td></td>
+	  </tr>
+  </tbody>
+</table>
+
+<div id="indicazioni_division">
+
+<%= form_for(:person, url: valutazionedipendenteobiettivi_indicazioni_considerazioni_people_path, method: :get, :remote => false) do |f| %>
+<table class="pagella_table">
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ 
+</td>
+</tr>
+<tr>
+<td>
+<%= f.hidden_field :from, :value => "scheda_valutazione_obiettivi_dipendente" %>
+<%= f.hidden_field :person_id, :value => @dipendente.id %>
+<%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+<%= submit_tag( (@dipendente.flag_valutazione_chiusa ? "X" : "Indicazioni e considerazioni"), disabled: @dipendente.flag_valutazione_chiusa) %>
+<% end %>  
+</td>
+</tr>
+</tbody>
+</table> 
+
+</div>
+
+

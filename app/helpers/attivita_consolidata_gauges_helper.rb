@@ -1,0 +1,2 @@
+module AttivitaConsolidataGaugesHelper
+end

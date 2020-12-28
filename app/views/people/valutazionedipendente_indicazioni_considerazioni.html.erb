@@ -1,0 +1,51 @@
+<div id="search_division">
+    <%= render 'intestazionepagella' %>
+</div>
+
+<div id="indicazioni_division">
+
+<%= form_for(:person, url: salva_indicazioni_people_path, method: :post, :remote => false) do |f| %>
+<table class="pagella_table">
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ <b>Indicazioni del dirigente: </b>
+</td>
+</tr>
+<tr>
+<td>
+
+<%= f.text_area(:indicazioni_miglioramento_prestazione, cols: 80, rows: 5) %>
+
+</td>
+</tr>
+<tr>
+<td>
+ <b>Considerazioni del valutato: </b>
+</td>
+</tr>
+<tr>
+<td>
+
+<%= f.text_area(:considerazioni_del_valutato, cols: 80, rows: 5) %>
+
+</td>
+</tr>
+<tr>
+<td>
+<%= f.hidden_field :from, :value => @from %>
+<%= f.hidden_field :person_id, :value => @person.id %>
+<%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+<%= submit_tag( (@person.flag_valutazione_chiusa ? "X" : "Salva indicazioni e considerazioni"), disabled: @person.flag_valutazione_chiusa) %>
+<% end %>  
+</td>
+</tr>
+</tbody>
+</table> 
+
+</div>

@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Fattori di valutazione</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+	  <th>N. Ordine</th>
+      <th>Peso sg</th>
+      <th>Peso dirigenti</th>
+      <th>Peso po</th>
+      <th>Peso preposti</th>
+      <th>Peso nonpreposti</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vfactors.each do |vfactor| %>
+      <tr>
+        <td><%= vfactor.denominazione %></td>
+        <td><%= vfactor.descrizione %></td>
+		<td><%= vfactor.ordine_apparizione %></td>
+        <td><%= vfactor.peso_sg %></td>
+        <td><%= vfactor.peso_dirigenti %></td>
+        <td><%= vfactor.peso_po %></td>
+        <td><%= vfactor.peso_preposti %></td>
+        <td><%= vfactor.peso_nonpreposti %></td>
+        <td><%= link_to 'Show', vfactor %></td>
+        <td><%= link_to 'Edit', edit_vfactor_path(vfactor) %></td>
+        <td><%= link_to 'Destroy', vfactor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vfactor', new_vfactor_path %>

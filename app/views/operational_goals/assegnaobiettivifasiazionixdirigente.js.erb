@@ -1,0 +1,222 @@
+console.log("assegnaobiettivifasiazionixdirigente.js.erb file");
+var includeDivObiettivo = $("#division_obiettivo")
+var includeDivFase = $("#division_fase")
+var includeDivAzione = $("#division_azione")
+
+includeDivObiettivo.empty();
+includeDivFase.empty();
+includeDivAzione.empty();
+
+var html = '<hr>';
+
+<% if @dirigente != nil %>
+html += '<p> Selezionare un obiettivo: </p> ';
+html += '<%= form_for @dirigente, url: operational_goals_selectobiettivoxdirigente_path, method: :get, :remote => true do |p|  %>';
+html += '<%= p.select(:id) do  %>';
+html += '<%=      content_tag(:option, "   ", value: nil) %>';
+html += '<%     @obiettivi.each do |c| %>';
+html += '<%=      content_tag(:option, c.denominazione.gsub(/[^0-9A-Za-z .,;]/,"").strip , value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<% end %>
+
+<% if @obiettivo != nil %>
+
+html += '<p> Obiettivo: ';
+html += '<b><%= @obiettivo.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip %> </b>';
+html += '</p>';
+html += '<% @obiettivo.fasi.each do |f| %>';
+html += '<p> Fase: ';
+html += '<i><%= f.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip %></i>';
+html += '</p>';
+html += '<%   f.azioni.each do |a| %>';
+html += '- <i> <%=   a.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip %> </i><br>';
+html += '<%   end %>';
+html += '<% end %>';
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Dipendenti assegnatari obiettivo:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @obiettivo.assegnatari.each do |ass| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @obiettivo, url: operational_goal_remove_assegnatario_path(@obiettivo), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :person_id, :value => ass.id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ass.nominativo %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+html += '<%= form_for @obiettivo, url: operational_goal_add_assegnatario_path(@obiettivo), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     @listadipendenti.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+html += '<hr>';
+html += '<hr>';
+
+
+
+<%end %>
+
+<% if @fasi.length > 0 %>
+
+html += '<p> Selezionare una fase: </p> ';
+html += '<%= form_for @obiettivo, url: operational_goals_selectfasexdirigente_path, method: :get, :remote => true do |p|  %>';
+html += '<%= p.select(:id) do  %>';
+html += '<%=      content_tag(:option, "   ", value: nil) %>';
+html += '<%     @fasi.each do |c| %>';
+html += '<%=      content_tag(:option, c.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<%end %>
+
+
+<% if @fase != nil %>
+
+html += '<p> Fase: ';
+html += '<b><%= @fase.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip %></b>';
+html += '</p>';
+html += '<% @fase.azioni.each do |a| %>';
+html += '<p> Azione: ';
+html += '<i><%= a.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip %></i>';
+html += '</p>';
+html += '<% end %>';
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Dipendenti assegnatari Fase:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @fase.assegnatari.each do |ass| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @fase, url: operational_goal_remove_assegnatario_fase_path(@obiettivo), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :person_id, :value => ass.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ass.nominativo %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+html += '<%= form_for @fase, url: operational_goal_add_assegnatario_fase_path(@fase), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     @listadipendenti.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+html += '<hr>';
+html += '<hr>';
+
+<% if @fase.azioni.length > 0 %>
+
+html += '<p> Selezionare una azione: </p> ';
+html += '<%= form_for @fase, url: operational_goals_selectazionexdirigente_path, method: :get, :remote => true do |p|  %>';
+html += '<%= p.select(:id) do  %>';
+html += '<%=      content_tag(:option, "   ", value: nil) %>';
+html += '<%     @fase.azioni.each do |c| %>';
+html += '<%=      content_tag(:option, c.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip, value: c.id) %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '<%=   p.submit "Seleziona" %>';
+html += '<% end %>';
+
+<%end %>
+
+<% if @azione != nil %>
+
+html += '<p> Azione: ';
+html += '<b><%= @azione.denominazione.gsub(/[^0-9A-Za-z .,;\r\n]/,"").strip %></b>';
+html += '</p>';
+html += '<hr>';
+html += '<p>';
+html += '  <strong>Dipendenti assegnatari Azione:</strong>';
+html += '  <table class="blueTable"><thead></thead><tbody>';
+html += '  <% @azione.assegnatari.each do |ass| %>';
+html += '  <tr>';
+html += '  <td>';
+html += '  <%= form_for @azione, url: operational_goal_remove_assegnatario_azione_path(@azione), method: :post, :remote => true do |p| %>';
+html += '  <%= p.hidden_field :person_id, :value => ass.id %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <%= p.hidden_field :azione_id, :value => @azione.id %>';
+html += '  <%= p.submit "Rimuovi" %>';
+html += '  <% end %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= ass.nominativo %>';
+html += '  </td>';
+html += '  <% end %>';
+html += '  </tr>';
+html += '  </tbody></table>';
+html += '</p>';
+
+html += '<%= form_for @azione, url: operational_goal_add_assegnatario_azione_path(@azione), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id) do %>';
+html += '<%     @listadipendenti.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '  <%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '  <%= p.hidden_field :obiettivo_id, :value => @obiettivo.id %>';
+html += '  <%= p.hidden_field :fase_id, :value => @fase.id %>';
+html += '  <%= p.hidden_field :azione_id, :value => @azione.id %>';
+html += '<%=   p.submit "Aggiungi" %>';
+html += '<% end %>';
+html += '<hr>';
+
+<%end %>
+
+html += '<hr>';
+
+<%end %>
+
+
+
+includeDivObiettivo.append(html);
+
+
+

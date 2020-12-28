@@ -1,0 +1,191 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+console.log("searchvaluatazionidirigentexdirigente.js.erb file");
+var includeDivRisultati = $("#division_risultati")
+
+includeDivRisultati.empty();
+
+
+var html = '<hr>';
+
+html += '<h2> Valutazione obiettivi/fasi/azioni del dirigente </h2>';
+
+html += '<p> Dirigente : <%= @dirigente.cognome %></p>';
+html += '<p> Obiettivi come responsabile </p>';
+html += '  <table  class="tabella_valutazioni"><thead>';
+
+html += '  <tr>';
+html += '      <th class="obiettivo">Obiettivo</th>';
+html += '      <th class="fase_azione">Fase</th>';
+html += '      <th class="fase_azione">Azione</th>';
+html += '      <th>Indicatori</th>';
+html += '      <th class="formvalore">Misurazione</th>';
+html += '      <th class="formvalore">Valutazione Dirigente</th>';
+
+html += '     </tr>';
+html += ' </thead><tbody>';
+
+<% @dirigente.obiettivi_responsabile.each do |o| %>
+
+html += '  <tr>';
+html += '  <td class="obiettivo">';
+html += '  <%= o.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="valore_totale">';
+html += '    <%= o.valore_totale != nil ? o.valore_totale : "n.a." %>';
+html += '  </td>';
+html += '  <td>';
+<% if o.assegnatari.length > 0 %>
+<% val = o.valutazione  %>
+html += '       <%= form_for val, url: set_valore_valutazione_dirigente_item_evaluations_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => val.valore_valutazione_dirigente, min: 0, max: 100, :onchange => "abilita_save("+val.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :item_evaluation_id, :value => val.id %>';
+html += '	    <%= form.hidden_field :type, :value => o.tipo %>';
+html += '	    <%= form.hidden_field :obiettivo_id, :value => o.id %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+val.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% end %>
+html += '  </td>';
+html += '  </tr>';
+<% if o.indicatori.length > 0  %>
+<% o.indicatori.each do |io| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= io.nome %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '  <%= io.valore_misurazione %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+<% end %>
+
+<% o.fasi.each do |f| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= f.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="valore_totale">';
+html += '    <%= f.valore_totale != nil ? f.valore_totale : "n.a." %>';
+html += '  </td>';
+html += '  <td>';
+<% if (f.assegnatari.length > 0) && (f.valutazione != nil)%>
+<% val = f.valutazione  %>
+html += '       <%= form_for val, url: set_valore_valutazione_dirigente_item_evaluations_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => val.valore_valutazione_dirigente, min: 0, max: 100, :onchange => "abilita_save("+val.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :item_evaluation_id, :value => val.id %>';
+html += '	    <%= form.hidden_field :type, :value => f.tipo %>';
+html += '	    <%= form.hidden_field :fase_id, :value => f.id %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+val.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% end %>
+html += '  </td>';
+html += '  </tr>';
+<% if f.indicatori.length > 0  %>
+<% f.indicatori.each do |indicatore_fase| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= indicatore_fase.nome.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '  <%= indicatore_fase.valore_misurazione %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+<% end %>
+
+<% f.azioni.each do |a| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= a.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="valore_totale"> ';
+html += '    <%= a.valore_totale != nil ? a.valore_totale : "n.a." %>';
+html += '  </td>';
+html += '  <td>';
+<% if (a.assegnatari.length > 0) && (a.valutazione != nil)%>
+<% val = a.valutazione  %>
+html += '       <%= form_for val, url: set_valore_valutazione_dirigente_item_evaluations_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => val.valore_valutazione_dirigente, min: 0, max: 100, :onchange => "abilita_save("+val.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :item_evaluation_id, :value => val.id %>';
+html += '	    <%= form.hidden_field :type, :value => a.tipo %>';
+html += '	    <%= form.hidden_field :azione_id, :value => a.id %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+val.id.to_s, disabled: true %>';
+html += '       <% end %>';
+<% end %>
+html += '  </td>';
+html += '  </tr>';
+
+<% if a.indicatori.length > 0  %>
+<% a.indicatori.each do |indicatore_azione| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= indicatore_azione.nome.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '  <%= indicatore_azione.valore_misurazione %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+<% end %>
+
+
+<% end %>
+
+<% end %>
+
+<% end %>
+
+html += '  </tbody></table>';
+
+includeDivRisultati.append(html);

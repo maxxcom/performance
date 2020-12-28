@@ -1,0 +1,229 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+console.log("scheda_copia_assegnazione_obiettivi_dipendente.js.erb file");
+var includeDiv = $("#results_division")
+includeDiv.empty();
+
+var html = '';
+
+html += '<h1> Copia assegnazione obiettivi dipendente. </h1>';
+
+<% if (@dipendenti != nil) && (@dirigente != nil) %>
+
+
+html += '<hr>';
+
+
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '      <th><p> DA </p>';
+
+html += '<%= form_for @dirigente, url: scelta_dipendente_copia_assegnazione_obiettivi_people_path(), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id, :selected => (@dipendente != nil ? @dipendente.nominativo2 : " ") ) do %>';
+html += '<%     @dipendenti.sort_by{|p| p.cognome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo2, value: c.id) %>';
+
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '<%=  p.hidden_field :destinatario, :value => ((@destinatario != nil) ? @destinatario.id : nil) %>';
+html += '<%=  p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%=  p.submit "Seleziona" %>';
+html += '<% end %>';
+html += '      </th>';
+
+html += '      <th>Copia</th>';
+html += '      <th><p> A </p>';
+
+html += '<%= form_for @dirigente, url: scelta_destinatario_copia_assegnazione_obiettivi_people_path(), method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:id, :selected => (@destinatario != nil ? @destinatario.nominativo2 : " ") ) do %>';
+html += '<%     @dipendenti.sort_by{|p| p.cognome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo2, value: c.id) %>';
+
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '<%=  p.hidden_field :dipendente_id, :value => ((@dipendente != nil) ? @dipendente.id : nil) %>';
+html += '<%=  p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%=  p.submit "Seleziona" %>';
+html += '<% end %>';
+
+html += '      </th>';
+html += '    </tr>';
+html += '  </thead>';
+html += '    <tbody>';
+html += '      <tr>';
+html += '      <td>';	
+
+html += '<p>Nominativo : <b> <%= (@dipendente != nil ? @dipendente.nominativo : " - ") %> </b></p>';
+html += '<p>Dipartimento : <%= @dipartimento != nil ? @dipartimento.nome : ' - ' %></p>';
+html += '<p>Ufficio : <%= @ufficio != nil ? @ufficio.nome : ' - ' %></p>';
+html += '<p> Obiettivi/Fasi/Azioni/Opere : </p>';
+
+<% if ((@targets_da != nil) && (@dipendente != nil)) %>
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Nr</th>';
+html += '	  <th>Tipo</th>';
+html += '      <th>Denominazione</th>';
+html += '      <th>Peso</th>';
+html += '    </tr>';
+html += '  </thead>';
+html += '    <tbody>';
+    <% i = 0 %>
+    <% num = 0 %>
+	<% den = 0 %>
+    <% @targets_da.each do |t| %>
+	  <% num = num + t.valore_totale %>
+	  <% den = den + 1 %>
+	  
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+<% puts t.denominazione %>
+html += '		<td><%= t.tipo %><%= t.attivita_ordinaria ? " AC" : "" %></td>';
+html += '        <td><%= t.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %></td>';
+html += '        <td> ';
+ 
+<%  case t.tipo   %>
+<%     when "Obiettivo"    %>
+html += ' <%= GoalAssignment.where(persona: @dipendente, obiettivo: t).first != nil ? GoalAssignment.where(persona: @dipendente, obiettivo: t).first.wheight : 0 %>';
+<%     when "Fase"   %>
+html += ' <%= PhaseAssignment.where(persona: @dipendente, fase: t).first != nil ? PhaseAssignment.where(persona: @dipendente, fase: t).first.wheight : 0 %>';
+<%	 when "Azione"   %>
+html += ' <%= SimpleActionAssignment.where(persona: @dipendente, azione: t).first != nil ? SimpleActionAssignment.where(persona: @dipendente, azione: t).first.wheight : 0 %>';
+<%	 when "Opera"    %>
+html += ' <%= OperaAssignment.where(persona: @dipendente, opera: t).first != nil ? OperaAssignment.where(persona: @dipendente, opera: t).first.wheight : 0 %>	 ';
+<%     else          %>
+html += '  -  ';
+<%    end            %>
+
+html += '           </td>';
+		
+html += '	  </tr>';
+    <% end %>
+
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  </tr>';
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '      <td>Totale</td>';
+
+html += '	   <td><%= @dipendente.peso_totale_obiettivi_fasi_azioni.round(2) %></td>';
+html += '	  </tr>';	
+
+html += '  </tbody>';
+html += '</table>';
+<% end %>
+
+<% end %>
+
+html += '     </td>';
+
+html += '      <td>';
+html += '     </td>';
+html += '      <td>';
+
+html += '<p>Nominativo : <b> <%= @destinatario != nil ? @destinatario.nominativo2 : "-" %> </b></p>';
+html += '<p>Dipartimento : <%= @dipartimento != nil ? @dipartimento.nome : ' - ' %></p>';
+html += '<p>Ufficio : <%= @ufficio != nil ? @ufficio.nome : ' - ' %></p>';
+
+html += '<p> Obiettivi/Fasi/Azioni/Opere : </p>';
+<% if ((@targets_a != nil) && (@destinatario != nil)) %>
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Nr</th>';
+html += '	  <th>Tipo</th>';
+html += '      <th>Denominazione</th>';
+html += '      <th>Peso</th>';
+html += '    </tr>';
+html += '  </thead>';
+html += '    <tbody>';
+    <% i = 0 %>
+    <% num = 0 %>
+	<% den = 0 %>
+    <% @targets_a.each do |t| %>
+	  <% num = num + t.valore_totale %>
+	  <% den = den + 1 %>
+	  
+html += '      <tr>';
+html += '	    <td><%= i = i + 1 %></td>';
+<% puts t.denominazione %>
+html += '		<td><%= t.tipo %><%= t.attivita_ordinaria ? " AC" : "" %></td>';
+html += '        <td><%= t.denominazione.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %></td>';
+html += '        <td> ';
+ 
+<%  case t.tipo   %>
+<%     when "Obiettivo"    %>
+html += ' <%= GoalAssignment.where(persona: @destinatario, obiettivo: t).first != nil ? GoalAssignment.where(persona: @destinatario, obiettivo: t).first.wheight : 0 %>';
+<%     when "Fase"   %>
+html += ' <%= PhaseAssignment.where(persona: @destinatario, fase: t).first != nil ? PhaseAssignment.where(persona: @destinatario, fase: t).first.wheight : 0 %>';
+<%	 when "Azione"   %>
+html += ' <%= SimpleActionAssignment.where(persona: @destinatario, azione: t).first != nil ? SimpleActionAssignment.where(persona: @destinatario, azione: t).first.wheight : 0 %>';
+<%	 when "Opera"    %>
+html += ' <%= OperaAssignment.where(persona: @destinatario, opera: t).first != nil ? OperaAssignment.where(persona: @destinatario, opera: t).first.wheight : 0 %>	 ';
+<%     else          %>
+html += '  -  ';
+<%    end            %>
+
+html += '           </td>';
+		
+html += '	  </tr>';
+    <% end %>
+
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '	  </tr>';
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '	  <td></td>';
+html += '      <td>Totale</td>';
+
+html += '	   <td><%= @destinatario.peso_totale_obiettivi_fasi_azioni.round(2) %></td>';
+html += '	  </tr>';	
+
+html += '  </tbody>';
+html += '</table>';
+<% end %>
+
+
+
+
+html += '	  </td>';
+html += '	  </tr>';
+html += '	  <tr>';
+html += '	  <td></td>';
+html += '	  <td>';
+
+html += '<%= form_for @dirigente, url: copia_assegnazione_obiettivi_dipendente_people_path(), method: :post, :remote => true do |p| %>';
+html += '<%=  p.hidden_field :dipendente_id, :value => ((@dipendente != nil) ? @dipendente.id : nil) %>';
+html += '<%=  p.hidden_field :destinatario_id, :value => ((@destinatario != nil) ? @destinatario.id : nil) %>';
+html += '<%=  p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '<%=  p.submit "COPIA" %>';
+html += '<% end %>';
+
+html += '</td>';
+html += '	  <td></td>';
+html += '	  </tr>';	
+html += '  </tbody>';
+html += '</table>';
+
+
+includeDiv.append(html);

@@ -1,0 +1,11 @@
+<h1>Importazione SDOPE</h1>
+
+<h4> Importazione SDOPE</h4>
+	<%= form_tag importazionecsv_sdope_rows_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa CSV" %>
+	<% end %>
+	
+<p>Importa un csv che viene da SDOPE </p>
+<p>I dati vengono importati nella tabella SDOPE ROW </p>
+<p>Poi eventualmente si fa un merge con i dipendenti già esistenti </p>

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nome:</strong>
+  <%= @gauge.nome %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @gauge.descrizione %>
+</p>
+
+<p>
+  <strong>Descrizione valore misurazione:</strong>
+  <%= @gauge.descrizione_valore_misurazione %>
+</p>
+
+<p>
+  <strong>Valore misurazione:</strong>
+  <%= @gauge.valore_misurazione %>
+</p>
+
+<%= link_to 'Edit', edit_gauge_path(@gauge) %> |
+<%= link_to 'Back', gauges_path %>

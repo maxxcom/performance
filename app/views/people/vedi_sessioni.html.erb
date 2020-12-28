@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+
+<%= @people.length %>
+
+<%= form_tag("/people/vedi_sessioni_show", method: "post", remote: false, name: "vedi_sessioni_show"  )  do  %>
+<%= collection_select(:person, :id, @people, :id, :cognomenome)  %>
+<%= submit_tag "Seleziona", class:'btn btn-sm btn-info' %>
+<% end %>

@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @simple_action.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @simple_action.descrizione %>
+</p>
+
+<p>
+  <strong>Peso:</strong>
+  <%= @simple_action.peso %>
+</p>
+
+<p>
+  <strong>Anno:</strong>
+  <%= @simple_action.anno %>
+</p>
+
+<p>
+  <strong>Ente:</strong>
+  <%= @simple_action.ente %>
+</p>
+
+<p>
+  <strong>Fase:</strong>
+  <%= @simple_action.fase != nil ? @simple_action.fase.denominazione : " - " %>
+</p>
+
+<%= link_to 'Edit', edit_simple_action_path(@simple_action) %> |
+<%= link_to 'Back', simple_actions_path %>

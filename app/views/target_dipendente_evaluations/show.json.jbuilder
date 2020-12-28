@@ -1,0 +1,1 @@
+json.partial! "target_dipendente_evaluations/target_dipendente_evaluation", target_dipendente_evaluation: @target_dipendente_evaluation

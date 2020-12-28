@@ -1,0 +1,95 @@
+<script>
+function setflagproduttivita(id_person)
+{
+ console.log("ciao");
+ console.log(id_person);
+ var f = document.getElementById(id_person);
+ $.ajax({
+    method:'POST',
+    url: 'setflagproduttivita',
+    dataType: "json",
+    data: { content: id_person }
+  });
+ 
+}
+
+</script>
+
+<div id="results_division">
+   
+<h1>Dipendenti</h1>
+
+<table>
+  <thead>
+  
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>Categoria</th>
+	  <th>COS</th>
+	  <th>Assegnazione</th>
+	  <th>Totgg %</th>
+	  <th>Tot_assenze</th>
+	  <th>Servizio %</th>
+	  <th>Tempo</th>
+	  <th>Ufficio</th>
+	  <th>Qualifica</th>
+	  <th class="numeratore" >Comportamento</th>
+	  <th class="numeratore" >Ob.Val.Dir.</th>
+	  <th class="numeratore" >Obiettivi</th>
+      <th colspan="1"  class="flag_produttivita">Flag produttività</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+	 
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		<td><%= person.categoria %></td>
+		<td><%= person.cos %></td>
+		<td><%= person.assegnazione %></td>
+		<td><%= person.totgg %></td>
+		<td><%= person.totassenze %></td>
+		<td><%= person.servizio_percentuale %></td>
+		<td><%= person.tempo %></td>
+		<td><%= if person.ufficio != nil
+                 person.ufficio.nome
+                else
+				 if person.dirige.length != 0
+                   person.dirige.first.nome
+                 else				 
+                  "-" 
+				 end
+				end %></td>
+		<td><%= if person.qualification != nil
+                 person.qualification.denominazione
+                else
+                 "-" 
+				end %></td>
+		<td class="numeratore" ><%= person.valutazione %></td>		
+		<td class="numeratore" ><%= person.raggiungimento_obiettivi %></td>
+		<td class="numeratore" ><%= person.valutazione_dirigente_obiettivi_fasi_azioni %></td>
+		<td class="flag_produttivita"> 
+		 <div id="<%= person.matricola %>">
+		 <%= form_for( person, :url => setflagproduttivita_people_path( person ), :html => { :method => :post, :id => (person.id.to_s )} ) do |f| %>
+		 <%= f.check_box :flag_calcolo_produttivita, :onclick=>'setflagproduttivita(' + person.id.to_s + ')' %> 
+		 <% end %>
+		 </div>
+		</td>
+        
+      </tr>
+	  </div>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+

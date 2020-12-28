@@ -1,0 +1,35 @@
+<table>
+  <thead>
+    <tr>
+	  <th>Nr.</th>
+	  <th>ID</th>
+	  <th>Tipo</th>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Anno</th>
+      <th>Ente</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% index = 0 %>
+    <% @risultati.each do |r| %>
+	<% index = index + 1 %>
+      <tr>
+	    <td><%= index %></td>
+	    <td><%= r.id %></td>
+		<td><%= r.tipo %></td>
+        <td><%= r.denominazione.gsub(/[^0-9A-Za-z .,;]/,"").strip %></td>
+        <td><%= r.descrizione.gsub(/[^0-9A-Za-z .,;]/,"").strip %></td>
+        <td><%= r.responsabile_principale != nil ? r.responsabile_principale.cognome : " - "  %></td>
+        <td><%= r.anno %></td>
+        <td><%= r.ente %></td>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

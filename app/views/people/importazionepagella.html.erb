@@ -1,0 +1,21 @@
+<h1>Importazione pagella dipendente</h1>
+
+
+<h4> Importazione pagella</h4>
+	<%= form_tag importapagella_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende un file excel prodotto da Pagelle dipendenti per dirigente (sia il riassuntivo che per il singolo dipendente) </p>
+<p> può avere due o più fogli di lavoro </p>
+<p> - fogli per la pagella </p>
+
+<p> Colonna C: C4 </p>
+<p> Colonna C: C3 nome e cognome </p>
+<p> Colonna C: C12:C19 punteggi </p>
+
+<p> -  fogli per gli obiettivi </p>
+
+<b> Nota bene </b> per caricare più pagelle si possono mettere i vari fogli di lavoro in un unico File Excel con più fogli.
+L'importazione li scorre tutti.

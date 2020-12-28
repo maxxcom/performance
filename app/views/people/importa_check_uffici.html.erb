@@ -1,0 +1,204 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Importazione Check Uffici</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Ufficio</th>
+      <th>Ufficio trovato</th>
+	  <th>Ufficio cercato</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @result != nil %>
+    <% @result.each do |element| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= element[0].nome %></td>
+		<td><%= element[0].cognome %></td>
+        <td><%= element[0].matricola %></td>
+        <td><%= element[0].email %></td>
+		<td><%= element[0].ufficio != nil ? element[0].ufficio.nome : "n.a." %></td>
+        <td><%= element[1] != nil ? element[1].nome : "n.a." %></td>
+		<td><%= element[2].to_s %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @result.length == 0 then "Non sono state importat dati" else "Servizio percentuale N° persone importate :" + @result.length.to_s end %>
+<br>
+
+<h2> Righe scartate </h2>
+<table>
+  <thead>
+    <tr>
+	  
+      <th>Nominativo</th>
+	       
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @scartate != nil %>
+    <% @scartate.each do |s| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= s %></td>
+		
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h2> Righe aggiunte </h2>
+<table>
+  <thead>
+    <tr>
+	  
+      <th>Nominativo</th>
+	       
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @aggiunte != nil %>
+    <% @aggiunte.each do |s| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= s %></td>
+		
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h2> Righe diverse </h2>
+<table>
+  <thead>
+    <tr>
+	  
+      <th>Nominativo</th>
+	       
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @diverse != nil %>
+    <% @diverse.each do |s| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= s %></td>
+		
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h2> Nuovi Uffici </h2>
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Dipendente</th>     
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+	<% j = 0 %>
+    <% if @nuovi_uffici != nil %>
+    <% @nuovi_uffici.each do |s| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= s.nome %></td>
+		<td></td>
+        
+       </tr>
+	   <% j = 0 %>
+	   <% s.people.each do |p| %>
+        <tr>
+	     <% j = j + 1 %>
+	     <td></td>
+         <td><%= j %></td>
+		 <td><%= p.nominativo %></td>
+        
+        </tr>
+	   <% end %>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h2> Spostati di ufficio </h2>
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      
+      <th>Ufficio</th>
+      <th>Ufficio trovato</th>
+	  <th>Ufficio cercato</th>
+	  <th>Sposta</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @spostati_di_ufficio != nil %>
+    <% @spostati_di_ufficio.each do |element| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= element[0].nome %></td>
+		<td><%= element[0].cognome %></td>
+        <td><%= element[0].matricola %></td>
+        
+		<td><%= element[0].ufficio != nil ? element[0].ufficio.nome : "n.a." %></td>
+        <td><%= element[1] != nil ? element[1].nome : "n.a." %></td>
+		<td><%= element[2].to_s %></td>
+		<td>
+		<% if element[1] != nil %>
+		 <%= form_for :person, url: sposta_persona_people_path, method: :post, :remote => true do |p| %>
+         <%= p.hidden_field :person_id, :value => element[0].id %>
+		 <%= p.hidden_field :office_id, :value => element[1].id %>
+         <%= p.submit "Sposta in  " + element[1].nome %>
+         <% end %>
+		<% end %>
+		</td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

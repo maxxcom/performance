@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Target:</strong>
+  <%= @office_target_collaboration.target_id %>
+</p>
+
+<p>
+  <strong>Target type:</strong>
+  <%= @office_target_collaboration.target_type %>
+</p>
+
+<p>
+  <strong>Office:</strong>
+  <%= @office_target_collaboration.office_id %>
+</p>
+
+<%= link_to 'Edit', edit_office_target_collaboration_path(@office_target_collaboration) %> |
+<%= link_to 'Back', office_target_collaborations_path %>

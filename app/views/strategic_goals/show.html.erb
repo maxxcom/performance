@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Denominazione:</strong>
+  <%= @strategic_goal.denominazione %>
+</p>
+
+<p>
+  <strong>Descrizione:</strong>
+  <%= @strategic_goal.descrizione %>
+</p>
+
+<p>
+  <strong>Anno:</strong>
+  <%= @strategic_goal.anno %>
+</p>
+
+<p>
+  <strong>Ente:</strong>
+  <%= @strategic_goal.ente %>
+</p>
+
+<%= link_to 'Edit', edit_strategic_goal_path(@strategic_goal) %> |
+<%= link_to 'Back', strategic_goals_path %>

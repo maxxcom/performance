@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Phase Assignments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Phase</th>
+      <th>Wheight</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @phase_assignments.each do |phase_assignment| %>
+      <tr>
+        <td><%= phase_assignment.person_id %></td>
+        <td><%= phase_assignment.phase_id %></td>
+        <td><%= phase_assignment.wheight %></td>
+        <td><%= link_to 'Show', phase_assignment %></td>
+        <td><%= link_to 'Edit', edit_phase_assignment_path(phase_assignment) %></td>
+        <td><%= link_to 'Destroy', phase_assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Phase Assignment', new_phase_assignment_path %>

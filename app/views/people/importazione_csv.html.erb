@@ -1,0 +1,22 @@
+<h1>Importazione dipendenti da CSV</h1>
+
+
+<h4> Importazione dipendenti CSV</h4>
+	<%= form_tag importa_csv_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa CSV" %>
+	<% end %>
+	
+<p> Prende un file csv con questo formato </p>
+<p> la prima riga la considera di intestazione </p>
+<p>  </p>
+<p>  matricola = row[0].rjust(7,'0') </p>
+<p>	 nome = row[2].upcase </p>
+<p>	 cognome = row[1].upcase </p>
+<p>	 email = row[3] </p>
+<p>	 cat = row[4] </p>
+<p>	 cos = row[5] </p>
+<p>	 servizio = row[6] </p>
+<p>	 uorg = row[7] </p>
+<p>	 uff = row[8] </p>
+<p> Fornito da Silvia Mattiussi </p>

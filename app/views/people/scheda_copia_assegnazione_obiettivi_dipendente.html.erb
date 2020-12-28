@@ -1,0 +1,63 @@
+<h1> Scheda valutazione obiettivi dipendente </h1>
+
+<p>Nominativo : <%= @dipendente.cognome + "  " + @dipendente.nome %></p>
+<p>Dipartimento : <%= @dipartimento.nome %></p>
+<p>Ufficio : <%= @ufficio.nome %></p>
+
+<p> Obiettivi/Fasi/Azioni/Opere : </p>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+	  <th>Tipo</th>
+      <th>Denominazione</th>
+      <th>Percentuale raggiungimento</th>
+	  <th>Valutazione dirigente</th>
+	  
+      
+    </tr>
+  </thead>
+
+  
+    <tbody>
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @targets.each do |t| %>
+	  <% num = num + t.valore_totale %>
+	  <% den = den + 1 %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+		<td><%= t.tipo %></td>
+        <td><%= t.denominazione %></td>
+        <td><%= t.valore_totale %></td>
+		
+	  </tr>
+    <% end %>
+	  <tr>
+	  <td></td>
+	  <td></td>
+      <td>Totale</td>
+      <td><%=den !=0 ? 100.00*(num/den).round(2) : " n.a." %></td> </td>
+	  <td></td>
+	  <td><%= @dipendente.peso_totale_obiettivi_fasi_azioni.round(2) %></td>
+	  </tr>
+	  <tr>
+	  <td></td>
+	  <td></td>
+      <td></td>
+      <td>
+	  <%= form_for :target_dipendente_evaluation, url: conferma_misurazione_dirigente_people_path, method: :post, :remote => true do |f| %>
+      <%= f.hidden_field :person_id, :value => @dipendente.id %>
+      <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>
+      <%= f.submit "Conferma misurazione" , class: "btn-salva", id: "btn-salva"+i.to_s %>
+      <% end %>';
+	  
+	  </td>
+	  <td></td>
+	  </tr>
+  </tbody>
+</table>
+
+

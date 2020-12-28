@@ -1,0 +1,61 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Importazione Analitico (da calcolo precedente)</h1>
+
+<h1>Dipendenti modificati</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @modificate != nil %>
+    <% @modificate.each do |p| %>
+      <tr>
+        <td><%= p.nome %></td>
+		<td><%= p.cognome %></td>
+        <td><%= p.matricola %></td>
+        <td><%= p.email %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Dipendenti aggiunti</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @aggiunte != nil %>
+    <% @aggiunte.each do |p| %>
+      <tr>
+        <td><%= p.nome %></td>
+		<td><%= p.cognome %></td>
+        <td><%= p.matricola %></td>
+        <td><%= p.email %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+

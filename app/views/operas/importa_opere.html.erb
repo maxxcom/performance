@@ -1,0 +1,85 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Opere importate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>N. SUB.</th>
+	  <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Anno</th>
+	  <th>Target</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @opere != nil %>
+    <% @opere.each do |op| %>
+      <tr>
+        <td><%= op.numero + " " + (op.sub != nil ? op.sub : " - ") %></td>
+		<td><%= op.descrizione %></td>
+        <td><%= op.responsabile != nil ? op.responsabile.nominativo : " - "  %></td>
+        <td><%= op.anno %></td>
+		<td><%= op.target != nil ? op.target.denominazione_completa : " n.a." %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @opere.length == 0 then "Non sono state importate opere" else "N° opere importate :" + @opere.length.to_s end %>
+<br>
+
+<hr>
+
+
+<h1>Opere modificate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Peso</th>
+      <th>Target</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @opere_modificate != nil %>
+    <% @opere_modificate.each do |op| %>
+      <tr>
+        <td><%= op.numero + " " + op.sub %></td>
+		<td><%= op.descrizione %></td>
+        <td><%= op.responsabile != nil ? op.responsabile.nominativo : " - "  %></td>
+        <td><%= op.anno %></td>
+		<td><%= op.target != nil ? op.target.denominazione_completa : " n.a." %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Righe non determinate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Testo riga</th>
+	</tr>
+  </thead>
+
+  <tbody>
+    <% if @righe_non_determinate != nil %>
+    <% @righe_non_determinate.each do |riga| %>
+      <tr>
+        <td><%= riga %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

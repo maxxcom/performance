@@ -1,0 +1,214 @@
+console.log("getoffice.js.erb file");
+var includeDiv = $("#results_division")
+var includeDivTree = $("#jstree_office")
+includeDiv.empty();
+//includeDivTree.empty();
+
+var html = '';
+html += ' <p>Un dipendente che è direttore di un ufficio non va inserito nell\'ufficio anche come dipendente </p>'; 
+html += ' <p><b><%= @ufficio.nome %></b></p> ';
+html += ' <p>Direttore: ';
+html += ' <%= @ufficio.director != nil ? (@ufficio.director.nome + " " + @ufficio.director.cognome) : " - " %></p>';
+
+html += ' <%= form_for @ufficio, url: office_removedirectorfromoffice_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.hidden_field :director_id, :value => (@ufficio.director != nil ? @ufficio.director.id : nil)%>';
+html += ' <%= p.submit "Rimuovi" %>';
+html += ' <% end %>';
+html += ' <%= form_for @ufficio, url: office_setdirector_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += '<%= p.select(:director_id)  do %>';
+html += '  <% lista = Person.order(:cognome)%>';
+html += '  <% lista.each do |c| %>';
+html += '    <%= content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.submit "Direttore" %>';
+html += ' <% end %>';
+html += '<br>';
+html += '<br>';
+
+html += '<hr />';
+
+html += '<b>Tipo Ufficio :</b>';
+html += ' <%= @ufficio.office_type != nil ? (@ufficio.office_type.denominazione ) : " - " %></p>';
+html += ' <%= form_for @ufficio, url: office_settype_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.select(:id) do %>';
+html += '  <% OfficeType.order(:denominazione).each do |c| -%>';
+html += '    <%= content_tag(:option, c.denominazione, value: c.id) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.submit "Tipologia" %>';
+html += ' <% end %>';
+
+html += '<hr />';
+
+html += '<b>Ufficio padre:</b>';
+html += ' <%= @ufficio.parent != nil ? (@ufficio.parent.nome ) : " - " %></p>';
+
+html += ' <%= form_for @ufficio, url: office_setparentoffice_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.select(:id) do %>';
+html += '  <% (Office.order(:nome) -[@ufficio]).each do |c| -%>';
+html += '    <%= content_tag(:option, c.nome, value: c.id) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.submit "Padre" %>';
+html += ' <% end %>';
+
+html += '<hr />';
+
+html += '<b>Uffici figli:</b>';
+html += '<br>';
+html += '<div class="toleft">';
+html += '<table class="blueTable"><thead></thead><tbody>';
+html += '<% @ufficio.children.each do |office| %>';
+html += '<tr>';
+html += '<td>';
+html += ' <%= form_for @ufficio, url: office_removechildrenfromoffice_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.hidden_field :office_id, :value => office.id %>';
+html += ' <%= p.submit "Rimuovi" %>';
+html += ' <% end %>';
+html += '</td>';
+html += '<td>';
+html += '<%= office.nome %>';
+html += '</td>';
+
+html += ' <% end %> ';
+html += ' </tr>';
+html += ' </tbody></table>';
+html += '</div>';
+
+html += '<br>';
+html += '<%= form_for @ufficio, url: office_stringa_filtro_path(@ufficio), method: :post, :remote => true do |f| %>';
+html += '<%= f.text_field(:stringa_filtro , :value => @stringa_filtro, size: 20) %>';
+html += '<%= f.hidden_field :office_id, :value => @ufficio.id %>';
+html += '<% end %>';
+html += ' <%= form_for @ufficio, url: office_addchildrentooffice_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.select(:id) do %>';
+html += '  <% (Office.where("lower(nome) LIKE lower(?)", "%#{@stringa_filtro}%").order(:nome) - [@ufficio]).each do |c| -%>';
+html += '    <%= content_tag(:option, c.nome, value: c.id) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.submit "Aggiungi" %>';
+html += ' <% end %>';
+html += '<hr />';
+
+html += '<hr />';
+
+html += '<b>Dipendenti appartenenti :</b>';
+html += '<br>';
+html += '<div class="toleft">';
+html += '<table class="blueTable"><thead></thead><tbody>';
+html += '<% @ufficio.people.each do |person| %>';
+
+html += '<tr>';
+html += '<td>';
+html += ' <%= form_for @ufficio, url: office_removepersonfromoffice_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.hidden_field :person_id, :value => person.id %>';
+html += ' <%= p.submit "Rimuovi" %>';
+html += ' <% end %>';
+html += '</td>';
+html += '<td>';
+html += '<%= person.nome %> <%= person.cognome %>';
+html += '</td>';
+
+html += ' <% end %> ';
+html += ' </tr>';
+html += ' </tbody></table>';
+html += '</div>';
+
+html += '<br>';
+html += ' <%= form_for @ufficio, url: office_setperson_path(@ufficio), method: :post, :remote => true do |p| %>';
+html += ' <%= p.select(:id) do %>';
+html += '  <% Person.order(:cognome).each do |c| -%>';
+html += '    <%= content_tag(:option, c.cognome + " " + c.nome, value: c.id) %>';
+html += '  <% end %>';
+html += ' <% end %>';
+html += ' <%= p.submit "Aggiungi" %>';
+html += ' <% end %>';
+html += '<hr />';
+
+includeDiv.append(html);
+
+includeDivTree.jstree("destroy");
+
+var data = [];
+
+data.push({ "id" : '<%= "o-" + @ufficio.id.to_s %>', "parent" : "#", "text" : '<%= @ufficio.nome %>', 'state' : { 'opened' : true} });
+   
+<% @ufficio.people.each do |dipendente| %>
+    data.push({ "id" : '<%= "d-" + dipendente.id.to_s %>', "parent" : '<%= "o-" + @ufficio.id.to_s %>', "text" : '<%= dipendente.matricola_nominativo2 %>', 'type': 'dipendente', 'state' : { 'opened' : false} });
+<% end %>
+<% @ufficio.children.each do |office| %>
+  data.push({ "id" : '<%= "o-" + office.id.to_s %>', "parent" : '<%= "o-" + @ufficio.id.to_s %>', "text" : '<%= office.nome %>', 'type': 'office', 'state' : { 'opened' : true} });
+  <% office.people.each do |dipendente| %>
+    data.push({ "id" : '<%= "d-" + dipendente.id.to_s %>', "parent" : '<%= "o-" + office.id.to_s %>', "text" : '<%= dipendente.matricola_nominativo2 %>', 'type': 'dipendente', 'state' : { 'opened' : false} });
+  <% end %>
+  <% office.children.each do |figlio| %>
+    data.push({ "id" : '<%= "o-" + figlio.id.to_s %>', "parent" : '<%= "o-" +  office.id.to_s %>', "text" : '<%= figlio.nome %>', 'type': 'office', 'state' : { 'opened' : true} });
+	<% figlio.people.each do |figliodipendente| %>
+      data.push({ "id" : '<%= "d-" + figliodipendente.id.to_s %>', "parent" : '<%= "o-" + figlio.id.to_s %>', "text" : '<%= figliodipendente.matricola_nominativo2 %>', 'type': 'dipendente', 'state' : { 'opened' : false} });
+    <% end %>
+	<% figlio.children.each do |sottofiglio| %>
+      data.push({ "id" : '<%= "o-" + sottofiglio.id.to_s %>', "parent" : '<%= "o-" + figlio.id.to_s %>', "text" : '<%= sottofiglio.nome %>', 'type': 'office', 'state' : { 'opened' : true} });
+      <% sottofiglio.people.each do |sottofigliodipendente| %>
+       data.push({ "id" : '<%= "d-" + sottofigliodipendente.id.to_s %>', "parent" : '<%= "o-" + sottofiglio.id.to_s %>', "text" : '<%= sottofigliodipendente.matricola_nominativo2 %>', 'type': 'dipendente', 'state' : { 'opened' : false} });
+      <% end %>
+	<% end %>
+  <% end %>
+<% end %>	
+
+
+
+
+includeDivTree.jstree({
+     "core" : {
+       // so that create works
+       "check_callback" : true,
+	   "themes": {
+            "icons": true
+        },
+        
+       "data": data
+	   
+	   
+     },
+	 
+	 "dnd" : {
+            "drop_finish" : function () {
+                console.log("DROP");
+            },
+	},
+
+	   
+	  "plugins" : ["types", "themes", "dnd"]
+	 
+	 });	
+
+$(document).on('dnd_stop.vakata', function (event, data) {
+   console.log("DROP");
+   Parent = includeDivTree.jstree(true).get_node(data.data.nodes[0]).parent;
+   nodo_dragged = includeDivTree.jstree(true).get_node(data.data.nodes[0]);
+   //console.log(nodo_dragged);
+   nodo_target = includeDivTree.jstree(true).get_node(data.event.target);
+   office_id = '<%= @ufficio.id %>'
+   //console.log(nodo_target);
+   //console.log(nodo_dragged.id);
+   //console.log(nodo_target.id);
+   mydata = {
+   
+    origin: nodo_dragged.id,
+    target: nodo_target.id,
+	office: office_id,
+   };
+   
+   console.log(mydata);
+   $.ajax({
+    method: 'POST',
+    url: 'moveoffice',
+    data: mydata,
+    success: function(){},
+    error: function(){}
+    
+   });      
+})	 
+
+//includeDivTree.jstree("set_theme","default");

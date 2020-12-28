@@ -1,0 +1,1 @@
+json.partial! "simple_action_assignments/simple_action_assignment", simple_action_assignment: @simple_action_assignment

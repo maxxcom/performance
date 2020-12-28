@@ -1,0 +1,18 @@
+<h1>Lettura file Borghese</h1>
+
+
+<h4> Lettura file</h4>
+	<%= form_tag leggi_file_borghese_people_path, multipart: true do %>
+	 <p><%= file_field_tag :file %></p>
+	 
+	 <p> Output su file <%= check_box_tag :opzione1 %></p>
+	 <p> Aggiorna ufficio <%= check_box_tag :opzione2 %></p>
+	 <p> Aggiorna note e contratto <%= check_box_tag :opzione3 %></p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende un file excel prodotto da Laura borghese </p>
+<p> un foglio di lavoro per il servizio </p>
+<p> - controllo i nomi </p>
+<p> - cerca la matricola </p>
+<p> - restituisce un file Excel con la matricola </p>

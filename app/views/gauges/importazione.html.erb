@@ -1,0 +1,15 @@
+<h1>Importazione Indicatori</h1>
+
+
+<h4> Importazione indicatori</h4>
+	<%= form_tag importa_gauges_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati dai file Excel di Mauro Gaspardo </p>
+	<p> Dal foglio di lavoro Obiettivi vengono presi: </p>
+	<p> indicatori nella colonna H. </p>
+	<p> più indicatori si mettono nella stessa cella con \n (Alt Invio) tra uno e l'altro </p>
+	<p> l'importazione non sovrascrive gli indicatori esistenti </p>
+	

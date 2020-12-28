@@ -1,0 +1,1 @@
+json.partial! "attivita_consolidata_gauges/attivita_consolidata_gauge", attivita_consolidata_gauge: @attivita_consolidata_gauge

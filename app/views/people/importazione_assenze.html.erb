@@ -1,0 +1,21 @@
+<h1>Importazione assenze dipendenti </h1>
+
+
+<h4> Importazione assenze</h4>
+	<%= form_tag importa_assenze_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p> Somma righe per stesso nominativo <%= check_box_tag :somma_righe %></p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende il file Excel mandato da Insiel </p>
+<p> 14 righe di intestazione </p>
+<p> Il file può essere ricavato da Ascot personale con STAT , ASSENZE_TUTTE, raggruppa a 12 mesi </p>
+<p> Se non si seleziona somma righe, per ogni nominativo viene presa l'ultima riga </p>
+<p>  </p>
+<p>  matricola    = colonna D </p>
+<p>	 cognome nome = colonna E </p>
+<p>	 totgg        = colonna H </p>
+<p>	 tot_assenze  = colonna I </p>
+
+<p> Fornito da Insiel </p>

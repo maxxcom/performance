@@ -1,0 +1,17 @@
+<h1>Setta assegnazione con ufficio</h1>
+
+
+<h4> Lettura file</h4>
+	<%= form_tag setta_assegnazione_ufficio_people_path, multipart: true do %>
+	 <p><%= file_field_tag :file %></p>
+	 
+	 
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende file excel delle valutazioni (riassuntivo pagelle) </p>
+<p> Colonna C: matricola </p>
+<p> Colonna D: cognome o UFFICIO</p>
+<p> Colonna E: nome </p>
+
+<p> Mette la stringa dell'ufficio nell'assegnazione </p> 

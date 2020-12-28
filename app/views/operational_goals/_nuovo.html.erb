@@ -1,0 +1,72 @@
+<%= form_with(model: @operational_goal, local: true, url: crea_nuovo_obiettivo_operational_goals_path) do |form| %>
+
+
+  <div class="field">
+    <%= form.label :denominazione %>
+    <%= form.text_field :denominazione, id: :operational_goal_denominazione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione %>
+    <%= form.text_area :descrizione, id: :operational_goal_descrizione %>
+  </div>
+  
+  <div class="field">
+      <%= form.label :responsabile_principale_id %>
+      <%= form.collection_select(:responsabile_principale_id, Person.dirigenti, :id, :cognome, :include_blank => true) %>
+  </div>
+  
+  <div class="field">
+  <%= form.label "Crea indicatore avanzamento" %>
+    <%= form.check_box :indicatore_avanzamento %>
+  </div>
+
+  <div class="field">
+    <%= form.label :obiettivo_di_ente %>
+    <%= form.check_box :obiettivo_di_ente, id: :operational_goal_obiettivo_di_ente %>
+  </div>
+
+  <div class="field">
+    <%= form.label :obiettivo_di_gruppo %>
+    <%= form.check_box :obiettivo_di_gruppo, id: :operational_goal_obiettivo_di_gruppo %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :obiettivo_di_struttura %>
+    <%= form.check_box :obiettivo_di_struttura, id: :operational_goal_obiettivo_di_struttura %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :obiettivo_individuale %>
+    <%= form.check_box :obiettivo_individuale, id: :operational_goal_obiettivo_individuale %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :attivita_ordinaria %>
+    <%= form.check_box :attivita_ordinaria, id: :operational_goal_attivita_ordinaria %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :flag_variazione_peg %>
+    <%= form.check_box :flag_variazione_peg, id: :operational_goal_flag_variazione_peg %>
+  </div>
+
+  <div class="field">
+    <%= form.label :indice_strategicita %>
+    <%= form.text_field :indice_strategicita, id: :operational_goal_indice_strategicita %>
+  </div>
+
+  <div class="field">
+    <%= form.label :anno %>
+    <%= form.number_field :anno, id: :operational_goal_anno, :value => Setting.where(denominazione: "anno").first.value %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ente %>
+    <%= form.text_field :ente, id: :operational_goal_ente, :value => Setting.where(denominazione: "ente").first.value %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Salva Obiettivo" %>
+  </div>
+<% end %>

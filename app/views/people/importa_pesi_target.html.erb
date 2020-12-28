@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pesi assegnati</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+	  <th>Target</th>
+      <th>Dipendente</th>
+	  <th>Peso</th>
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% if @pesi_importati != nil %>
+    <% @pesi_importati.each do |ass| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= ass["target"] %></td>
+		<td><%= ass["persona"] %></td>
+        <td><%= ass["peso"] %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Righe tralasciate</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Riga</th>
+	  <th>Stringa</th>
+      <th>Motivo</th>
+	  <th></th>
+           
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @righe_tralasciate != nil %>
+    <% @righe_tralasciate.each do |riga| %>
+      <tr>
+	    <td><%= riga["numero"] %></td>
+        <td><%= riga["stringa"] %></td>
+		<td><%= riga["causale"] %></td>
+        <td><%= "" %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+

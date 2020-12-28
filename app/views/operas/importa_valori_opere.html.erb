@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Valori misurazioni Opere importate</h1>
+
+
+<hr>
+
+
+<h1>Opere modificate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Valore</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @opere_modificate != nil %>
+    <% @opere_modificate.each do |op| %>
+      <tr>
+        <td><%= op.numero + " " + op.sub %></td>
+		<td><%= op.descrizione %></td>
+        <td><%= op.responsabile != nil ? op.responsabile.nominativo : " - "  %></td>
+        <td><%= op.indicatori.first.valore_misurazione %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Righe non determinate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Testo riga</th>
+	</tr>
+  </thead>
+
+  <tbody>
+    <% if @righe_non_determinate != nil %>
+    <% @righe_non_determinate.each do |riga| %>
+      <tr>
+        <td><%= riga %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

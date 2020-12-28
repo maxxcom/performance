@@ -1,0 +1,223 @@
+<h1>Quote categorie</h1>
+
+
+<h2>Dipendenti per categoria</h1>
+<% totale = 0 %>
+<% @numero_per_categoria.sort_by{|key|}.each {|key, value|  %>
+<p><%= key %> = <%= value %>  </p>
+<% totale = totale + value %>
+<%  } %>
+<p>Totale <%= totale %>
+<br>
+
+
+<h1>Quota per categoria</h1>
+<h2>Categorie trovate</h1>
+<% @quote.sort_by{|key|}.each {|key, value|  %>
+<p><%= key %>; <%= value %>; </p>
+<%  } %>
+<br>
+
+<p>Totale <%= @totale_dipendenti %> </p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Aree Valutazione</th>
+      <th>A</th>
+      <th>B</th>
+	  <th>C</th>
+      <th>D</th>
+	  <th>PLA</th>
+      <th>PLB</th>
+	</tr>
+  </thead>
+	<tbody>
+      <tr>
+        <td>Obiettivi</td>
+        <td><%= @ripartizione["A"][0] %></td>
+        <td><%= @ripartizione["B"][0]%></td>
+		<td><%= @ripartizione["C"][0] %></td>
+        <td><%= @ripartizione["D"][0]%></td>
+		<td><%= @ripartizione["PLA"][0]%></td>
+		<td><%= @ripartizione["PLB"][0]%></td>
+      </tr>
+	  <tr>
+        <td>Comportamento</td>
+        <td><%= @ripartizione["A"][1] %></td>
+        <td><%= @ripartizione["B"][1]%></td>
+		<td><%= @ripartizione["C"][1] %></td>
+        <td><%= @ripartizione["D"][1]%></td>
+		<td><%= @ripartizione["PLA"][1] %></td>
+        <td><%= @ripartizione["PLB"][1]%></td>
+      </tr>
+   
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Pesi categorie</th>
+      <th>A</th>
+      <th>B</th>
+	  <th>C</th>
+      <th>D</th>
+	  <th>PLA</th>
+      <th>PLB</th>
+	</tr>
+  </thead>
+	<tbody>
+      <tr>
+        <td>Pesi</td>
+        <td><%= @peso_categorie["A"] %></td>
+        <td><%= @peso_categorie["B"] %></td>
+		<td><%= @peso_categorie["C"] %></td>
+        <td><%= @peso_categorie["D"] %></td>
+		<td><%= @peso_categorie["PLA"] %></td>
+        <td><%= @peso_categorie["PLB"] %></td>
+      </tr>
+	  
+   
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Totali uomo</th>
+      <th>A</th>
+      <th>B</th>
+	  <th>C</th>
+      <th>D</th>
+	  <th>PLA</th>
+	  <th>PLB</th>
+	  <th>Tot</th>
+	</tr>
+  </thead>
+	<tbody>
+      <tr>
+        <td>Non pesate</td>
+        <td><%= @quote["A"] != nil ? @quote["A"].round(2) : 0 %></td>
+        <td><%= @quote["B"] != nil ? @quote["B"].round(2) : 0 %></td>
+		<td><%= @quote["C"] != nil ? @quote["C"].round(2) : 0 %></td>
+        <td><%= @quote["D"] != nil ? @quote["D"].round(2) : 0 %></td>
+		<td><%= @quote["PLA"] != nil ? @quote["PLA"].round(2) : 0 %></td>
+		<td><%= @quote["PLB"] != nil ? @quote["PLB"].round(2) : 0 %></td>
+		<td><%= (@quote["A"] + @quote["B"] + @quote["C"] + @quote["D"] + @quote["PLA"] + @quote["PLB"]).round(2)%></td>
+      </tr>
+	  <tr>
+        <td>Pesate</td>
+        <td><%= @quote_pesate["A"].round(2)%></td>
+        <td><%= @quote_pesate["B"].round(2)%></td>
+		<td><%= @quote_pesate["C"].round(2)%></td>
+        <td><%= @quote_pesate["D"].round(2)%></td>
+		<td><%= (@quote_pesate["PLA"] != nil ? @quote_pesate["PLA"] : 0).round(2)%></td>
+		<td><%= (@quote_pesate["PLB"] != nil ? @quote_pesate["PLB"] : 0).round(2)%></td>
+		<td><%= (@quote_pesate["A"] + @quote_pesate["B"] + @quote_pesate["C"] +@quote_pesate["D"] + @quote_pesate["PLA"] + @quote_pesate["PLB"]).round(2)%></td>
+      </tr>
+   
+  </tbody>
+</table>
+
+<p>Totale pesato  <%= @totale_pesato %> </p>
+
+<h1>Quota per categoria  pesate</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Categoria</th>
+      <th>Comportamento</th>
+      <th>Obiettivi</th>
+	  <th>Totali</th>
+	</tr>
+  </thead>
+	<tbody>
+	<% totale = 0 %>
+    <% @quote_pesate.each {|key, value|  %>
+      <tr>
+        <td><%= key %></td>
+        <td><%= tot1 = (value * (@ripartizione[key] != nil ? @ripartizione[key][1] : 0) / @totale_pesato).round(2) %></td>
+        <td><%= tot2 = (value * (@ripartizione[key] != nil ? @ripartizione[key][0] : 0) / @totale_pesato).round(2) %></td>
+		<td><%= tot = (tot1 + tot2).round(2) %></td>
+      </tr>
+	  <% totale = totale + tot %>
+    <% } %>
+	<tr>
+        <td> Totale </td>
+        <td></td>
+        <td></td>
+		<td><%= totale.round(2) %></td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Categoria</th>
+      <th>Comportamento</th>
+      <th>Obiettivi</th>
+	  <th>Totali</th>
+	</tr>
+  </thead>
+	<tbody>
+	<% totale = 0 %>
+    <% @categorie.each {|key|  %>
+      <tr>
+        <td><%= key %></td>
+        <td><%= tot1 = ((@fondo/ @totale_pesato) * (@quote_pesate[key] != nil ? @quote_pesate[key] : 0) * (@ripartizione[key] != nil ? @ripartizione[key][1] : 0)/100).round(2) %></td>
+        <td><%= tot2 = ((@fondo / @totale_pesato) * (@quote_pesate[key] != nil ? @quote_pesate[key] : 0) * (@ripartizione[key] != nil ? @ripartizione[key][0] : 0)/100).round(2) %></td>
+        <td><%= tot = (tot1 + tot2).round(2) %></td>
+	  </tr>
+	  <% totale = totale + tot %>
+    <% } %>
+	<tr>
+        <td> Totale </td>
+        <td></td>
+        <td></td>
+		<td><%= totale.round(2) %></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h1>Quote Categorie</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Categoria</th>
+      <th>Comportamento</th>
+      <th>Obiettivi</th>
+	  <th>Totale Individuale</th>
+	  <th> N. dip. </th>
+	  <th> Totale categoria </th>
+	</tr>
+  </thead>
+	<tbody>
+	<% totale = 0 %>
+	<% totale_dipendenti = 0 %>
+    <% @categorie.each {|key|  %>
+      <tr>
+        <td><%= key %></td>
+        <td><%= tot1 = CategoriaQuotum.where(chiave: key).first.quota_comportamento.round(2) %></td>
+        <td><%= tot2 = CategoriaQuotum.where(chiave: key).first.quota_obiettivi.round(2)  %></td>
+        <td><%= tot = (tot1 + tot2).round(2) %></td>
+		<td><%= @numero_per_categoria[key].to_i %></td>
+		<td><%= tot_categoria = ((tot1 + tot2) * @numero_per_categoria[key].to_f).round(2) %></td>
+	  </tr>
+	  <% totale_dipendenti = totale_dipendenti + @numero_per_categoria[key].to_i %>
+	  <% totale = totale + tot_categoria %>
+    <% } %>
+	<tr>
+        <td> Totali </td>
+        <td></td>
+        <td></td>
+		<td></td>
+		<td><%= totale_dipendenti %> </td>
+		<td><%= totale.round(2) %></td>
+    </tr>
+  </tbody>
+</table>
+ 
+<br>

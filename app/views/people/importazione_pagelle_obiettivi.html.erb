@@ -1,0 +1,17 @@
+<h1>Importazione pagelle obiettivi </h1>
+
+
+<h4> Importazione schede pagelle + obiettivi</h4>
+	<%= form_tag importa_pagelle_obiettivi_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> File Excel riassuntivi con pagelle e obiettivi nello stessa scheda Excel </p>
+<p> Importa tutte le pagelle una per una </p>
+
+
+
+
+
+								

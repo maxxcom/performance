@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Importazione assenze</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Categoria</th>
+      <th>cos</th>
+	  
+	  <th>TOTGG</th>
+	  <th>TOTASSENZE</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @result != nil %>
+    <% @result.each do |person| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= person.nome %></td>
+		<td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.email %></td>
+		<td><%= person.categoria %></td>
+        <td><%= person.cos %></td>
+		
+		<td><%= person.totgg %></td>
+		<td><%= person.totassenze %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @result.length == 0 then "Non sono state importate assenze per persone" else "Assenze N° persone importate :" + @result.length.to_s end %>
+<br>
+

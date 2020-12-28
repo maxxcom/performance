@@ -1,0 +1,2 @@
+module OtherManagersHelper
+end

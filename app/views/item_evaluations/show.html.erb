@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Valore valutazione dirigente:</strong>
+  <%= @item_evaluation.valore_valutazione_dirigente %>
+</p>
+
+<p>
+  <strong>Valore valutazione oiv:</strong>
+  <%= @item_evaluation.valore_valutazione_oiv %>
+</p>
+
+<%= link_to 'Edit', edit_item_evaluation_path(@item_evaluation) %> |
+<%= link_to 'Back', item_evaluations_path %>

@@ -1,0 +1,2 @@
+module StrategicGoalsHelper
+end

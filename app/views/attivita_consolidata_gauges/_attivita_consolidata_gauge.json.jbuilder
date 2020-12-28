@@ -1,0 +1,2 @@
+json.extract! attivita_consolidata_gauge, :id, :ufficio_stringa, :linea_di_attivita, :indicatore_di_quantita, :consuntivo_anno_n_meno_3, :consuntivo_anno_n_meno_2, :consuntivo_anno_n_meno_1, :previsionale_anno_n, :previsionale_anno_n_piu_1, :previsionale_anno_n_piu_2, :previsionale_anno_n_piu_3, :obiettivo_di_performance, :note, :foglio_di_lavoro, :created_at, :updated_at
+json.url attivita_consolidata_gauge_url(attivita_consolidata_gauge, format: :json)

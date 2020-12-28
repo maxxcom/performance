@@ -1,0 +1,23 @@
+<b> prova </b>
+
+
+<%= form_with url: "/fte_percentages/aggiungi_fte_percentage", method: :get, remote: false do |form| %>
+
+  <div class="field">
+    <%= form.label :category_id %>
+	 <%= collection_select(:category_id, :id, Category.all.sort_by{|c| c.denominazione}, :id, :denominazione, :include_blank => true)  %>
+    
+  </div>
+
+  <div class="field">
+    <%= form.label :percentuale %>
+    <%= form.text_field :percentuale %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+ 
+ <% end %> 
+ 
+

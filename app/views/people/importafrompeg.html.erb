@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Dipendenti trovati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Ufficio</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @persone != nil %>
+    <% @persone.each do |person| %>
+      <tr>
+        <td><%= person[:persona].nome %></td>
+		<td><%= person[:persona].cognome %></td>
+        <td><%= person[:persona].matricola %></td>
+        <td><%= person[:persona].email %></td>
+		<td><%= person[:persona].ufficio != nil ? person[:persona].ufficio.nome : "-" %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Dipendenti non trovati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Cognome Nome</th>
+	        
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @nontrovate != nil %>
+    <% @nontrovate.each do |word| %>
+      <tr>
+        <td><%= word %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+
+
+

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @fte_percentage.category_id %>
+</p>
+
+<p>
+  <strong>Percentuale:</strong>
+  <%= @fte_percentage.percentuale %>
+</p>
+
+<%= link_to 'Edit', edit_fte_percentage_path(@fte_percentage) %> |
+<%= link_to 'Back', fte_percentages_path %>

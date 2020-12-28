@@ -1,0 +1,100 @@
+<script>
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva_'+button_code)
+ $.rails.enableElement($button)
+ //$button.removeAttr('disabled')
+}
+
+</script>
+
+<div id="results_division">
+   
+<h1>Tabellone valutazioni</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>Categoria</th>
+	  <th>COS</th>
+	  <th>Comportamento</th>
+	  <th>Obiettivi</th>
+	  <th>Punteggio Finale</th>
+	  <th>Punteggio Discretizzato</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+	<tr>
+	<td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+	<td></td>
+    <td></td>
+	<td>
+	<%= form_for :person, url: ricalcola_tutti_finale_valutazione_people_path, method: :post, :remote => true do |f| %>
+	<%= f.submit "Ricalcola" , class: "btn-salva", id: "ricalcola_valutazioni" %>
+	<% end %>
+	</td>
+	<td>
+	<%= form_for :person, url: ricalcola_tutti_finale_obiettivi_people_path, method: :post, :remote => true do |f| %>
+	<%= f.submit "Ricalcola" , class: "btn-salva", id: "ricalcola_valutazioni" %>
+	<% end %>
+	</td>
+	<td>
+	
+	</td>
+	<td>
+	
+	</td>
+	</tr>
+    <% @people.each do |person| %>
+	 
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		<td><%= person.stringa_categoria %></td>
+		<td><%= person.cos %></td>
+		<td>
+		<%= form_for :person, url: set_finale_valutazione_people_path, method: :post, :remote => true do |f| %>
+    	<%= f.number_field :value,  :value => person.valutazione, min: 0, max: 100, step: :any, :onchange => "abilita_save(v"+i.to_s+")" %>
+		<%= f.hidden_field :person_id, :value => person.id %>
+		<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_v"+i.to_s %>
+		<% end %>
+		</td>
+		
+		<td>
+		<%= form_for :person, url: set_finale_raggiungimento_obiettivi_people_path, method: :post, :remote => true do |f| %>
+    	<%= f.number_field :value,  :value => person.raggiungimento_obiettivi, min: 0, max: 100, step: :any, :onchange => "abilita_save(o"+i.to_s+")" %>
+		<%= f.hidden_field :person_id, :value => person.id %>
+		<%= f.submit "Salva" , class: "btn-salva", id: "btn-salva_o"+i.to_s %>
+		<% end %>
+		</td>
+		
+		<td style="text-align: center">
+		<%= ((person.raggiungimento_obiettivi.to_f * person.percentuale_obiettivi.to_f + person.percentuale_pagella.to_f * person.valutazione.to_f)/(person.percentuale_obiettivi.to_f + person.percentuale_pagella.to_f)).round(2) %>
+		
+		</td>
+		
+		<td style="text-align: center">
+		<%= person.punteggio_finale_totale_discretizzato %>
+		</td>
+        
+      </tr>
+	 
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+</div>

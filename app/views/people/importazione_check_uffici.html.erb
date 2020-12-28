@@ -1,0 +1,29 @@
+<h1>Importazione con check uffici </h1>
+
+
+<h4> Importazione Check Ufficio </h4>
+	<%= form_tag importa_check_uffici_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p><%= check_box_tag :sposta_persona %> Sposta persona se trovi ufficio</p>
+	 <p><%= check_box_tag :crea_ufficio %> Crea Ufficio se non esistente</p>
+	 <p><%= check_box_tag :solo_prova %> Non creare ne uffici ne persone ne spostare realmente persone (solo per prova)</p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> File Excel  </p>
+<p>  </p>
+<p>  </p>
+<p>  matricola     = colonna A </p>
+<p>  cognome     = colonna B </p>
+<p>  nome     = colonna C </p>
+<p>  Servizio     = colonna D </p>
+<p>  Ufficio     = colonna E </p>
+
+<br>
+<b> Attenzione che crea nuove persone se non trova la matricola </b>
+
+
+
+
+
+								

@@ -1,0 +1,32 @@
+<%= form_with(model: goal_assignment, local: true) do |form| %>
+  <% if goal_assignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(goal_assignment.errors.count, "error") %> prohibited this goal_assignment from being saved:</h2>
+
+      <ul>
+      <% goal_assignment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :person_id %>
+    <%= form.number_field :person_id, id: :goal_assignment_person_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :operational_goal_id %>
+    <%= form.number_field :operational_goal_id, id: :goal_assignment_operational_goal_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wheight %>
+    <%= form.number_field :wheight, id: :goal_assignment_wheight %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,35 @@
+<h1>Importazione Analitico </h1>
+
+
+<h4> Importazione Analitico</h4>
+	<%= form_tag importa_analitico_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <p> Aggiungi mancanti <%= check_box_tag :aggiungi_mancanti %></p>
+	 <p> Aggiorna matricole <%= check_box_tag :correggi_matricole %></p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende il file Excel in uscita da Performance, la scheda Analitico, e la importa nell'installazione.</p>
+
+<p> La prima riga di intestazione, meglio toglierla </p>
+<p> Dal foglio analitico togliere anche la prima colonna che è un progressivo. </p>
+<p>  </p>
+<p> matricola  = sheet.cell('A',row)  </p>
+<p> cognome  = sheet.cell('B',row)  </p>
+<p> nome  = sheet.cell('C',row)  </p>
+<p> categoria  = sheet.cell('D',row).to_s.strip  </p>
+<p> ruolo  = sheet.cell('E',row).to_s  </p>
+<p> assegnazione  = sheet.cell('F',row).to_s  </p>
+<p> totgg = sheet.cell('G',row).to_f  </p>
+<p> totassenze = sheet.cell('H',row).to_f  </p>
+<p> in I ci sarebbe la percentuale di assenze che però calcoliamo quindi non viene presa. 
+La colonna può essere lasciata lì </p>
+<p> tempo = sheet.cell('J',row).to_f  </p>
+<p> servizio = sheet.cell('K',row).to_f  </p>
+<p> comportamento = sheet.cell('L',row).to_f  </p>
+<p> obiettivi = sheet.cell('M',row).to_f  </p>
+
+
+<p>  </p>
+
+<p> Esportazione di un calcolo precedente </p>

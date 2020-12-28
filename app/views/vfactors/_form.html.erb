@@ -1,0 +1,67 @@
+<%= form_with(model: vfactor, local: true) do |form| %>
+  <% if vfactor.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(vfactor.errors.count, "error") %> prohibited this vfactor from being saved:</h2>
+
+      <ul>
+      <% vfactor.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :denominazione %>
+    <%= form.text_area :denominazione, id: :vfactor_denominazione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione %>
+    <%= form.text_area :descrizione, id: :vfactor_descrizione %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :ordine_apparizione %>
+    <%= form.number_field :ordine_apparizione, id: :vfactor_ordine_apparizione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :peso_sg %>
+    <%= form.number_field :peso_sg, id: :vfactor_peso_sg %>
+  </div>
+
+  <div class="field">
+    <%= form.label :peso_dirigenti %>
+    <%= form.number_field :peso_dirigenti, id: :vfactor_peso_dirigenti %>
+  </div>
+
+  <div class="field">
+    <%= form.label :peso_po %>
+    <%= form.number_field :peso_po, id: :vfactor_peso_po %>
+  </div>
+
+  <div class="field">
+    <%= form.label :peso_preposti %>
+    <%= form.number_field :peso_preposti, id: :vfactor_peso_preposti %>
+  </div>
+
+  <div class="field">
+    <%= form.label :peso_nonpreposti %>
+    <%= form.number_field :peso_nonpreposti, id: :vfactor_peso_nonpreposti %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :min %>
+    <%= form.number_field :min, id: :vfactor_min %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :max %>
+    <%= form.number_field :max, id: :vfactor_max %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

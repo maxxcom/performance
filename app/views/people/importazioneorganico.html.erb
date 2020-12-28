@@ -1,0 +1,13 @@
+<h1>Importazione organico</h1>
+
+
+<h4> Importazione Organico</h4>
+	<%= form_tag importaorganico_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa XLS" %>
+	<% end %>
+	
+	<p> Importazione da Organico.xls di Mauro Gaspardo </p>
+	<p> Cerca di riconoscere i nomi degli uffici e le persone </p>
+	<p> Non sovrascrive quello che ha già trovato </p>
+	<p> Non inserisce le persone negli uffici: questo conviene farlo con Importazione da peg</p>

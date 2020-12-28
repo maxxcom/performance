@@ -1,0 +1,21 @@
+<h1>Importazione Raggiungimento Obiettivi </h1>
+
+
+<h4> Importazione Raggiungimento Obiettivi</h4>
+	<%= form_tag importa_raggiungimento_obiettivi_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	  <p> Colonna valore XY <%= text_field_tag :value %> </p>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+<p> Prende il file Excel  </p>
+<p> Una riga di intestazione </p>
+<p>  </p>
+<p>	 cognome           = colonna A </p>
+<p>	 nome              = colonna B </p>
+<p>	 raggiungimento obiettivi  = colonna XY  </p>
+
+
+<p> da questi due numeri viene ricavato tempo = impegno assoluto / impegno relativo </p>
+
+

@@ -1,0 +1,1 @@
+json.partial! "valuation_qualification_percentages/valuation_qualification_percentage", valuation_qualification_percentage: @valuation_qualification_percentage

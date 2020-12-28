@@ -1,0 +1,14 @@
+<h1>Importazione misurazioni Opere</h1>
+
+
+<h4> Importazione opere</h4>
+	<%= form_tag importa_valori_opere_operas_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= collection_select(:person, :id, @dirigenti, :id, :cognomenome, :include_blank => true)  %>
+	 <%= submit_tag "Importa Excel" %>
+	<% end %>
+	
+	<p> Vengono importati dai file Excel di Mauro Gaspardo </p>
+	
+	<p> Colonna AA <p>
+	<p> viene valorizzato l'indicatore "Stato di avanzamento" <p>

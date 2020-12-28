@@ -1,0 +1,6 @@
+<%= form_tag("/operational_goals/gestisci_operational_goal", method: "get", remote: true, name: "gestisci_operational_goal"  )  do  %>
+<%= collection_select(:operational_goal, :operational_goal_id, OperationalGoal.all, :id, :denominazione, {}, {onchange: 'Rails.fire(this.form, "submit")'}) %>
+<%= submit_tag "Cerca" %>
+<% end %>
+
+<hr />

@@ -1,0 +1,58 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Opere</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+	  <th>ID</th>
+      <th>Numero</th>
+      <th>Sub</th>
+      <th>Descrizione</th>
+      <th>Anno</th>
+      <th>Ente</th>
+      <th>Parte di</th>
+      <th>Responsabile</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @operas.each do |opera| %>
+	<% i = i + 1 %>
+      <tr>
+	    <td><%= i %></td>
+		<td><%= opera.id %></td>
+        <td><%= opera.numero %></td>
+        <td><%= opera.sub %></td>
+        <td><%= opera.descrizione %></td>
+        <td><%= opera.anno %></td>
+        <td><%= opera.ente %></td>
+		<% if opera.target_type != nil && opera.target != nil %>
+        <td><%= 
+		       (case opera.target_type
+				when 'OperationalGoal'
+				"Obiettivo"
+				when 'Phase'
+				"Fase"
+				when 'SimpleAction'
+				"Azione"
+			   end +  ": " + opera.target.denominazione)
+		       %></td>
+		<% else %>
+		<td> - </td>
+		<% end %>
+        <td><%= opera.responsabile.nominativo %></td>
+        <td><%= link_to 'Show', opera %></td>
+        <td><%= link_to 'Edit', edit_opera_path(opera) %></td>
+        <td><%= link_to 'Destroy', opera, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Opera', new_opera_path %>

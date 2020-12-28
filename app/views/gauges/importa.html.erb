@@ -1,0 +1,121 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Indicatori obiettivi</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Obiettivo</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @indicatori_obiettivi != nil %>
+    <% @indicatori_obiettivi.each do |io| %>
+	  <tr>
+	  <td><%= io[:obiettivo].denominazione %></td>
+	  <td></td>
+	  </tr>
+	   <% io[:indicatori].each do |i| %>
+         <tr>
+	   
+          <td></td>
+		  <td><%= i %></td>
+         
+         </tr>
+	   <% end %> 
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Indicatori fasi</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Fase</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @indicatori_fasi != nil %>
+    <% @indicatori_fasi.each do |io| %>
+	  <tr>
+	  <td><%= io[:fase].denominazione %></td>
+	  <td></td>
+	  </tr>
+	   <% io[:indicatori].each do |i| %>
+         <tr>
+	   
+          <td></td>
+		  <td><%= i %></td>
+         
+         </tr>
+	   <% end %> 
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+<h1>Indicatori Azioni</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Azione</th>
+      <th>Indicatore</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @indicatori_azioni != nil %>
+    <% @indicatori_azioni.each do |io| %>
+	  <tr>
+	  <td><%= io[:azione].denominazione %></td>
+	  <td></td>
+	  </tr>
+	   <% io[:indicatori].each do |i| %>
+         <tr>
+	   
+          <td></td>
+		  <td><%= i %></td>
+         
+         </tr>
+	   <% end %> 
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<hr>
+
+<h1>Target (obiettivi/fasi/azioni) non trovati</h1>
+<table>
+  <thead>
+    <tr>
+	  <th>Titolo</th>
+      <th>Tipo</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @target_non_trovati != nil %>
+    <% @target_non_trovati.each do |t| %>
+	  <tr>
+	  <td><%= t %></td>
+	  <td></td>
+	  </tr>
+	  
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+
+
+

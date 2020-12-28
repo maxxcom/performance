@@ -1,0 +1,196 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Importazione valori</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Anno</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @obiettivi != nil %>
+    <% @obiettivi.each do |obiettivo| %>
+      <tr>
+        <td><%= obiettivo.denominazione %></td>
+		<td><%= obiettivo.descrizione %></td>
+        <td><%= obiettivo.responsabile_principale != nil ? obiettivo.responsabile_principale.nominativo : " - "  %></td>
+        <td><%= obiettivo.anno %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @obiettivi.length == 0 then "Non sono stati importati obiettivi" else "N° obiettivi importati :" + @obiettivi.length.to_s end %>
+<br>
+
+<hr>
+
+<h1>Fasi modificate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Anno</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @fasi_modificate != nil %>
+    <% @fasi_modificate.each do |fase| %>
+      <tr>
+        <td><%= fase.denominazione %></td>
+		<td><%= fase.descrizione %></td>
+        <td><%= fase.anno %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @fasi_modificate.length == 0 then "Non sono state modificate fasi" else "N° fasi importate :" + @fasi_modificate.length.to_s end %>
+<br>
+
+<hr>
+
+<h1>Azioni modificate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Anno</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @azioni_modificate != nil %>
+    <% @azioni_modificate.each do |azione| %>
+      <tr>
+        <td><%= azione.denominazione %></td>
+		<td><%= azione.descrizione %></td>
+        <td><%= azione.anno %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @azioni_modificate.length == 0 then "Non sono state modificate azioni" else "N° azioni modificate :" + @azioni_modificate.length.to_s end %>
+<br>
+
+<h1>Obiettivi modificati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+	  <th>Descrizione</th>
+      <th>Responsabile</th>
+      <th>Anno</th>
+      
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @obiettivi_modificati != nil %>
+    <% @obiettivi_modificati.each do |obiettivo| %>
+      <tr>
+        <td><%= obiettivo.denominazione %></td>
+		<td><%= obiettivo.descrizione %></td>
+        <td><%= obiettivo.responsabile_principale != nil ? obiettivo.responsabile_principale.nominativo : " - "  %></td>
+        <td><%= obiettivo.anno %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Indicatori valorizzati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+	  <th>Descrizione</th>
+      <th>Descrizione valore misurazione</th>
+      <th>Valore misurazione</th>
+      <th>Padre</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @indicatori_valorizzati != nil %>
+    <% @indicatori_valorizzati.each do |indicatore| %>
+      <tr>
+        <td><%= indicatore.nome %></td>
+		<td><%= indicatore.descrizione %></td>
+        <td><%= indicatore.descrizione_valore_misurazione  %></td>
+        <td><%= indicatore.valore_misurazione %></td>
+		<td><%= indicatore.target.tipo + " - " + indicatore.target.denominazione %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Valutazioni importate</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome target</th>
+	  <th>Tipo</th>
+      <th>Valutazione dirigente</th>
+      <th>Valutazione OIV</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @valutazioni_importate != nil %>
+    <% @valutazioni_importate.each do |valutazione| %>
+      <tr>
+        <td><%= valutazione.target.denominazione %></td>
+		<td><%= valutazione.target.tipo %></td>
+        <td><%= valutazione.valore_valutazione_dirigente  %></td>
+        <td><%= valutazione.valore_valutazione_oiv %></td>
+		
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<h1>Target non trovati</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Titolo</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @target_non_trovati != nil %>
+    <% @target_non_trovati.each do |target| %>
+      <tr>
+        <td><%= target %></td>
+		</tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

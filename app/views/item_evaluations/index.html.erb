@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Item Evaluations</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Tipo</th>
+	  <th>Target</th>
+      <th>Valore valutazione dirigente</th>
+      <th>Valore valutazione oiv</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @item_evaluations.each do |item_evaluation| %>
+      <tr>
+	    <td><%= item_evaluation.target_type %></td>
+        <td><%= item_evaluation.target_id %></td>
+        <td><%= item_evaluation.valore_valutazione_dirigente %></td>
+        <td><%= item_evaluation.valore_valutazione_oiv %></td>
+        <td><%= link_to 'Show', item_evaluation %></td>
+        <td><%= link_to 'Edit', edit_item_evaluation_path(item_evaluation) %></td>
+        <td><%= link_to 'Destroy', item_evaluation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Item Evaluation', new_item_evaluation_path %>

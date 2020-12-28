@@ -1,0 +1,65 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Utenti</h1>
+
+<p> Servizio percentuale: part/time o tempo pieno </p>
+<p> Tempo : mesi di servizio / 12 </p>
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Matricola</th>
+	  <th>Categoria</th>
+	  <th>COS</th>
+	  <th>Assegnazione</th>
+	  <th>Servizio %</th>
+	  <th>Tempo</th>
+      <th>Email</th>
+	  <th>Ufficio</th>
+	  <th>Qualifica</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% i = 0 %>
+    <% @people.each do |person| %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= person.nome %></td>
+        <td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+		<td><%= person.categoria %></td>
+		<td><%= person.cos %></td>
+		<td><%= person.assegnazione %></td>
+		<td><%= person.servizio_percentuale %></td>
+		<td><%= person.tempo %></td>
+        <td><%= person.email %></td>
+		<td><%= if person.ufficio != nil
+                 person.ufficio.nome
+                else
+				 if person.dirige.length != 0
+                   person.dirige.first.nome
+                 else				 
+                  "-" 
+				 end
+				end %></td>
+		<td><%= if person.qualification != nil
+                 person.qualification.denominazione
+                else
+                 "-" 
+				end %></td>
+        <td><%= link_to 'Show', person %></td>
+        <td><%= link_to 'Edit', edit_person_path(person) %></td>
+		<td><%= link_to 'Password', edit_password_path(person) %></td>
+        <td><%= link_to 'Destroy', person, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Person', new_person_path %>

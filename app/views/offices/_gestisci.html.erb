@@ -1,0 +1,6 @@
+<%= form_tag("/offices/getoffice", method: "get", remote: true, name: "getoffice"  )  do  %>
+<%= collection_select(:office, :office_id, Office.order(:nome), :id, :nome, {}, {onchange: 'Rails.fire(this.form, "submit")'}) %>
+<%= submit_tag "Cerca" %>
+<% end %>
+
+<hr />

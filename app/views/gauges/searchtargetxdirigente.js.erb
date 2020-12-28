@@ -1,0 +1,240 @@
+function abilita_save(button_code)
+{
+ $button = $('#btn-salva'+button_code)
+ $.rails.enableElement($button)
+ $button.removeAttr('disabled')
+}
+
+console.log("searchtargetxdirigente.js.erb file");
+var includeDivRisultati = $("#division_risultati")
+
+includeDivRisultati.empty();
+
+
+var html = '<hr>';
+
+html += '<p> Dirigente : <%= @dirigente.cognome %></p>';
+
+html += '<%= (@opzionepeg != nil ? @opzionepeg.to_s : "-") %>';
+html += '<%= (@opzioneac != nil ? @opzioneac.to_s : "-") %>';
+html += '<%= (@opzioneopere != nil ? @opzioneopere.to_s : "-") %>';
+
+<% if (((@opzionepeg != nil) && (@opzionepeg != "")) || ((@opzioneac != nil) && (@opzioneac != ""))) %>
+
+html += '<p> Obiettivi come responsabile </p>';
+html += '  <table  class="tabella_misurazioni"><thead>';
+
+html += '  <tr>';
+html += '      <th class="obiettivo">Obiettivo</th>';
+html += '      <th class="fase_azione">Fase</th>';
+html += '      <th class="fase_azione">Azione</th>';
+html += '      <th>Indicatori</th>';
+html += '      <th class="formvalore">Misurazione</th>';
+
+html += '     </tr>';
+html += ' </thead><tbody>';
+
+<% @obiettivi.each do |o| %>
+
+html += '  <tr>';
+html += '  <td class="obiettivo">';
+<%  if o.attivita_ordinaria  %>
+html += 'AC: ';
+<%  else  %>
+html += '';
+<%  end  %>
+html += '  <%= o.denominazione_completa %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= o.valore_totale.round(2) %>';
+html += '  </td>';
+html += '  </tr>';
+<% if o.indicatori.length > 0  %>
+<% o.indicatori.each do |io| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= io.nome.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '       <%= form_for io, url: setmisurazione_gauges_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => io.valore_misurazione, min: 0, max: 100, :onchange => "abilita_save("+io.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :indicatore_id, :value => io.id %>';
+html += '	    <%= form.hidden_field :opzionepeg, :value => @opzionepeg %>';
+html += '	    <%= form.hidden_field :opzioneac, :value => @opzioneac %>';
+html += '	    <%= form.hidden_field :opzioneopere, :value => @opzioneopere %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+io.id.to_s, disabled: true %>';
+html += '       <% end %>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+<% end %>
+
+<% o.fasi.each do |f| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= f.denominazione_completa %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= f.valore_totale.round %>';
+html += '  </td>';
+html += '  </tr>';
+<% if f.indicatori.length > 0  %>
+<% f.indicatori.each do |indicatore_fase| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= indicatore_fase.nome.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '       <%= form_for indicatore_fase, url: setmisurazione_gauges_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => indicatore_fase.valore_misurazione, min: 0, max: 100, :onchange => "abilita_save("+indicatore_fase.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :indicatore_id, :value => indicatore_fase.id %>';
+html += '	    <%= form.hidden_field :opzionepeg, :value => @opzionepeg %>';
+html += '	    <%= form.hidden_field :opzioneac, :value => @opzioneac %>';
+html += '	    <%= form.hidden_field :opzioneopere, :value => @opzioneopere %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+indicatore_fase.id.to_s, disabled: true %>';
+html += '       <% end %>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+<% end %>
+
+<% f.azioni.each do |a| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= a.denominazione_completa %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  </tr>';
+
+<% if a.indicatori.length > 0  %>
+<% a.indicatori.each do |indicatore_azione| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td class="fase_azione">';
+html += '  <%= indicatore_azione.denominazione %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '       <%= form_for indicatore_azione, url: setmisurazione_gauges_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => indicatore_azione.valore_misurazione, min: 0, max: 100, :onchange => "abilita_save("+indicatore_azione.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :indicatore_id, :value => indicatore_azione.id %>';
+html += '	    <%= form.hidden_field :opzionepeg, :value => @opzionepeg %>';
+html += '	    <%= form.hidden_field :opzioneac, :value => @opzioneac %>';
+html += '	    <%= form.hidden_field :opzioneopere, :value => @opzioneopere %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+indicatore_azione.id.to_s.to_s, disabled: true %>';
+html += '       <% end %>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+<% end %>
+
+
+<% end %>
+
+<% end %>
+
+<% end %>
+
+html += '  </tbody></table>';
+
+<% end %>
+
+<% if (@opzioneopere != nil && @opzioneopere != "") %>
+
+html += '  <table  class="tabella_misurazioni"><thead>';
+html += '  <tr>';
+html += '      <th class="obiettivo">Opera</th>';
+html += '      <th class="fase_azione">NR </th>';
+html += '      <th class="fase_azione">SUB </th>';
+html += '      <th>Indicatori</th>';
+html += '      <th class="formvalore">Misurazione</th>';
+
+html += '     </tr>';
+html += ' </thead><tbody>';
+<% @opere.each do |op| %>
+html += '  <tr>';
+html += '  <td class="obiettivo">';
+html += '  <%= op.descrizione80 %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= op.numero.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= op.sub.gsub(/[^0-9A-Za-z .,;-_àèéìòù]/,"").strip %>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td >';
+html += '  <%= op.valore_totale.round(2) %>';
+html += '  </td>';
+html += '  </tr>';
+
+<% op.indicatori.each do |indicatore_opera| %>
+html += '  <tr>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  </td>';
+html += '  <td>';
+html += '  <%= indicatore_opera.denominazione %>';
+html += '  </td>';
+html += '  <td class="formvalore">';
+html += '       <%= form_for indicatore_opera, url: setmisurazione_gauges_path, method: :post, :remote => true do |form| %>';
+html += '		<%= form.number_field :value,  :value => indicatore_opera.valore_misurazione, min: 0, max: 100, :onchange => "abilita_save("+indicatore_opera.id.to_s+")" %>';
+html += '	    <%= form.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '	    <%= form.hidden_field :indicatore_id, :value => indicatore_opera.id %>';
+html += '	    <%= form.hidden_field :opzionepeg, :value => @opzionepeg %>';
+html += '	    <%= form.hidden_field :opzioneac, :value => @opzioneac %>';
+html += '	    <%= form.hidden_field :opzioneopere, :value => @opzioneopere %>';
+html += '		<%= form.submit "Salva" , class: "btn-salva", id: "btn-salva"+indicatore_opera.id.to_s, disabled: true %>';
+html += '       <% end %>';
+html += '  </td>';
+html += '  </tr>';
+<% end %>
+
+<% end %>
+html += '  </tbody></table>';
+
+<% end %>
+
+includeDivRisultati.append(html);

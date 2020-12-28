@@ -1,0 +1,235 @@
+
+console.log("setvalueall.js.erb file");
+var pagellaDiv = $("#pagella_division");
+
+var indicazioniDiv = $("#indicazioni_division");
+
+var comandiDiv = $("#comandi_division");
+
+pagellaDiv.empty();
+indicazioniDiv.empty();
+comandiDiv.empty();
+
+
+var html = '';
+
+
+html += '<h1> Valutazione </h1>';
+
+html += '    <%= form_for :valutazione, url: setvalueall_people_path, method: :post, :remote => true do |f| %>';
+html += '<table class="pagella_table">';
+html += '  <thead>';
+html += '    <tr>';
+html += '      <th class="fattore_valutazione">Denominazione</th>';
+html += '      <th>Peso</th>';
+html += '      <th>Voto</th>';
+html += '      <th>Voto pesato</th>';
+html += '    </tr>';
+html += '  </thead>';
+html += '  <tbody>';
+
+html += '  <% indice = 0 %>';
+
+html += '    <% @valutazioni.each do |v| %>';
+html += '    <% indice = indice + 1 %>';
+html += '    <tr>';
+html += '      <td class="fattore_valutazione">';
+html += '       <%= v.vfactor.denominazione.gsub(/\r\n/, "").strip %>';
+html += '	   </td>';
+html += '      <td><%= v.vfactor.peso(@person)%></td>';
+html += '      <td>';
+html += '		<% stringa_campo =  @person.id.to_s + "_" + v.id.to_s + "_" + v.vfactor.id.to_s %>';
+html += '		<%= f.number_field stringa_campo,  :value => v.value, min: v.vfactor.min, max: v.vfactor.max, step: :any %>';
+html += '       </td>';
+html += '       <td>';
+html += '       <%= (v.value * v.vfactor.peso(@person)/v.vfactor.max).round(2) %>';
+html += '       </td>';
+html += '    <tr>';
+html += '    <% end %>';
+
+html += '	 <td>  </td>';
+html += '	 <td>  </td>';
+html += '	 <td> ';
+
+html += '    <%= f.hidden_field :numero_voti, :value => indice %>';
+html += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html += '    <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '    <%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Salva tutto"), class: 'btn_salva', id: 'btn_salva_tutto', disabled: @person.flag_valutazione_chiusa %>';
+html += '    <% end %>';
+
+html += '	 </td>';
+html += '	 <td>  </td>';
+html += '</tr>';
+
+html += '<tr>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td> ';
+html += '    <% if Setting.where(denominazione: 'anno').first.value == '2019' %>';
+html += '    <b> Media pesata </b>';
+html += '    <% end %>';
+html += '     </td>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td>';
+html += '    <% if Setting.where(denominazione: 'anno').first.value == '2019' %>';
+html += '	 <%= @person.punteggiocomplessivo.round(2) %>';
+html += '    <% end %>';
+html += '	 </td>';
+html += '</tr>';
+
+html += '<tr>';
+html += '	 <td> <b> Punteggio finale </b> </td>';
+html += '	 <td>';
+html += '	 </td>';
+html += '	 <td align="center">';
+html += '    <%= @person.flag_valutazione_chiusa ? "VALUTAZIONE CHIUSA" : "" %>';
+html += '	 </td>';
+html += '	 <td> <b><%= @person.punteggiofinale.round(2) %></b></td>';
+html += '</tr>';
+
+html += '  </tbody>';
+html += '</table>';
+
+html += '<table class="pagella_table">';
+html += '  <thead>';
+html += '  </thead>';
+html += '  <tbody>';
+html += '  <tr>';
+html += '	 <td> <b> Valutazione complessiva </b> </td>';
+html += '	 <td ><b>';
+html += '	 <% moltiplicatore_valutazione_pagella = @person.percentuale_pagella %>';
+html += '	 <% moltiplicatore_valutazione_obiettivi = @person.percentuale_obiettivi %>';
+html += '	 <% valutazione_complessiva = (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) != 0 ? (moltiplicatore_valutazione_pagella *  @person.punteggiofinale  + moltiplicatore_valutazione_obiettivi * @person.raggiungimento_obiettivi_discretizzato) / (moltiplicatore_valutazione_pagella + moltiplicatore_valutazione_obiettivi ) : 0.0 %>';
+html += '	 <%= "" + moltiplicatore_valutazione_pagella.to_s + "*" + @person.punteggiofinale.to_s + " + " + moltiplicatore_valutazione_obiettivi.to_s + "*" + @person.raggiungimento_obiettivi_discretizzato.to_s + " = " + valutazione_complessiva.round(2).to_s %>';
+html += '	 </b>';
+html += '	 </td>';
+html += '  </tr>'; 
+  
+html += '  </tbody>';
+html += '</table>';
+
+var html2 = '';
+
+html2 += '<%= form_for :person, url: salva_indicazioni_people_path, method: :post, :remote => true do |f| %>';
+html2 += '<table class="pagella_table">';
+html2 += '<thead>';
+html2 += '<tr>';
+html2 += '<th></th>';
+html2 += '</tr>';
+html2 += '</thead>';
+html2 += '<tbody>';
+
+html2 += '<tr>';
+html2 += '<td>';
+html2 += ' <b>Indicazioni per il miglioramento della prestazione: </b>';
+html2 += '</td>';
+html2 += '</tr>';
+html2 += '<tr>';
+html2 += '<td>';
+
+html2 += '<%= f.text_field :indicazioni_miglioramento_prestazione, size: 90 %>';
+
+html2 += '</td>';
+html2 += '</tr>';
+html2 += '<tr>';
+html2 += '<td>';
+html2 += ' <b>Considerazioni del valutato: </b>';
+html2 += '</td>';
+html2 += '</tr>';
+html2 += '<tr>';
+html2 += '<td>';
+
+html2 += '<%= f.text_field :considerazioni_del_valutato, size: 90 %>';
+
+html2 += '</td>';
+html2 += '</tr>';
+
+html2 += '<tr>';
+html2 += '<td>';
+html2 += '<%= f.hidden_field :person_id, :value => @person.id %>';
+html2 += '<%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html2 += '<%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Salva indicazioni e considerazioni"), class: 'btn_salva', id: 'btn_salva_indicazioni', disabled: @person.flag_valutazione_chiusa %>';
+
+
+
+html2 += '<% end %>  ';
+html2 += '</td>';
+html2 += '</tr>';
+
+html2 += '</tbody>';
+html2 += '</table>';
+
+var html3 = '';
+
+html3 += '<table class="pagella_table">';
+html3 += '  <thead>';
+html3 += '    <tr>';
+html3 += '      <th align="center"></th>';
+html3 += '      <th align="center">OPERAZIONI FINALI</th>';
+html3 += '      <th align="center"></th>';
+html3 += '    </tr>';
+html3 += '  </thead>';
+html3 += '  <tbody>';
+html3 += '    <tr>';
+html3 += '      <td>';
+
+html3 += '      </td>';
+html3 += '      <td align="center">';
+
+html3 += '    <%= form_for @person, url: chiusura_valutazione_people_path, method: :post, :remote => false do |f| %>';
+html3 += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html3 += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html3 += '	 <%= f.submit (@person.flag_valutazione_chiusa ? "X" : "Chiudi valutazione"), class: 'btn_chiudi', id: 'btn_chiudi_valutazione', disabled: @person.flag_valutazione_chiusa, data: {confirm: 'Sicuro di chiudere la valutazione?'} %>';
+html3 += '	 <% end %>';
+
+html3 += '      </td>';
+html3 += '      <td>';
+
+html3 += '      </td>';
+html3 += '    </tr>';
+
+html3 += '    <tr>';
+html3 += '      <td>';
+
+html3 += '      </td>';
+html3 += '      <td>';
+
+html3 += '    <%= form_for :pagellapdf, url: people_pagellapdf_path, method: :get, :remote => false do |f| %>';
+html3 += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html3 += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html3 += '	 <%= f.submit "PDF"%>';
+html3 += '	 <% end %>';
+
+html3 += '      </td>';
+html3 += '      <td>';
+
+html3 += '      </td>';
+html3 += '    </tr>';
+
+html3 += '    <tr>';
+html3 += '      <td>';
+
+html3 += '      </td>';
+html3 += '      <td>';
+
+html3 += '    <%= form_for :schedaxls, url: people_schedavalutazionedipendentexls_path, method: :get, :remote => false do |f| %>';
+html3 += '    <%= f.hidden_field :person_id, :value => @person.id %>';
+html3 += '	 <%= f.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html3 += '	 <%= f.submit "Excel"%>';
+html3 += '	 <% end %>';
+	 
+html3 += '      </td>';
+html3 += '      <td>';
+
+html3 += '      </td>';
+html3 += '    </tr>';
+
+html3 += '  </tbody>';
+html3 += '</table>';
+
+
+
+pagellaDiv.append(html);
+indicazioniDiv.append(html2);
+comandiDiv.append(html3);

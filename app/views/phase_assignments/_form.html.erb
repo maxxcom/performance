@@ -1,0 +1,32 @@
+<%= form_with(model: phase_assignment, local: true) do |form| %>
+  <% if phase_assignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(phase_assignment.errors.count, "error") %> prohibited this phase_assignment from being saved:</h2>
+
+      <ul>
+      <% phase_assignment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :person_id %>
+    <%= form.number_field :person_id, id: :phase_assignment_person_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phase_id %>
+    <%= form.number_field :phase_id, id: :phase_assignment_phase_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wheight %>
+    <%= form.number_field :wheight, id: :phase_assignment_wheight %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Aree di valutazione</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Denominazione</th>
+      <th>Descrizione</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @valuation_areas.each do |valuation_area| %>
+      <tr>
+        <td><%= valuation_area.denominazione %></td>
+        <td><%= valuation_area.descrizione %></td>
+        <td><%= link_to 'Show', valuation_area %></td>
+        <td><%= link_to 'Edit', edit_valuation_area_path(valuation_area) %></td>
+        <td><%= link_to 'Destroy', valuation_area, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Valuation Area', new_valuation_area_path %>

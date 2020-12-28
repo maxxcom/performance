@@ -1,0 +1,65 @@
+<%= form_with(model: opera, local: true) do |form| %>
+  <% if opera.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(opera.errors.count, "error") %> prohibited this opera from being saved:</h2>
+
+      <ul>
+      <% opera.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :numero %>
+    <%= form.text_field :numero, id: :opera_numero %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sub %>
+    <%= form.text_field :sub, id: :opera_sub %>
+  </div>
+
+  <div class="field">
+    <%= form.label :descrizione %>
+    <%= form.text_area :descrizione, id: :opera_descrizione %>
+  </div>
+
+  <div class="field">
+    <%= form.label :anno %>
+    <%= form.number_field :anno, id: :opera_anno %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ente %>
+    <%= form.text_field :ente, id: :opera_ente %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :responsabile %>
+	<%= form.collection_select( :responsabile_id, Person.dirigenti, :id, :nominativo, id: :responsabile_id, :include_blank => true) %>
+   
+  </div>
+  
+  <div class="field">
+    <%= form.label @opera.target.tipo_dirigente_denominazione80 %>
+	<% collezione = [] %>
+	<% OperationalGoal.all.each do | o | %>
+	<%   collezione<< o %>
+	<% end %>
+	<% Phase.all.each do | f | %>
+	<%   collezione<< f %>
+	<% end %>
+	<% SimpleAction.all.each do | a | %>
+	<%   collezione<< a %>
+	<% end %>
+	<%= form.collection_select(:target, collezione, :id_class, :tipo_dirigente_denominazione80, selected: collezione.first.tipo_dirigente_denominazione80,  :include_blank => true) %>
+   
+  </div>
+
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,27 @@
+<%= form_with(model: other_manager, local: true) do |form| %>
+  <% if other_manager.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(other_manager.errors.count, "error") %> prohibited this other_manager from being saved:</h2>
+
+      <ul>
+      <% other_manager.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :altro_responsabile_id %>
+    <%= form.number_field :altro_responsabile_id, id: :other_manager_altro_responsabile_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :obiettivo_operativo_id %>
+    <%= form.number_field :obiettivo_operativo_id, id: :other_manager_obiettivo_operativo_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

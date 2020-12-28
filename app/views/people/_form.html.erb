@@ -1,0 +1,82 @@
+<%= form_with(model: person, local: true) do |form| %>
+  <% if person.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(person.errors.count, "error") %> prohibited this person from being saved:</h2>
+
+      <ul>
+      <% person.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nome %>
+    <%= form.text_field :nome, id: :person_nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cognome %>
+    <%= form.text_field :cognome, id: :person_cognome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :matricola %>
+    <%= form.text_field :matricola, id: :person_matricola %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :ruolo %>
+    <%= form.text_field :ruolo, id: :person_ruolo %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :flag_calcolo_produttivita %>
+    <%= form.check_box :flag_calcolo_produttivita, id: :person_flag_calcolo_produttivita %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :tempo %>
+    <%= form.number_field :tempo, id: :person_tempo, step: :any %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :servizio_percentuale %>
+    <%= form.number_field :servizio_percentuale, id: :servizio_percentuale, step: :any %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :categoria %>
+    <%= form.text_field :categoria, id: :person_categoria %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email, id: :person_email %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :abilitato %>
+    <%= form.text_field :abilitato, id: :person_abilitato %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :qualification %>
+    <%= form.collection_select(:qualification_type_id, QualificationType.all, :id, :denominazione, :include_blank => true) %>
+  </div>
+  
+   <div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password, id: :person_password %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :password_confirmation %>
+    <%= form.password_field :password_confirmation, id: :person_password_confirmation %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

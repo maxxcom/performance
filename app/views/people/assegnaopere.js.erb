@@ -1,0 +1,107 @@
+function addOperaToDipendente(id_opera, id_person, id_dirigente, val)
+{
+ console.log(id_person);
+ console.log(id_opera);
+ console.log(id_dirigente);
+ 
+ mydata = {   
+               opera: id_opera, 
+               dipendente: id_person,
+               dirigente: id_dirigente,
+			   valore: val
+            };
+ $.ajax({
+              method: 'POST',
+              url: '/people/aggiungiassegnazioniopere',
+              data: mydata,
+              success: function(){},
+              error: function(){}
+    
+            });
+ 
+}
+
+
+var includeDiv = $("#results_division");
+var includeDivTree = $("#jstree_assegnaopere");
+includeDiv.empty();
+
+var html = '';
+var html2 = '';
+
+html += '<br>';
+
+html += '<br>';
+
+html += '<p>';
+html += '<%= form_for :person, url: "/people/aggiungiassegnazioniopere", method: :post, :remote => true do |p| %>';
+html += '<%=   p.select(:person_id, :selected => (@dipendente != nil ? @dipendente :  " ") ) do %>';
+html += '<%     @dirigente.dipendenti_sotto.sort_by{|p| p.cognome}.each do |c| %>';
+html += '<%      if c != nil %>';
+html += '<%=      content_tag(:option, c.nominativo2, value: c.id) %>';
+html += '<%      end %>';
+html += '<%     end %>';
+html += '<%    end %>';
+html += '<%= p.number_field :valore, :value => (@valore != nil ? @valore : 0) %>';
+html += '<%= p.hidden_field :dirigente_id, :value => @dirigente.id %>';
+html += '</p>';
+
+html += '<%=   p.submit "Seleziona dipendente" %>';
+html += '<% end %>';
+
+html += '<hr>';
+html += '<hr>';
+
+<% if @dipendente != nil %>
+html += '<p> Assegna opere per</p>';
+html += '<p> <b><%= @dipendente.nominativo %></b> con peso per ogni opera uguale a : <b> <%= @valore.to_s %></b></p>';
+
+html += '<table>';
+html += '  <thead>';
+html += '    <tr>';
+html += '	  <th>Flag</th>';
+html += '	  <th>Peso</th>';
+html += '	  <th>Opera nr</th>';
+html += '     <th>Descrizione</th>';
+html += '    </tr>';
+html += '  </thead>';
+html += '  <tbody>';
+<% @opere_array.each do |opera| %>
+
+
+html += '     <div id="<%= opera.id %>">';	
+html += '      <tr>';
+html += '		<td class="flag_opera" >'; 
+
+
+html += ' <%= form_tag @dipendente, :url => aggiungiassegnazioniopere_people_path, method: :post, :remote => true do -%>';
+html += ' <%= hidden_field :dirigente_id, :value => @dirigente.id  %>';
+html += ' <%= hidden_field :numero, :value => @valore  %>';
+html += ' <%= hidden_field :dipendente_id, :value => (@dipendente != nil ? @dipendente.id : nil) %>';
+html += ' <%= check_box_tag :assegnazione_opera, value = "1", checked = opera.assegnata_a(@dipendente), :onclick=>"addOperaToDipendente(#{opera.id}, #{@dipendente.id}, #{@dirigente.id}, #{@valore} );" %> ';
+html += ' <% end %>';  
+
+html += '       </td>';
+html += '        <td><%= opera.peso_assegnazione(@dipendente)  %></td>';
+html += '        <td><%= opera.numero + "-" + opera.sub  %></td>';
+html += '        <td><%= opera.descrizione80 %></td>';
+html += '      </tr>';
+html += '     </div>';	 
+<% end %>
+
+html += '  </tbody>';
+html += '</table>';
+
+<% end %>
+
+
+
+html_alternativo = '<h1> La fase di assegnazione obiettivi è chiusa. </h1>'
+
+<% if periodo_assegnazione_aperto || current_user_admin? %>
+   includeDiv.append(html);
+<% else %>
+   includeDiv.append(html_alternativo);
+<% end %>
+
+

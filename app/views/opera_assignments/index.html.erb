@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Opera Assignments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Opera</th>
+      <th>Wheight</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @opera_assignments.each do |opera_assignment| %>
+      <tr>
+        <td><%= opera_assignment.person_id %></td>
+        <td><%= opera_assignment.opera_id %></td>
+        <td><%= opera_assignment.wheight %></td>
+        <td><%= link_to 'Show', opera_assignment %></td>
+        <td><%= link_to 'Edit', edit_opera_assignment_path(opera_assignment) %></td>
+        <td><%= link_to 'Destroy', opera_assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Opera Assignment', new_opera_assignment_path %>

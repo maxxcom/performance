@@ -1,0 +1,2 @@
+class CategoriaQuotum < ApplicationRecord
+end

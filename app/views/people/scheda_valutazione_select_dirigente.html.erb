@@ -1,0 +1,121 @@
+<h1> Scheda valutazione dirigente </h1>
+
+<p>Nominativo : <%= @dirigente.cognome + "  " + @dirigente.nome %></p>
+<p>Dipartimento : <%= @dipartimento.nome %></p>
+<p>Servizio : <%= @servizio %></p>
+
+<% if false %>
+<p> Obiettivi individuali: </p>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Obiettivo</th>
+      <th>Percentuale raggiungimento</th>
+	  
+      
+    </tr>
+  </thead>
+
+  
+    <tbody>
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @obiettivi_individuali_digruppo.each do |obiettivo| %>
+	  <% num = num + obiettivo.valore_totale*1 %>
+	  <% den = den + 1 %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= obiettivo.denominazione %></td>
+        <td><%= obiettivo.valore_totale %></td>
+		
+	  </tr>
+    <% end %>
+	  <tr>
+	  <td></td>
+      <td>Totale</td>
+      <td><%=den !=0 ? (num/den).round(2) : " n.a." %></td> </td>
+	  
+	  </tr>
+  </tbody>
+</table>
+
+<% end %>
+
+<p> Obiettivi : </p>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Obiettivo</th>
+      <th>Percentuale raggiungimento</th>
+	  <th>Indice di strategicità</th>
+      
+    </tr>
+  </thead>
+
+  
+    <tbody>
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @obiettivi_strategici.each do |obiettivo| %>
+	  <% num = num + obiettivo.valore_totale*obiettivo.indice_strategicita %>
+	  <% den = den + obiettivo.indice_strategicita %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= obiettivo.denominazione %></td>
+        <td><%= obiettivo.valore_totale %></td>
+		<td><%= obiettivo.indice_strategicita %></td>
+	  </tr>
+    <% end %>
+	  <tr>
+	  <td></td>
+      <td>Totale</td>
+      <td><%= den !=0 ? (num/den).round(2) : " n.a." %></td> </td>
+	  <td></td>
+	  </tr>
+  </tbody>
+</table>
+
+<% if false %>
+<p> Obiettivi di ente: </p>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Obiettivo</th>
+      <th>Percentuale raggiungimento</th>
+	        
+    </tr>
+  </thead>
+
+  
+    <tbody>
+    <% i = 0 %>
+	<% num = 0 %>
+	<% den = 0 %>
+    <% @obiettivi_strategici.each do |obiettivo| %>
+	  <% num = num + obiettivo.valore_totale*1 %>
+	  <% den = den + 1 %>
+      <tr>
+	    <td><%= i = i + 1 %></td>
+        <td><%= obiettivo.denominazione %></td>
+        <td><%= obiettivo.valore_totale %></td>
+		
+	  </tr>
+    <% end %>
+	  <tr>
+	  <td></td>
+      <td>Totale</td>
+      <td><%= den !=0 ? (num/den).round(2) : " n.a." %></td> </td>
+	  
+	  </tr>
+  </tbody>
+</table>
+
+<% end %>

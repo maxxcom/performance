@@ -1,0 +1,65 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Importazione servizio percentuale e tempo (da scarico Insiel)</h1>
+
+<table>
+  <thead>
+    <tr>
+	  <th>Nr</th>
+      <th>Nome</th>
+	  <th>Cognome</th>
+      <th>Matricola</th>
+      <th>email</th>
+      <th>Servizio percentuale</th>
+      <th>Tempo</th>  
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @result != nil %>
+    <% @result.each do |person| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= person.nome %></td>
+		<td><%= person.cognome %></td>
+        <td><%= person.matricola %></td>
+        <td><%= person.email %></td>
+		<td><%= person.servizio_percentuale.round(2) %></td>
+        <td><%= person.tempo.round(2) %></td>
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= if @result.length == 0 then "Non sono state importat dati" else "Servizio percentuale N° persone importate :" + @result.length.to_s end %>
+<br>
+
+<h2> Righe scartate </h2>
+<table>
+  <thead>
+    <tr>
+	  
+      <th>Nominativo</th>
+	       
+    </tr>
+  </thead>
+
+  <tbody>
+    <% n = 0 %>
+    <% if @scartate != nil %>
+    <% @scartate.each do |s| %>
+      <tr>
+	    <% n = n + 1 %>
+	    <td><%= n %></td>
+        <td><%= s %></td>
+		
+        
+        </tr>
+    <% end %>
+	<% end %>
+  </tbody>
+</table>

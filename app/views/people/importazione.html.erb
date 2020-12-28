@@ -1,0 +1,13 @@
+<h1>Importazione dipendenti</h1>
+
+
+<h4> Importazione dipendenti</h4>
+	<%= form_tag importa_people_path, multipart: true do %>
+	 <%= file_field_tag :file %>
+	 <%= submit_tag "Importa CSV" %>
+	<% end %>
+	
+<p> Prende un file csv con questo formato </p>
+<p> cognome; nome; matricola; email; ufficio </p>
+<p> matricola è un numero che viene pad con 0 a sinistra fino ad arrivare a 7 cifre </p>
+<p> Fornito da Silvia Mattiussi </p>

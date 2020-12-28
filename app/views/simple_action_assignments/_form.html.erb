@@ -1,0 +1,32 @@
+<%= form_with(model: simple_action_assignment, local: true) do |form| %>
+  <% if simple_action_assignment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(simple_action_assignment.errors.count, "error") %> prohibited this simple_action_assignment from being saved:</h2>
+
+      <ul>
+      <% simple_action_assignment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :person_id %>
+    <%= form.number_field :person_id, id: :simple_action_assignment_person_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :simple_action_id %>
+    <%= form.number_field :simple_action_id, id: :simple_action_assignment_simple_action_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wheight %>
+    <%= form.number_field :wheight, id: :simple_action_assignment_wheight %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

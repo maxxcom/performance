@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Valutations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Year</th>
+      <th>State</th>
+      <th>Person</th>
+      <th>Vfactor</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @valutations.each do |valutation| %>
+      <tr>
+        <td><%= valutation.value %></td>
+        <td><%= valutation.year %></td>
+        <td><%= valutation.state %></td>
+        <td><%= valutation.person_id.to_s + " " + (Person.where(id: valutation.person_id).first != nil ? Person.where(id: valutation.person_id).first.cognome : "Nil") %></td>
+        <td><%= valutation.vfactor_id.to_s + " " + (Vfactor.where(id: valutation.vfactor_id).first != nil ? Vfactor.where(id: valutation.vfactor_id).first.denominazione : "Nil") %></td>
+        <td><%= link_to 'Show', valutation %></td>
+        <td><%= link_to 'Edit', edit_valutation_path(valutation) %></td>
+        <td><%= link_to 'Destroy', valutation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Valutation', new_valutation_path %>

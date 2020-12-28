@@ -1,0 +1,36 @@
+<div id="intestazione_division">
+    <%= render 'intestazione_manage_strategic_goal' %>
+</div>
+<div id="operational_goals_division">
+
+
+<p>
+  <strong>Obiettivi Operativi:</strong>
+  <table class="blueTable"><thead></thead><tbody>
+  <% @strategic_goal.obiettivi_operativi.each do |oo| %>
+  <tr>
+  <td>
+  <%= form_for @strategic_goal, url: strategic_goal_remove_operational_goal_path(@strategic_goal), method: :post, :remote => true do |p| %>
+  <%= p.hidden_field :operational_goal_id, :value => oo.id %>
+  <%= p.submit "Rimuovi" %>
+  <% end %>
+  </td>
+  <td>
+  <%= oo.denominazione %>
+  </td>
+  <% end %>
+  </tr>
+  </tbody></table>
+</p>
+
+
+<%= form_for @strategic_goal, url: strategic_goal_add_operational_goal_path(@strategic_goal), method: :post, :remote => true do |p| %>
+<%=   p.select(:id) do %>
+<%     OperationalGoal.order(:denominazione).each do |c| %>
+<%=      content_tag(:option, c.denominazione, value: c.id) %>
+<%     end %>
+<%    end %>
+<%=   p.submit "Aggiungi" %>
+<% end %>
+   
+</div>
